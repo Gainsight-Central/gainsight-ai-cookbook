@@ -1,0 +1,4 @@
+interface:
+  display_name: "Map Gainsight Tenant"
+  short_description: "Explain tenant configuration with gs-admin"
+  default_prompt: "Use $map-gainsight-tenant to map my Gainsight tenant read-only."
