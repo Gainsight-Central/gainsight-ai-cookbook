@@ -1,8 +1,10 @@
-# Gainsight MCP Skills
+# Gainsight CS MCP Skills
 
 > Part of the [Gainsight AI Cookbook](../).
 
 Agent skills that turn Gainsight CS data into the things a CSM or CS leader actually needs — a rendered account dashboard, a weekly call brief, an executive prep note, a risk update logged to Timeline.
+
+All four run on the Gainsight CS MCP server. Three of them go further when **Staircase AI** is also connected, folding conversation intelligence — sentiment, transcripts, risk scores — into their output; each degrades explicitly and says so when it isn't available.
 
 Each skill is installed independently. Take the ones that match your role.
 
