@@ -6,7 +6,7 @@ description: >
   colors. USE THIS SKILL WHENEVER the user asks about a Gainsight
   customer/account/company/relationship or its data — even without the word "visualize."
   Covers: summary / status / "how is X doing," account summary, health score, scorecard,
-  open CTAs, success plan, timeline / activity / QBR /
+  open CTAs, success plan, adoption/usage, NPS, risk/sentiment, timeline / activity / QBR /
   "last quarter of activity," trends over time, portfolio / book of business, renewals, owner ("who
   owns X"), attributes / company details, contacts, a contact's email or phone — and any
   request reading Gainsight data. Fire AUTOMATICALLY; the user should never have to say "use
@@ -20,7 +20,7 @@ description: >
 ## Mandatory tool flow (every Gainsight visualization)
 
 1. **Fetch the data** from the Gainsight MCP tools (resolve the entity first, then scorecard / CTAs / timeline / etc.).
-2. **Call `mcp__visualize__read_me` once** with `modules: ["mockup"]` before your first `show_widget` call in the session (loads the live rendering contract). For a **trend / time-series** request (pattern 8), load `modules: ["chart"]` instead so you get the line-chart guidance. Do not narrate this call.
+2. **Call `mcp__visualize__read_me` once** with `modules: ["mockup"]` before your first `show_widget` call in the session (loads the live rendering contract). For a **trend / time-series** request (pattern 13), load `modules: ["chart"]` instead so you get the line-chart guidance. Do not narrate this call.
 3. **Call `mcp__visualize__show_widget`** with an HTML fragment. This renders **inline in the conversation.**
 4. In your text reply, add the short narrative + next steps. Do NOT repeat the widget's content as text.
 
@@ -57,7 +57,7 @@ Decision rule: only render an empty state when a tool **actually ran and returne
 - **Render ALL rows — no cap — but match format to size.** Show the full set (all 51). Format by item count: **≤10 items → rich cards; 11+ → one compact table** (lean rows, not per-item cards), one widget, sorted by the key — the table keeps the payload small enough to render reliably. Never split across multiple widgets. Only if a render genuinely fails after the one retry (see the failure section) do you fall back — and then give the **full list as text**, never a silently-dropped subset. If a header shows a total (e.g. "51 open"), the rows below it must be the full set, not a quiet partial.
 - **Header pills clear of the top-right corner.** The host renders a `⋯` overflow menu in the top-right of every widget — keep header pills (ARR, renewal, overdue, %) out from under it: put them below the title, or leave right padding, so they never truncate ("Total ARR USD 11.3…"). Prefer a short pill label.
 - **Stat/KPI grid never orphans a tile.** Set `grid-template-columns` to the *number* of tiles (up to 4, or 5 for wide) so 4 tiles are 4-up, not 3+1 with one tile alone on a second row.
-- **Do NOT color a plain COUNT number.** KPI/stat values that are just counts ("High priority 15", "Overdue 12", "Total open 51") use `var(--text-primary)` — never a severity color. The AA-dark light-mode danger/warning hues (`#9A1C0B` dark-red, `#DA7309` olive-brown) look muddy as large numbers and imply a status the count doesn't have. Only color a value that is *inherently* a status: a health **score** (by its `score_color`), or a **trend delta** (`↑/↓`). Convey "high priority" via the label, not by painting the number.
+- **Do NOT color a plain COUNT number.** KPI/stat values that are just counts ("High priority 15", "Overdue 12", "Total open 51") use `var(--text-primary)` — never a severity color. The AA-dark light-mode danger/warning hues (`#9A1C0B` dark-red, `#DA7309` olive-brown) look muddy as large numbers and imply a status the count doesn't have. Only color a value that is *inherently* a status: a health **score** (by its `score_color`), **NPS** (green/red), or a **trend delta** (`↑/↓`). Convey "high priority" via the label, not by painting the number.
 - **Wide tables must not overlap.** Use `table-layout:fixed` + a `<colgroup>` and `nowrap`/ellipsis per cell so e.g. a "Due date" cell can't bleed into "Owner". If columns won't fit, drop a column rather than overlap.
 - **Simple lookups still render a visual.** "Who is the account owner of X?", "list attributes for X", "what's the renewal date for X", **"get the email / phone of a contact"** → render a compact **card** (header + a small key/value `detail` block, or a contact card), NOT plain text/markdown. A one-line answer is still a card.
 - **Task-style prompts that read Gainsight data still render.** A QBR outline, "what's on my plate this week," "prep for the Atlassian renewal," "last quarter of activity" — even when phrased as a task, not a question — pull Gainsight data, so they render as a dashboard (timeline/QBR cards, book-of-business, etc.), NOT a text write-up. The user should never have to add "use the skill" — fire on the data, not the phrasing.
@@ -96,10 +96,10 @@ for the matched pattern below and render its sections top-to-bottom, exactly.
 - A "table" section = ONE table sorted by the fixed key — never split one list into several tables, UNLESS the pattern explicitly says grouped (only Portfolio does).
 - Missing data → the section's defined empty state, or collapse the section per its rule — never an ad-hoc alternative.
 
-**The 9 layouts (render sections in this order):**
+**The 10 layouts (render sections in this order):**
 1. **Account summary** — ALWAYS these sections in this order, for EVERY account (never swap or substitute):
    - header `[building] name · segment` + right health gauge — label = the tenant's `overall_label` (e.g. "Yellow"), number colored by `score_color`; `—` + "Unscored" if no score. Never label it "Healthy" from a hardcoded cutoff.
-   - alert banner — the "Scorecard not scored" notice when unscored (this is the ONLY conditional section)
+   - alert banner — only if a sentiment/risk alert exists, else the "Scorecard not scored" notice when unscored (this is the ONLY conditional section)
    - KPI row (4, fixed): ARR · Renewal · Open CTAs · Stage — always present, `—` for any missing value
    - **Open CTAs** section — always present: CTA cards, or an empty state box ("No open CTAs.") when 0
    - **Recent timeline** section — always present: timeline rows, or an empty state box ("No timeline activity…") when none
@@ -113,15 +113,20 @@ for the matched pattern below and render its sections top-to-bottom, exactly.
 3. **Success plan** — header `plan — account · dates` + right `%` pill; progress bar; objectives checklist (done / active / pending).
 4. **CTA pipeline** — header `Open CTA pipeline · N` + right `overdue` pill; CTA cards (no colored left border; priority pill + due).
 5. **KPI dashboard** — header `title · N accounts`; KPI row (4) with trends; health-split bar + legend.
-6. **Timeline activity** — for any request about an account's activity/history/QBR/"last quarter" (standalone, not the account-summary section). Header `Recent activity — account · N activities` (the **account name is a click-through** → `sendPrompt('Show the account summary for <account>')`). Then a stack of **timeline cards** (NOT plain text) — one card per activity, newest first, each a **clickable card** that expands detail via `sendPrompt` (see the Timeline card template). For a QBR-style ask, use the two-column card layout (Wins & milestones / Challenges & response, + Upcoming priorities / Expansion) over the same timeline cards. NEVER return timeline/QBR data as a text/bullet answer — it renders as cards.
-7. **Scorecard measures** — for "show the scorecard measures / breakdown / why is X unscored". Header `Scorecard — account` + the overall band gauge (same gauge as account summary, label/color from `overall_label`/`score_color`). Then **one measure card per measure** (see the Scorecard-measure card template): measure name (bold) + weight `%` (muted) on the left; a **status chip colored by that measure's own `score_color`** on the right, or `— · Unscored` when not scored; submeasures on a muted sub-line. Tag unweighted rows "informational". Never a bullet list.
-8. **Trend / time-series** — for "health / ARR / adoption **over time**", "trend", "last N months/quarters". This is the ONE pattern that uses a **line chart**: call `mcp__visualize__read_me` with `modules: ["chart"]` (NOT "mockup") first to load chart guidance, then render a single inline **line chart** (Chart.js from the CDN allowlist). Header `<metric> trend — account/portfolio · <period>`; x-axis = time, y-axis = metric; one line per series (multiple lines only for an explicit compare); Horizon/CDS colors; one widget. If there's only a single data point (no history), fall back to the KPI tile with its ↑/↓ delta — do not draw a one-point chart.
-9. **Comparison / ranking** — for "compare Acme vs Globex," "top 10 accounts by ARR," "which accounts renew this quarter." Two shapes: (a) **Compare** a few named entities → side-by-side **cards** (one per entity, the SAME fields in the SAME order so differences line up), or a compact table with entities as columns; (b) **Rank / filter** a list → a sorted **table** (or ranked horizontal **bars** when it's one metric), sorted by the metric, following the big-list rules (≤10 → cards/bars, 11+ → compact table). Health/score cells use the band chip colored by `score_color`. Never a prose comparison.
+6. **NPS gauge** — centered label + big `+score` + responses; distribution bar + legend; KPI row (3).
+7. **Feature adoption** — header `Feature adoption — account · source`; KPI row (4) with trends; feature breakdown bars.
+8. **Engagement funnel** — header `Engagement funnel — guide · views`; funnel bars; KPI row (3).
+9. **Risk alerts** — header `Declining sentiment · source · N flagged`; risk cards (border by severity · 3-col sentiment/relationship/champion · evidence). Compact card ONLY for Low severity; Critical/High ALWAYS show the 3-col grid + an Evidence box ("No evidence recorded." if none). Base compact on severity, never on whether evidence happens to be missing. Empty list → an empty-state box.
+10. **Community activity** — header `Community activity — account · source` + right `unanswered` pill; KPI row (4) with trends; unanswered-questions cards; trending-topics pills.
+11. **Timeline activity** — for any request about an account's activity/history/QBR/"last quarter" (standalone, not the account-summary section). Header `Recent activity — account · N activities` (the **account name is a click-through** → `sendPrompt('Show the account summary for <account>')`). Then a stack of **timeline cards** (NOT plain text) — one card per activity, newest first, each a **clickable card** that expands detail via `sendPrompt` (see the Timeline card template). For a QBR-style ask, use the two-column card layout (Wins & milestones / Challenges & response, + Upcoming priorities / Expansion) over the same timeline cards. NEVER return timeline/QBR data as a text/bullet answer — it renders as cards.
+12. **Scorecard measures** — for "show the scorecard measures / breakdown / why is X unscored". Header `Scorecard — account` + the overall band gauge (same gauge as account summary, label/color from `overall_label`/`score_color`). Then **one measure card per measure** (see the Scorecard-measure card template): measure name (bold) + weight `%` (muted) on the left; a **status chip colored by that measure's own `score_color`** on the right, or `— · Unscored` when not scored; submeasures on a muted sub-line. Tag unweighted rows "informational". Never a bullet list.
+13. **Trend / time-series** — for "health / NPS / ARR / adoption **over time**", "trend", "last N months/quarters". This is the ONE pattern that uses a **line chart**: call `mcp__visualize__read_me` with `modules: ["chart"]` (NOT "mockup") first to load chart guidance, then render a single inline **line chart** (Chart.js from the CDN allowlist). Header `<metric> trend — account/portfolio · <period>`; x-axis = time, y-axis = metric; one line per series (multiple lines only for an explicit compare); Horizon/CDS colors; one widget. If there's only a single data point (no history), fall back to the KPI tile with its ↑/↓ delta — do not draw a one-point chart.
+14. **Comparison / ranking** — for "compare Acme vs Globex," "top 10 accounts by ARR," "which accounts renew this quarter." Two shapes: (a) **Compare** a few named entities → side-by-side **cards** (one per entity, the SAME fields in the SAME order so differences line up), or a compact table with entities as columns; (b) **Rank / filter** a list → a sorted **table** (or ranked horizontal **bars** when it's one metric), sorted by the metric, following the big-list rules (≤10 → cards/bars, 11+ → compact table). Health/score cells use the band chip colored by `score_color`. Never a prose comparison.
 
 For the portfolio sort toggle, render both buttons and re-issue the query via `sendPrompt`
 (e.g. `sendPrompt('Show my portfolio health sorted by ARR')`).
 
-## Fallback — data outside the 9 patterns (the long tail)
+## Fallback — data outside the 10 patterns (the long tail)
 
 Not every request maps to a dashboard above (contacts, custom reports, comparisons, ad-hoc
 queries). Do NOT force a mismatched dashboard and NEVER fabricate. Instead pick the best-fit
@@ -134,7 +139,7 @@ queries). Do NOT force a mismatched dashboard and NEVER fabricate. Instead pick 
 5. **Detail** — a two-column key/value grid (muted label · value), for attribute lists.
 
 Rule: dashboard if it fits → else the closest primitive → else clean text. Same header pattern
-(`[icon] Title` + subtitle) and Horizon styling as the 9, so the long tail still looks consistent.
+(`[icon] Title` + subtitle) and Horizon styling as the 10, so the long tail still looks consistent.
 
 ## CSS variables the host provides (auto light/dark) — use the exact names
 
@@ -163,8 +168,8 @@ Use host variables for all neutral + accent/success/warning/danger. Use hardcode
 - Expansion / "pro" purple (no host variable exists): `#6E32AE` text on `#F0E5FA` bg
 - Alert banner: `rgba(255,187,0,0.12)` bg + `rgba(255,187,0,0.25)` border; title/icon `#FFBB00`, body `var(--text-secondary)`. (Works in both modes.)
 - Distribution-bar segments: `#13C77F` / `#FFBB00` / `#F75D4F`
-- **Semantic TEXT on the surface (contrast rule):** any green/amber/red text that sits directly on a dark card/page — percentages, legend labels, trend deltas (`↑/↓`), overdue counts — must use the host vars `var(--text-success)` / `var(--text-warning)` / `var(--text-danger)`, which the Visualizer tunes for AA contrast in both modes. Do NOT use the dark 90-stop hexes for on-surface text (`#9A1C0B` ≈2:1, `#0F8754` ≈3.4:1, and `#DC3626`/`#13AD68` are borderline on dark). Those dark hexes are for **dark text on a light chip/pill only** (see Status chips above). The gauge score number is the one exception — it's large-format, so `score_color` is acceptable there. Dim neutrals: date/sub-label text uses `var(--text-secondary)`, never `var(--text-muted)` on dark.
-- **Card/box separation — REQUIRED, outline only (no shadow).** Every card/box container uses a visible **outline, not a shadow**. Use `border:1px solid var(--border-strong)` (NOT `var(--border)`, which is ~1.2:1 on white and disappears). `--border-strong` is more visible and adapts to both light and dark. Do **not** add a `box-shadow`. Apply the outline to every boxed element: KPI tiles, CTA cards, table containers, success-plan card, empty-state boxes, and the not-configured panel.
+- **Semantic TEXT on the surface (contrast rule):** any green/amber/red text that sits directly on a dark card/page — percentages, legend labels, sentiment values, trend deltas (`↑/↓`), overdue counts — must use the host vars `var(--text-success)` / `var(--text-warning)` / `var(--text-danger)`, which the Visualizer tunes for AA contrast in both modes. Do NOT use the dark 90-stop hexes for on-surface text (`#9A1C0B` ≈2:1, `#0F8754` ≈3.4:1, and `#DC3626`/`#13AD68` are borderline on dark). Those dark hexes are for **dark text on a light chip/pill only** (see Status chips above). The gauge score number is the one exception — it's large-format, so `score_color` is acceptable there. Dim neutrals: date/sub-label text uses `var(--text-secondary)`, never `var(--text-muted)` on dark.
+- **Card/box separation — REQUIRED, outline only (no shadow).** Every card/box container uses a visible **outline, not a shadow**. Use `border:1px solid var(--border-strong)` (NOT `var(--border)`, which is ~1.2:1 on white and disappears). `--border-strong` is more visible and adapts to both light and dark. Do **not** add a `box-shadow`. Apply the outline to every boxed element: KPI tiles, CTA cards, table containers, risk/community cards, success-plan card, empty-state boxes, and the not-configured panel.
 - **`var(--text-muted)` is for de-emphasized text only, never a section's primary label.** KPI-tile labels, table headers, and band sub-labels use `var(--text-secondary)` — `--text-muted` can fall below 4.5:1 on white.
 
 ## Icons — Tabler webfont, sized 16–24px, colored via `color`
@@ -206,7 +211,7 @@ Three variants — pick by meaning, not by which field it is:
 <!-- danger: bg #FDDFDC, icon <circle r=8 fill=#DC3626/> + white ✕ path "M5.5 5.5l5 5M10.5 5.5l-5 5" -->
 <!-- warning: bg #FFECB8, icon <path triangle fill=#F4A702/> + white "!" -->
 ```
-Mapping: priority High→danger · Medium/Yellow→warning · Low→success. Overdue→danger. Success-plan %→success.
+Mapping: priority High→danger · Medium/Yellow→warning · Low→success. Risk Critical→danger · High→warning · Low→success. Overdue→danger. Success-plan %→success. Community unanswered→warning.
 
 ### CTA card — 2×2 grid, standard outline (no colored left border)
 Grid keeps the sub-line and the due date on the same row (aligned), with a 4px row gap.
@@ -267,7 +272,7 @@ One per measure. Chip colored by that measure's own `score_color`; unscored → 
 ```
 `SCORE_COLOR` = the measure's own `score_color`; `TINT_OF_SCORE_COLOR` = a light tint of it (same treatment as the portfolio health chip). Unscored measure → `<span class="chip" style="background:var(--surface-2);color:var(--text-secondary)">— · Unscored</span>`. Tag unweighted measures "informational" in place of the weight.
 
-### Trend line chart (pattern 8) — the only chart
+### Trend line chart (pattern 13) — the only chart
 Load `read_me` with `modules: ["chart"]` first, then render one Chart.js line chart from the CDN allowlist (`cdnjs.cloudflare.com`). One `<canvas>`, x = time, y = metric, Horizon colors, `<script>` last (per the Visualizer streaming rule). Round all displayed numbers. Header above the chart: `<metric> trend — account · <period>`. Never draw a chart for a single data point — use the KPI tile with its ↑/↓ delta instead.
 
 ### Next-step buttons (always end with 2–3) — `sendPrompt` sends a chat message
@@ -294,6 +299,15 @@ call a tool and re-render in place, with no text round-trip) requires the MCP Ap
 Always `resolve_customer` FIRST — TWO calls: `mode="resolve"` for the GSID, then
 `mode="add_attributes"` with `company_ids=[gsid]` for attributes. Then pass the GSID on.
 **Reads:** account summary, health scores, CTAs + tasks, success plans, timeline, scorecards, reports, portfolio, contacts. **Writes:** CTAs, tasks, success plans, timeline activities.
+
+## PX (Product Experience) — beta, read only
+Feature adoption, MAU/DAU, engagement, NPS/surveys, segments, events, user/account attributes.
+
+## Staircase AI — live, read only
+Sentiment, relationship strength, risk/expansion signals, meeting prep, portfolio analysis.
+
+## Communities — beta, read only
+Unanswered questions, topic trends, member contributions, content analytics.
 
 ---
 
@@ -334,17 +348,35 @@ the missing connector — do NOT fill it with plausible-looking numbers.
 
 ## Which patterns can pull real data here
 
-Only the **CS** Gainsight MCP is connected in this tenant, and every remaining pattern
-is CS-sourced — there are no unconnected patterns to fall back for.
+Only the **CS** Gainsight MCP is connected in this tenant. PX, Staircase, and
+Communities are not, so their patterns cannot show real data until those connectors
+are added.
 
 | # | Pattern | Source | Live? | How to fetch real data |
 |---|---|---|---|---|
 | 1 | Account summary | CS | ✅ | `resolve_customer(mode="resolve")` → GSID, then `resolve_customer(mode="add_attributes", company_ids=[gsid])` → industry/ARR/owner/renewal/stage; `ask_scorecard(company_ids=[gsid])` → `overall_label`+`score_color`+measures; `fetch_cta_list(where CompanyId EQ id AND IsClosed EQ false)`; `fetch_timeline_activity_list`. Gauge label/color = tenant's `overall_label`/`score_color`. |
 | 2 | Portfolio health | CS | ✅ | `get_portfolio_filters("company")` → **if `has_portfolio_filters:false`, scope by `Csm=CURRENT_USER` or label as tenant-wide (never "your portfolio")**; else `run_query("company", filters)` → GSIDs+ARR+renewal (cap N) → `ask_scorecard` **in ≤15-ID batches, overall scores only** → bucket by `overall_label` |
 | 3 | Success plan | CS | ✅ | `fetch_success_plan_list(where CompanyId EQ id)` → may be **>1 plan** (disambiguate by relationship / list); PercentComplete, Status, Type; objectives via `run_query("call_to_action", where CtaGroupId EQ sp_id)` |
-| 4 | CTA pipeline | CS | ✅ | "my/open CTAs" → `fetch_cta_list(where OwnerId literal CURRENT_USER AND IsClosed EQ false)` — **always owner-scoped**; account view adds `CompanyId EQ id`. Fields: Name, Company, TypeId__gr.Name, PriorityId__gr.Name, Owner, DueDate, OverdueTaskCount |
-| 5 | KPI dashboard | CS | ✅ | portfolio-scoped `run_query("company", …)` (see #2 scoping) with `SUM(Arr)`/`COUNT` + `ask_scorecard` (batched, overall only) for avg health + `fetch_cta_list` count |
+| 8 | CTA pipeline | CS | ✅ | "my/open CTAs" → `fetch_cta_list(where OwnerId literal CURRENT_USER AND IsClosed EQ false)` — **always owner-scoped**; account view adds `CompanyId EQ id`. Fields: Name, Company, TypeId__gr.Name, PriorityId__gr.Name, Owner, DueDate, OverdueTaskCount |
+| 9 | KPI dashboard | CS | ✅ | portfolio-scoped `run_query("company", …)` (see #2 scoping) with `SUM(Arr)`/`COUNT` + `ask_scorecard` (batched, overall only) for avg health + `fetch_cta_list` count |
+| 4 | NPS gauge | PX | ❌ | Needs Gainsight PX connector — render "Connect Gainsight PX" empty state |
+| 5 | Feature adoption | PX | ❌ | Needs Gainsight PX connector — empty state |
+| 6 | Engagement funnel | PX | ❌ | Needs Gainsight PX connector — empty state |
+| 7 | Risk alerts | Staircase AI | ❌ | Needs Staircase connector for sentiment/relationship; a CS-only risk view can be derived from `fetch_timeline_activity_list` (risk mode) if the user wants |
+| 10 | Community activity | Communities | ❌ | Needs Communities (inSided) connector — empty state |
+
+## Empty state for an unconnected source
+
+```html
+<div style="display:flex;gap:12px;align-items:center;background:var(--surface-1);border:1px dashed var(--border-strong);border-radius:12px;padding:16px">
+  <i class="ti ti-plug-connected-x" style="font-size:22px;color:var(--text-muted)" aria-hidden="true"></i>
+  <div>
+    <div style="font-size:15px;font-weight:500;color:var(--text-primary)">Gainsight PX not connected</div>
+    <div style="font-size:14px;color:var(--text-secondary)">Feature adoption and NPS come from Gainsight PX. Connect it to see live data here.</div>
+  </div>
+</div>
+```
 
 Every visualization ends with 2–3 `sendPrompt` next-step buttons. When data is sparse
-or unscored, render the empty/blocked state honestly (like the unscored-scorecard alert)
-rather than inventing numbers.
+or unscored, render the empty/blocked state honestly (like the unscored-scorecard alert
+or the connector empty state) rather than inventing numbers.
