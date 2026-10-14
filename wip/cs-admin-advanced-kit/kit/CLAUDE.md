@@ -39,8 +39,6 @@ These rules come from how the CLI is actually called. Break one and you will thr
 | Build a new report | `prompts/build-report.md` |
 | Change a rule, program, field, or dropdown | `prompts/change-config.md` |
 
-If the ask is on the list in `DOES-NOT-COVER.md`, say the CLI cannot do that and stop.
-
 ## Where to look
 
 All paths are under `tenants/<slug>/`. The `.tsv` index files can be large: **search them with `grep`/`awk`/`python`, don't read them whole.** Never print a `raw/` file. Extract only the part you need with `python3` or `jq` (one object describe can be 170 KB+).

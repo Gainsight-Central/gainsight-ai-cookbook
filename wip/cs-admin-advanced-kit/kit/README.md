@@ -16,8 +16,6 @@ A one-time snapshot (`prompts/initialize.md`) is how the agent remembers the ten
 | Sandbox and production have drifted | "Diff sandbox and production." | [06](examples/06-sandbox-prod-diff.md) |
 | A saved report already answers the question | "Run the saved report. Do not rebuild it." | [07](examples/07-saved-report-answers.md) |
 
-What this kit does not claim is listed in [DOES-NOT-COVER.md](DOES-NOT-COVER.md). Null Salesforce fields, license counts, X-Org promotion, and Journey sends that never leave are product gaps. The CLI can show the configuration around them. It cannot repair them.
-
 The snapshot also holds:
 
 - **Every object and field**, every lookup path between objects, and every picklist value (with the internal IDs that filters need).
@@ -78,7 +76,6 @@ New rules are left inactive and Journey programs unpublished unless you ask othe
 ```
 CLAUDE.md            how Claude works in this folder (loaded automatically): routing, write gate, CLI facts
 GUARDRAILS.md        the safety model, in 1 minute
-DOES-NOT-COVER.md    admin pains this CLI cannot close
 examples/            the seven jobs: what to say, what runs, what it will not claim
 prompts/
   initialize.md      one-time snapshot of your tenant (start here)
