@@ -77,7 +77,7 @@ Add more hop objects for multi-hop paths. Get `through` and `to` from `schema/_l
   {"leftOperand":{"fieldPath":{"hops":[{"through":"Csm","to":"gsuser"}],"leaf":"Name"}},"operator":"IS_NOT_NULL"}
 ]}'
 ```
-- Conditions are joined with **AND**. Do not pass `alias` or `expression`; the CLI assigns them. For OR or nested logic, save the report, run `report update --where-filters`, then use `report run-saved`.
+- Conditions are joined with **AND**. Do not pass `alias` or `expression`; the CLI assigns them. Parentheses around AND, such as `(A AND B)`, are still AND. Pass those filters. Drop them only when the expression contains OR or NOT. For that case, run the saved report. Do not rebuild it.
 - Dates: absolute values work, e.g. `"operator":"BTW","rightOperand":{"value":["2026-10-01","2027-03-31"]}` or `"GTE"` with `"2026-10-01"`.
 - ⚠️ **Relative dates (THIS_QUARTER, NEXT_N_QUARTERS, LAST_N_WEEKS…) failed in every form tried through `report run`.** Work out absolute dates from today instead, and tell the user that a saved report will then be fixed to those dates rather than rolling. For a rolling filter, the user can set it in the report builder UI after you create the report.
 - ⚠️ **Picklist values must be the value's GSID, not its label.** Filtering `Stage EQ "2. Implementation"` silently returns **0 rows**. Filtering on the value's GSID (e.g. `1I00…`) works. Look up GSIDs in `config/dropdowns.tsv` (`value_gsid`). A 0-row result on a picklist filter almost always means this mistake.
@@ -112,11 +112,12 @@ A bare array of rows. Each key is a column alias and each cell is `{k, v, fv}`:
 | `groupByFields[]` (with `pivoted`, `rowGrouped`) | `--group-by` entries, same rule |
 | `orderByFields[].orderByInfo: {order, nulls}` | `--order-by` entry plus `"order"`, `"nulls"` |
 | `whereFilters.conditions[]`: `leftOperand.fieldName`, `comparisonOperator`, `filterValue.value` | `{"leftOperand":{"fieldName":…},"operator":…,"rightOperand":{"value":…}}` |
-| `whereFilters.expression` with OR | can't be passed to `run`/`create`. Save first, then `report update` |
+| `whereFilters.expression` of `(A AND B)` | still AND. Pass every condition. Parentheses are not a reason to drop them. |
+| `whereFilters.expression` with OR or NOT | can't be passed to `run`/`create`. Run the saved report. |
 | `reportDisplayType` | `--display-type` |
 | `sourceDetails.objectName` | `--object` |
 
-`python3 scripts/snapshot.py exemplar <reportId>` does this translation and checks it with `report run`. Nothing is saved in Gainsight. The file is a key definition: a real report from this tenant, written as a command the agent can copy. It is stored in `tenants/<tenant>/exemplars/reports/`, with whether the command ran and anything that could not be carried over. When you talk to the admin, call it a key definition.
+`python3 scripts/snapshot.py exemplar <reportId>` does this translation and checks it with `report run`. Nothing is saved in Gainsight. The file is a key definition. Its copy is **exact** (every filter is in the command), **partial** (the command ran, but a filter was left out, so the row count is not the saved report), or **failed** (the command did not run). A partial copy is not verified. When you talk to the admin, call it a key definition.
 
 ## 5. Other read commands worth knowing
 
@@ -139,7 +140,7 @@ Checked on `@gainsight/gs-admin-cli` 1.0.10. The 1.0.11 npm readme names command
 
 | Job | Command that exists | Flags that exist | Do not use |
 |---|---|---|---|
-| Handbook, field use, CTA and score sources | `re r list-and-describe` | `--search` (partial name), `--limit` (default **all**), `--page` | A call with no `--limit`. One rule at a time. |
+| Handbook, field use, CTA and score sources | `re r list-and-describe` | `--search` (partial name), `--limit` (default **all**) | `--page` on CLI 1.0.10 (ignored; every page is the first page). A call with no `--limit`. One rule at a time. |
 | Field use | `dm dependencies check` | `--name` (object, required) | A field name. This is object-level. |
 | Field use | `dd templates describe` | `--template-id`, `--template-name` (first match), `--task-id` | |
 | Rule health | `re r debug` | `--id` (rule GUID) or `--name` (first match), `--recent` (1–50, default 5) | `re r list-executions` — not on 1.0.10 |
@@ -154,7 +155,7 @@ Checked on `@gainsight/gs-admin-cli` 1.0.10. The 1.0.11 npm readme names command
 | Find a saved report | `rp describe` | `--id` (preferred) or `--name` (fragment) | |
 | Run a saved report | `report run-saved --id <id>` | See §5 | `rp run --name`. On 1.0.10 `--name` is a temporary label for a test run that is not saved, and `--object` is required. |
 
-`re r list-and-describe` returns `totalRules`, `rules[]`, and `_flatSummary`. Each rule has `rule` (list fields) and `rd` (`taskDetails`, `_sourceObject`, `_flatMappings`). Page with `--limit 20` until the collected count equals `totalRules`.
+`re r list-and-describe` returns `totalRules`, `rules[]`, and `_flatSummary`. Each rule has `rule` (list fields) and `rd` (`taskDetails`, `_sourceObject`, `_flatMappings`). On CLI 1.0.10, pass one `--limit` large enough for `totalRules` (a limit of 100 returned 99 rules). Do not pass `--page`. `rd` does not include the schedule. Use `re r schedules --id`.
 
 `re r list` rows include `lastRunResult` and `lastRunDate`. Either can be empty on an active rule. Empty is not proof of success. Use `re r debug --recent` for those rules.
 

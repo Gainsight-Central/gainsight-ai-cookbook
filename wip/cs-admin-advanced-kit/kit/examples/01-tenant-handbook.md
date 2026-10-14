@@ -14,7 +14,7 @@ From the indexes, answer:
 1. For ARR, renewal date, health, CSM, stage, segment, and churn: every object.field that looks like it,
    which reports and rules name it, and which one is used most. Say when two candidates are both plausible.
 2. Which of those fields a connector job maps, and which a rule loads. Page `gs-admin cn list --limit 20 --page N --json` until a short page. For each connection, `gs-admin cn jobs --id <connectionId> --limit 20 --json` (or `--name` for the first match). Do not pass `--connector-id` or `--describe`.
-   Page `gs-admin re r list-and-describe --limit 20 --page N --json` until the collected count equals `totalRules`. Read `rd._flatMappings` and `rd._sourceObject`. Do not describe rules one by one.
+   One call: `gs-admin re r list-and-describe --limit <rule count> --json`. Do not pass `--page` (on CLI 1.0.10 every page is the same first page). Read `rd._flatMappings` and `rd._sourceObject`. The schedule is not in that payload. For a rule you write up, run `gs-admin re r schedules --id <id> --json`. Do not describe rules one by one.
 3. Write tenants/<slug>/TENANT.md (at most 120 lines) and tenants/<slug>/intent/field-ownership.md.
    Keep "found in this file" separate from "this looks canonical".
 ```

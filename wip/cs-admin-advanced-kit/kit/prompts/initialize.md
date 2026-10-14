@@ -53,15 +53,19 @@ Then write the key definitions. These are what you will copy later, so do not sk
    Prefer reports your team uses. Skip names that are Demo, Sample, or Test when you have a real one.
 4. For each chosen report, run `python3 scripts/snapshot.py exemplar <report id>`.
    The script saves a file under exemplars/reports/. The file is a key definition.
-   It contains the command that recreates the report, checked with a test run that saves nothing.
-   If a file fails, read the error, fix the command using reference/cli-reference.md, and test it with
-   `gs-admin report run … --limit 3 --json`. Update that file. If you cannot fix it, mark it failed and say why.
+   Read the copy line. exact means every filter was copied and the test command ran.
+   partial means the command ran but a filter was left out (often a relative date, or OR). The row count
+   is not the saved report's count. Do not call a partial copy verified.
+   failed means the command did not run. Read the error, fix it using reference/cli-reference.md, and test
+   with `gs-admin report run … --limit 3 --json`. If you cannot fix it, leave it failed and say why.
    In each file, add two to four sentences: what kind of report this is, what it shows about how this tenant
    builds reports, and when to copy it. When you talk to me, call these key definitions. Do not say "exemplar."
 5. Rules. From config/rules.tsv, pick up to eight rules that are turned on and do different jobs
    (create a CTA, close a CTA, set a score, load data to Company, create a Success Plan, call an external action).
-   Describe each one. Save the JSON under exemplars/rules/ and write a short page: source object, filters,
-   what the action does, and whether it is scheduled.
+   Describe each one. That payload does not include the schedule. The snapshot stores it separately
+   as `_schedule`, from `gs-admin re r schedules --id`. If `_schedule` is missing, run that command.
+   Save the page under exemplars/rules/: source object, filters, what the action does, and the schedule.
+   If nothing came back, write "no schedule returned." Do not guess a schedule from the describe payload.
 6. Programs. Describe two or three Journey Orchestrator programs that represent how this tenant sends email
    or creates CTAs. Save a short page for each: who enters the program, and what the steps do.
 
