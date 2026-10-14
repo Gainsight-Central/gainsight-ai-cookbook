@@ -1,8 +1,8 @@
 # Guardrails (1 minute)
 
-**1. Initialization and questions are read-only.** The snapshot script can only run the read commands in its `READ_COMMANDS` allow-list (`scripts/snapshot.py`, top of file). Any other command is refused in code. `report run` is included because it executes a report ad hoc and saves nothing.
+**1. Building the local tenant brain, and answering questions, only reads.** The script can only run the read commands listed at the top of `scripts/snapshot.py`. Any other command is refused. `report run` is included because it runs a report as a test and does not save it.
 
-**2. Changes go through the write gate, every time.** For anything that creates, changes, deletes, schedules, publishes, or runs something, the AI agent must explain the plan and what else it touches, show the exact command, name the environment (sandbox or production), wait for your explicit yes for that specific change, then read it back and log it in `tenants/<tenant>/changelog.md`. Approving one change does not approve the next.
+**2. The agent asks before it changes anything.** For anything that creates, changes, deletes, schedules, publishes, or runs something, the AI agent explains the plan and what else it touches, shows the exact command, names sandbox or production, waits for your yes for that specific change, then reads it back and logs it in `tenants/<tenant>/changelog.md`. Saying yes once does not approve the next change.
 
 **3. Real-world effects are called out before they happen.** Running a rule now, publishing or resuming a Journey Orchestrator program, and load-to-object actions can email customers, create CTAs for CSMs, or overwrite data. The AI agent leaves new rules inactive and new programs unpublished unless you ask, and says what will happen before turning anything on.
 
@@ -18,4 +18,4 @@
 
 **9. You stay accountable.** The AI agent drafts, checks, and runs commands on your instruction. Review plans the way you would review a teammate's change, especially in production.
 
-**10. The AI agent does not overload the API.** It reads the local tenant brain instead of describing the same object again, it inventories rules in pages, and it stops when a command fails twice with the same arguments or when the API returns HTTP 429. The snapshot script describes two objects at a time and stops when the tenant throttles the calls.
+**10. The AI agent does not overload the API.** It reads the local tenant brain instead of describing the same object again, it reads rules in pages, and it stops when a command fails twice with the same arguments or when the API returns HTTP 429. The script describes two objects at a time and stops when the tenant slows the calls down.

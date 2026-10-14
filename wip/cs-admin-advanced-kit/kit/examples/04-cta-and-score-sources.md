@@ -1,6 +1,6 @@
 # What creates CTAs, and what writes each measure
 
-**Pain.** Cockpit fills up, and the rule that created the CTAs is not obvious. Two rules set the same scorecard measure, and the later one wins. A health score is quoted in a meeting, and half of it is a manual sentiment measure nobody has re-weighted.
+**When you need this.** Cockpit fills up, and the rule that created the CTAs is not obvious. Two rules set the same scorecard measure, and the later one wins. A health score is quoted in a meeting, and half of it is a manual sentiment measure nobody has re-weighted.
 
 **What you can say**
 
@@ -22,9 +22,9 @@ Follow CLAUDE.md and examples/04-cta-and-score-sources.md.
 5. If the measure list has no weight, say weights were not in the payload. Do not invent a percentage.
 ```
 
-**What the agent does**
+**What you get back**
 
-One rules inventory, the scorecard lists, and a drilldown only where two actions share a measure.
+Two tables: which rules create or close CTAs, and which rules set each scorecard measure. The agent reads the scorecard list and the rules already saved on your machine. It opens a single rule only when two rules write the same measure.
 
 **Example output** (illustrative)
 
@@ -45,6 +45,6 @@ Measures
 
 Sentiment has two writers. The chain order is the precedence. Weights are included only when `sc measures --name` returns them.
 
-**Why the CLI.** The UI lets you open a rule or a measure. It does not list every CTA-creating action next to every measure writer. That list is how you decide which rule to tighten before you ask CSMs to live in Cockpit.
+**Why this is easier than the screens.** Gainsight lets you open one rule or one measure. It does not list every CTA-creating action next to every measure writer. That list is how you decide which rule to tighten before you ask CSMs to live in Cockpit.
 
-**Limits.** This does not forecast how many CTAs the next run will create, and it does not close any. Turning a rule off is a write. Measure weights and null-reallocation are included only when the list or describe payload actually contains them.
+**What this will not tell you.** This does not forecast how many CTAs the next run will create, and it does not close any. Turning a rule off is a change, and the agent asks you first. Measure weights are included only when the scorecard command actually returns them.

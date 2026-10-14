@@ -98,7 +98,7 @@ A bare array of rows. Each key is a column alias and each cell is `{k, v, fv}`:
 - Alias patterns: `<object>_<field>`, `<agg>_of_<object>_<field>`, and for lookups `<targetobject>_<lookup>__gr_<leaf>` (e.g. `gsuser_Csm__gr_Name`).
 
 ### Saving
-`report create` takes the same flags as `report run`, plus `--name` (must be unique in the tenant), `--display-type` (required), and `--folder-id` (default 2; system folders are not allowed). **It is a write**, so follow the write gate in `CLAUDE.md`. Always get the same flags working with `report run` first.
+`report create` takes the same flags as `report run`, plus `--name` (must be unique in the tenant), `--display-type` (required), and `--folder-id` (default 2; system folders are not allowed). **It saves a report in Gainsight**, so ask the admin before you run it. Get the same flags working with `report run` first.
 
 ## 4. Translating a saved report (`report describe`) into CLI flags
 
@@ -116,7 +116,7 @@ A bare array of rows. Each key is a column alias and each cell is `{k, v, fv}`:
 | `reportDisplayType` | `--display-type` |
 | `sourceDetails.objectName` | `--object` |
 
-`python3 scripts/snapshot.py exemplar <reportId>` does this translation for you and proves it with a `report run` (nothing is saved). Each exemplar in `tenants/<tenant>/exemplars/reports/` contains the translated command, whether it ran, and anything that could not be carried over.
+`python3 scripts/snapshot.py exemplar <reportId>` does this translation and checks it with `report run`. Nothing is saved in Gainsight. The file is a key definition: a real report from this tenant, written as a command the agent can copy. It is stored in `tenants/<tenant>/exemplars/reports/`, with whether the command ran and anything that could not be carried over. When you talk to the admin, call it a key definition.
 
 ## 5. Other read commands worth knowing
 
@@ -152,7 +152,7 @@ Checked on `@gainsight/gs-admin-cli` 1.0.10. The 1.0.11 npm readme names command
 | Score sources | `sc list` | `--name` (contains), `--limit`, `--page` | |
 | Score sources | `sc measures` | `--id` or `--name` of a **scorecard** | `sc measures list` — not on 1.0.10 |
 | Find a saved report | `rp describe` | `--id` (preferred) or `--name` (fragment) | |
-| Run a saved report | `report run-saved --id <id>` | See §5 | `rp run --name`. On 1.0.10 `--name` is a temporary label for an **ad-hoc** run and `--object` is required. |
+| Run a saved report | `report run-saved --id <id>` | See §5 | `rp run --name`. On 1.0.10 `--name` is a temporary label for a test run that is not saved, and `--object` is required. |
 
 `re r list-and-describe` returns `totalRules`, `rules[]`, and `_flatSummary`. Each rule has `rule` (list fields) and `rd` (`taskDetails`, `_sourceObject`, `_flatMappings`). Page with `--limit 20` until the collected count equals `totalRules`.
 
@@ -162,6 +162,6 @@ Checked on `@gainsight/gs-admin-cli` 1.0.10. The 1.0.11 npm readme names command
 
 `cn list` defaults to 20 rows and the payload is an array on `data`. Page until a short page comes back.
 
-`re r list-executions` and `sc measures list` are not commands on 1.0.10. Rule history in the jobs is `re r debug --recent`. §5 still lists `rules-engine rules executions` for a single rule. The snapshot lists every measure with `scorecard measure list` (singular). That is a different command from `sc measures`, which takes one scorecard.
+`re r list-executions` and `sc measures list` are not commands on 1.0.10. Rule history in the jobs is `re r debug --recent`. §5 still lists `rules-engine rules executions` for a single rule. The local tenant brain lists every measure with `scorecard measure list` (singular). That is a different command from `sc measures`, which takes one scorecard.
 
-Known from an earlier 1.0.10 run, still unfixed: `dm objects list-and-describe` returned zero objects. The snapshot describes objects one by one for that reason. `dropdowns describe` was verified with `--id`. Use whichever `--help` accepts.
+`dm objects list-and-describe` returned zero objects on CLI 1.0.10, so the script describes objects one by one. `dropdowns describe` was checked with `--id`. Use whichever flag `--help` accepts.

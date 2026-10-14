@@ -1,13 +1,13 @@
 # Where the tenant actually lives
 
-**Pain.** One admin holds the map. A field called ARR exists in more than one place, and nobody can say which one the connector writes, which one a rule overwrites, and which one the scorecard reads. A new admin, or an agent, starts by describing the same objects again.
+**When you need this.** One admin holds the map. A field called ARR exists in more than one place, and nobody can say which one the connector writes, which one a rule overwrites, and which one the scorecard reads. A new admin, or an agent, starts by describing the same objects again.
 
 **What you can say**
 
 ```text
 Build the tenant handbook. Read-only. Follow CLAUDE.md and examples/01-tenant-handbook.md.
 
-Use the snapshot under tenants/<slug>/. If TENANT.md is missing, stop and offer prompts/initialize.md.
+Use the local tenant brain under tenants/<slug>/. If TENANT.md is missing, stop and offer prompts/initialize.md.
 Do not describe an object that already has a file in schema/objects/ or raw/objects/.
 
 From the indexes, answer:
@@ -19,12 +19,9 @@ From the indexes, answer:
    Keep "found in this file" separate from "this looks canonical".
 ```
 
-**What the agent does**
+**What you get back**
 
-1. Reads `schema/_field_index.tsv`, `config/rules.tsv`, and `config/reports.tsv`. It greps. It does not reload raw JSON.
-2. Pages `cn list`, then `cn jobs --id` (or `--name`) per connection.
-3. Pages `re r list-and-describe --limit 20`. If that command is missing, it runs `gs-admin re r --help` once and stops. It does not describe every rule.
-4. Writes the handbook. Canonical means "most reports and live rules use this field," and the file says so.
+A short handbook of the fields your team actually uses. The agent searches the indexes already on disk. It does not describe every object again. For connectors and rules it reads one page at a time. "The field this tenant uses" means the one most reports and live rules already use, and the file says so.
 
 **Example output** (illustrative — not a real tenant)
 
@@ -36,6 +33,6 @@ From the indexes, answer:
 
 `Company.Arr` is the one reports use. `Company.Arr__gc` is a second write. They are not the same number until someone checks a row.
 
-**Why the CLI.** The UI shows one connector mapping, or one rule, at a time. The handbook is the list you would otherwise rebuild in a spreadsheet after someone leaves.
+**Why this is easier than the screens.** Gainsight shows one connector mapping, or one rule, at a time. The handbook is the list you would otherwise rebuild in a spreadsheet after someone leaves.
 
-**Limits.** The connector command shows the mapping. It does not show whether the last run wrote nulls. Picklist mismatches and Salesforce merges are not in this job. Object dependency checks do not list every dashboard filter or playbook.
+**What this will not tell you.** The connector command shows the mapping. It does not show whether the last run wrote blanks. Dropdown mismatches and Salesforce merges are not in this job. A dependency check does not list every dashboard filter or playbook.

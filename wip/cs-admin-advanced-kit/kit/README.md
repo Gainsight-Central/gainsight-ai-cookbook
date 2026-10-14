@@ -26,7 +26,7 @@ A one-time setup (`prompts/initialize.md`) writes the brain under `tenants/<your
 
 - **Every object and field**, every lookup path between objects, and every picklist value, including the IDs that filters need.
 - **Your rules, reports, scorecards, Journey Orchestrator programs, and connectors**, indexed so the agent can search them.
-- **Report examples from your own tenant**, translated into CLI commands and checked with a test run. Gainsight report setup is hard to guess. These examples show the agent how your reports are built.
+- **Key definitions.** A few real reports, rules, and Journey Orchestrator programs from your tenant, written as commands. The agent copies these when it builds something new, so the result matches how your team already works. The files are stored in a folder named `exemplars/`. That is only the folder name.
 - **Your conventions.** Naming, folders, and the CTA types and reasons your team actually uses, so new work looks like your team built it.
 - **Where your core fields live** (ARR, renewal date, health, CSM, stage), including where the same idea exists in more than one field.
 
@@ -58,7 +58,7 @@ You need a super admin login. Before you log in, register one OAuth application 
 
 **3. Say "Initialize my tenant."** The agent follows `prompts/initialize.md`. This step is read-only. It asks two questions first: is this sandbox or production, and is it all right to start. On a typical tenant this takes about 10–20 minutes. When it finishes you have `tenants/<your-tenant>/TENANT.md` and a short check that the brain is usable.
 
-You need Node.js, Python 3 (already on macOS; the snapshot script uses it), and an AI agent that can run commands in the terminal.
+You need Node.js, Python 3 (already on macOS; the script that builds the local tenant brain uses it), and an AI agent that can run commands in the terminal.
 
 ---
 
@@ -76,7 +76,7 @@ If a saved report already answers the question, use [example 07](examples/07-sav
 
 ## How changes are made
 
-The agent can create and change configuration only through the write gate in `CLAUDE.md`:
+The agent can create and change configuration only after you say yes. The rules for that are in `CLAUDE.md`:
 
 1. A plain-English plan, the exact commands, what else the change touches, and any real-world effects (emails, CTAs, data overwrites).
 2. Your explicit yes for that specific change. For a production change, the agent recommends trying it in sandbox first.
@@ -87,14 +87,14 @@ New rules are left inactive, and Journey Orchestrator programs are left unpublis
 ## What's in the folder
 
 ```
-CLAUDE.md            how the AI agent behaves in this folder: routing, write gate, CLI facts
+CLAUDE.md            how the AI agent behaves in this folder, including when it must ask you before a change
 AGENTS.md            the same instruction, for agents that read this file name
 GUARDRAILS.md        the safety model
 examples/            the questions in the table above: what to say, what runs, and the limit
 prompts/
   initialize.md      build the local tenant brain (start here)
   build-report.md    plain English → a report checked against your tenant
-  change-config.md   rules, Journey Orchestrator, scorecards, fields, dropdowns, behind the write gate
+  change-config.md   rules, Journey Orchestrator, scorecards, fields, and dropdowns, only after you say yes
   refresh.md         bring the local tenant brain up to date
 reference/
   cli-reference.md   CLI syntax, output shapes, and known limits
@@ -110,7 +110,7 @@ TENANT.md            the overview the AI agent reads each session
 manifest.json        what was read, when, and with which command
 schema/              object, field, and lookup indexes, plus one page per object
 config/              rules, reports, dropdowns (with GSIDs), scorecards, measures, Journey Orchestrator programs
-exemplars/           reports, rules, and programs translated into CLI commands
+exemplars/           key definitions: a few of your reports, rules, and programs, written as commands
 conventions.md       how your team names and organizes configuration
 intent/              which standard processes you run, and which are specific to you
 changelog.md         every change made through the AI agent

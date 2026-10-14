@@ -1,13 +1,13 @@
 # What is different between sandbox and production
 
-**Pain.** A sandbox promotion fails partway, or a sandbox refresh quietly drops programs and resets dates. You need the list of what differs. You do not need another full click-through.
+**When you need this.** A sandbox promotion fails partway, or a sandbox refresh quietly drops programs and resets dates. You need the list of what differs. You do not need another full click-through.
 
 **What you can say**
 
 ```text
-Diff sandbox and production. Read-only. Follow CLAUDE.md and examples/06-sandbox-prod-diff.md.
+Compare sandbox and production. Read-only. Follow CLAUDE.md and examples/06-sandbox-prod-diff.md.
 
-I have two snapshots: tenants/<sandbox-slug>/ and tenants/<prod-slug>/.
+I have two local tenant brains: tenants/<sandbox-slug>/ and tenants/<prod-slug>/.
 If either TENANT.md is missing, stop and tell me to initialize that tenant. Do not copy files from one tenant into the other.
 
 Diff only the indexes, with a short Python script, not by reading the files whole:
@@ -24,9 +24,9 @@ Ignore created/modified dates. On a sandbox, Journey "off" after a refresh is no
 Do not replay any change. If I want to copy something later, that is a separate write and I will say which rows.
 ```
 
-**What the agent does**
+**What you get back**
 
-It compares two local snapshots. It does not log into the second tenant unless you ask it to refresh one of them, and it never applies a row from one side to the other inside this job.
+Three lists: only in sandbox, only in production, and in both but not the same. The agent compares the two folders on your machine. It does not log into the second tenant unless you ask it to refresh one of them, and it does not copy a change from one side to the other.
 
 **Example output** (illustrative)
 
@@ -36,6 +36,6 @@ It compares two local snapshots. It does not log into the second tenant unless y
 | Fields | `Company.Budget_Note__gc` | — | `Company.Segment` picklist has "Strategic" only in sandbox |
 | Journey | — | "QBR invite" | — |
 
-**Why the CLI.** X-Org tells you a promotion failed. It does not hand you a field-and-rule diff you can read. Two snapshots do.
+**Why this is easier than the screens.** X-Org tells you a promotion failed. It does not hand you a list of fields and rules you can read. The two local copies do.
 
-**Limits.** A diff is not a promotion. Connector configs, permission bundles, and PX connections are not in these indexes. Dates and Journey on/off status are the wrong signal after a sandbox refresh. Copying a change across is a write, on the target tenant, through the write gate, one approved list at a time.
+**What this will not tell you.** A comparison is not a promotion. Connector settings, permission bundles, and PX connections are not in these indexes. Dates, and whether a Journey Orchestrator program is on, are the wrong signal after a sandbox refresh. Copying a change across is a change in the target tenant. The agent asks you before it does that, one list at a time.

@@ -1,6 +1,6 @@
 # What uses this field
 
-**Pain.** You are about to retire a field, change a picklist, or delete a scorecard. Analyzer and Data Management dependencies miss dashboard filters, Data Designer, real-time rules, and playbooks. People find out when a rule fails the next morning.
+**When you need this.** You are about to retire a field, change a picklist, or delete a scorecard. Analyzer and Data Management dependencies miss dashboard filters, Data Designer, real-time rules, and playbooks. People find out when a rule fails the next morning.
 
 **What you can say**
 
@@ -9,7 +9,7 @@ What uses Company.Segment? Read-only. Follow CLAUDE.md and examples/02-what-uses
 
 1. Run `gs-admin dm dependencies check --name Company --json` and save it under
    tenants/<slug>/raw/dependencies-Company.json. This is object-level. Say that in the answer.
-2. Search the snapshot for the field name. Reports: `showFields`, `groupByFields`, and `filterVariations` inside raw/reports.json (the list payload already has them).
+2. Search the local tenant brain for the field name. In reports, look at the fields shown, the fields grouped, and the filters inside raw/reports.json. The report list already includes them.
    Rules: if tenants/<slug>/raw/rules-described.json is missing or older than 14 days, page
    `gs-admin re r list-and-describe --limit 20 --page N --json` until `totalRules` and save the `rules` array there. Never omit `--limit`. Do not describe each rule.
 3. Data Designer: `gs-admin dd templates list --json`, then describe only templates whose name or
@@ -22,9 +22,9 @@ What uses Company.Segment? Read-only. Follow CLAUDE.md and examples/02-what-uses
    command actually returned them.
 ```
 
-**What the agent does**
+**What you get back**
 
-One dependency call, one rule inventory call, a search of files already on disk, and a short table. A miss stays a miss.
+One table of what uses the field, from files already on your machine plus one dependency check and one pass through the rules. If a command did not return something, that row stays unknown.
 
 **Example output** (illustrative)
 
@@ -37,6 +37,6 @@ One dependency call, one rule inventory call, a search of files already on disk,
 
 Not searched, so not cleared: playbooks, C360 dashboard filters, real-time rules.
 
-**Why the CLI.** This is the bulk inventory admins already attempt by clicking. The kit does it once and writes it down, so the next question does not start over.
+**Why this is easier than the screens.** This is the inventory admins already try to build by clicking. The kit does it once and writes it down, so the next question does not start over.
 
-**Limits.** `dm dependencies check` names an object, not a field. A field can be unused while the object is busy. Deleting the field is a separate write and goes through the write gate. This job does not delete anything.
+**What this will not tell you.** The dependency check names an object, not a field. A field can be unused while the object is busy. Deleting the field is a separate change, and the agent asks you before it does that. This job does not delete anything.

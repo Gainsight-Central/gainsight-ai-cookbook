@@ -519,7 +519,7 @@ def index(d):
 
 
 def report_candidates(d):
-    """Print one or two candidate reports per pattern, so Claude can pick exemplars."""
+    """Print one or two candidate reports per pattern, so the agent can pick key definitions."""
     p = os.path.join(d, "config", "reports.tsv")
     if not os.path.exists(p):
         raise SystemExit("Run `pull reports` and `index` first.")
@@ -654,16 +654,17 @@ def exemplar(d, ids):
         cmd = "gs-admin " + " ".join(shlex.quote(a) for a in args) + " --limit 3 --json"
         create = cmd.replace("gs-admin report run", "gs-admin report create --name '<NEW UNIQUE NAME>'", 1) \
                     .replace(" --limit 3 --json", " --json")
-        md = [f"# Report exemplar: {r.get('reportName')}", "",
+        md = [f"# Key definition: {r.get('reportName')}", "",
+              "A real report from this tenant, written as a command. Copy it when you build a similar report.", "",
               f"- report id: `{rid}` | object: `{flags['--object']}` | display: `{flags['--display-type']}`",
               f"- server JSON: `{slug}.server.json` (from `gs-admin report describe --id {rid} --json`)",
-              f"- verification (`report run`, nothing saved, {now()}): **{'✅ ' if ok else '❌ '}{result}**", "",
-              "## Working CLI command (run, read-only)", "```", cmd, "```", "",
-              "## Same report, saved (WRITE: follow the write gate)", "```", create, "```", ""]
+              f"- check (`report run`, nothing saved, {now()}): **{'✅ ' if ok else '❌ '}{result}**", "",
+              "## Command that runs this report (does not save it)", "```", cmd, "```", "",
+              "## Command that would save a copy (ask the admin first)", "```", create, "```", ""]
         if notes:
-            md += ["## Not carried over / watch-outs"] + [f"- {n}" for n in notes] + [""]
-        md += ["## What this exemplar teaches", "_(Claude: add 2–4 bullets: the pattern, the tenant conventions it shows,"
-               " and when to copy it.)_", ""]
+            md += ["## What could not be copied"] + [f"- {n}" for n in notes] + [""]
+        md += ["## What this shows about the tenant", "_(Add 2–4 sentences: what kind of report this is,"
+               " what it shows about how this team builds reports, and when to copy it.)_", ""]
         open(os.path.join(outdir, f"{slug}.md"), "w").write("\n".join(md))
         existing[rid] = [rid, slug, r.get("reportName"), flags["--object"], flags["--display-type"],
                          "verified" if ok else "failed", str(len(notes))]

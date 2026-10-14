@@ -1,6 +1,6 @@
 # Which rules failed, and which only look healthy
 
-**Pain.** A rule says success, or partial success, and the execution history is empty or only a few weeks deep. Scorecard chains sit unscheduled. You find out because a CSM asks why the score did not move.
+**When you need this.** A rule says success, or partial success, and the execution history is empty or only a few weeks deep. Scorecard chains sit unscheduled. You find out because a CSM asks why the score did not move.
 
 **What you can say**
 
@@ -19,9 +19,9 @@ Audit rule and chain health. Read-only. Follow CLAUDE.md and examples/03-rule-he
    If the API returns no history, write "no history returned" — do not infer that the rule is fine.
 ```
 
-**What the agent does**
+**What you get back**
 
-It starts from the index, then calls `re r debug` only for the rows that look wrong. A green last-run with an empty history stays flagged.
+A list of rules that failed, finished only in part, or have no history. The agent starts from the index and looks up history only for those rules. A successful last run with an empty history stays on the list.
 
 **Example output** (illustrative)
 
@@ -31,6 +31,6 @@ It starts from the index, then calls `re r debug` only for the rows that look wr
 | Load usage | Failed | "Source row count 0" | Daily 01:00 |
 | Onboarding CTAs | Success | 3 runs | Unscheduled — chain says the chain owns the schedule |
 
-**Why the CLI.** The Rules Engine screen shows one rule's last run. This is the list you can take to the Monday ops review: failed, partial, and unscheduled.
+**Why this is easier than the screens.** Rules Engine shows one rule's last run. This is the list you can take to the Monday ops review: failed, partial, and not scheduled.
 
-**Limits.** The API keeps a short history. This job cannot recover a run older than that window, and it cannot show the row that a partial success skipped. A partial success with empty history is still an open item for you to open in the UI.
+**What this will not tell you.** Gainsight keeps a short history. This job cannot recover an older run, and it cannot show the row that a partial success skipped. A partial success with no history is still something to open in Rules Engine.

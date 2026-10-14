@@ -1,43 +1,47 @@
 # Build a report
 
-**What this does:** turns a plain-English report request into a working Gainsight report. The AI agent starts from your tenant's own reports, checks the report with a test run (nothing saved), and saves it only after you say yes.
+**What you get.** A Gainsight report that matches the way this tenant already builds reports. The agent starts from a key definition (a real report from your tenant, already written as a working command), runs it as a test, shows you the rows, and saves the report only after you say yes.
 
-**How to run:** ask, for example, *"Build a report of ARR by CSM for customers renewing in the next 6 months, as a bar chart."* The AI agent follows the steps below. You can also paste the box.
+**How to run.** Ask in plain English, for example: *"Build a report of ARR by CSM for customers renewing in the next 6 months, as a bar chart."* You can also paste the box below.
 
 ---
 
 ```
 Build the report I describe. Follow CLAUDE.md and reference/cli-reference.md.
 
-1. UNDERSTAND. Restate the report in one line: object, measures, grouping, filters, display type. If a choice
-   really changes the result (e.g. which ARR field, or whether "renewing" means the renewal date or an open
-   renewal CTA), ask me. Otherwise pick the sensible default and say which.
+1. Restate the report in one sentence: which object, which numbers, how it is grouped, which filters,
+   and which chart or grid. If a choice would change the answer (which ARR field, or whether "renewing"
+   means the renewal date or an open renewal CTA), ask me. Otherwise pick the field this tenant uses
+   and say which one you picked.
 
-2. RESOLVE FIELDS FROM THE SNAPSHOT (don't guess names):
-   - object → BI name from schema/_object_index.tsv
-   - each field → exact name and type from schema/_field_index.tsv (prefer the canonical field in TENANT.md)
-   - each lookup → `through`/`to` from schema/_lookup_index.tsv
-   - each picklist filter value → its GSID from config/dropdowns.tsv (labels silently return 0 rows)
-   - relative dates ("next 6 months") → absolute yyyy-MM-dd from today's date
+2. Look up names in the local tenant brain. Do not guess them.
+   - The report object name is the BI name in schema/_object_index.tsv.
+   - Each field name and type is in schema/_field_index.tsv. Prefer the field named in TENANT.md.
+   - A lookup (for example CSM name on the user record) comes from schema/_lookup_index.tsv.
+   - A dropdown filter must use the value's ID from config/dropdowns.tsv, not the label.
+     A label returns zero rows and no error.
+   - "Next 6 months" and other relative dates must become real dates (yyyy-MM-dd) from today.
+     The CLI cannot store a rolling date.
 
-3. START FROM AN EXEMPLAR. Pick the closest one in exemplars/reports/_index.tsv (same display type and/or same
-   object and pattern). Copy its working command and change it. If none are close, use the verified syntax in
-   reference/cli-reference.md §3.
+3. Start from a key definition. Open exemplars/reports/_index.tsv and pick the closest report
+   (same chart type, or the same object). Copy its working command and change it.
+   Those files are key definitions. Do not call them exemplars when you talk to me.
+   If none are close, use the command shapes in reference/cli-reference.md.
 
-4. PROVE IT (read-only): run `gs-admin report run … --limit 5 --json` with the final display type, then once more
-   as `--display-type GRID` so you can see actual rows. Check the numbers make sense: row count, totals, no
-   unexpected empties. If a picklist filter returns 0 rows, check you used the GSID. Fix and re-run until it's right.
+4. Prove it before you save anything. Run `gs-admin report run … --limit 5 --json`.
+   Run it once more as a grid so the rows are visible. Check that the row count and totals make sense.
+   If a dropdown filter returns zero rows, you used the label instead of the ID. Fix it and run again.
 
-5. SHOW ME: the rows (formatted table), the exact `report run` command, and the `report create` command you
-   would run, with a name that follows conventions.md and a folder (`--folder-id`) that matches where similar
-   reports live. Mention anything the CLI can't express (OR filters, rolling date ranges) and how to finish
-   it in the UI.
+5. Show me the rows, the test command, and the save command you would run.
+   Name the report the way conventions.md names reports, and put it in the folder where similar reports live.
+   If the CLI cannot express part of the request (an OR filter, or a rolling date), say what I would finish
+   in Report Builder.
 
-6. SAVE ONLY ON MY EXPLICIT YES (write gate in CLAUDE.md). Then:
-   - `gs-admin report describe --id <newId> --json`: compare with what was intended
-   - `gs-admin report run-saved --id <newId> --limit 5 --json`: confirm it returns the same rows
-   - append to tenants/<slug>/changelog.md
-   - offer to add it as a new exemplar: `python3 scripts/snapshot.py exemplar <newId>`
+6. Save only after I say yes to this specific report. Then:
+   - Read the saved report back and compare it with what I asked for.
+   - Run the saved report and confirm the rows match the test.
+   - Add a line to tenants/<slug>/changelog.md.
+   - Offer to save this report as a new key definition: `python3 scripts/snapshot.py exemplar <new report id>`.
 
-If I only wanted the answer (data, not a saved report), stop after step 5 and just give me the numbers.
+If I only wanted the number, and not a saved report, stop after step 5.
 ```

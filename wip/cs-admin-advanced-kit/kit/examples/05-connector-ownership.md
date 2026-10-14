@@ -1,6 +1,6 @@
 # Which connector writes this, and what else writes it too
 
-**Pain.** A Company field is null after sync. Permissions on the integration user look fine. A rule is also loading that object, and the two overwrite each other. The connector job and the rule do not appear on the same screen.
+**When you need this.** A Company field is null after sync. Permissions on the integration user look fine. A rule is also loading that object, and the two overwrite each other. The connector job and the rule do not appear on the same screen.
 
 **What you can say**
 
@@ -23,9 +23,9 @@ Read-only. Follow CLAUDE.md and examples/05-connector-ownership.md.
    If activity says success and the mapping exists, you may still not claim the row was non-null.
 ```
 
-**What the agent does**
+**What you get back**
 
-It joins three read models the UI keeps apart: job mappings, job activity, and rule load actions.
+One table that puts three things Gainsight keeps on different screens onto one row: the connector mapping, the last activity, and any rule that also writes the field.
 
 **Example output** (illustrative)
 
@@ -37,6 +37,6 @@ It joins three read models the UI keeps apart: job mappings, job activity, and r
 
 `Arr` has two writers. A success status does not mean the value landed. Partial on Segment is the one to open in the connector activity screen.
 
-**Why the CLI.** Admins already compare a connector mapping to a rule by hand when a field comes through empty. This writes the comparison down and keeps it next to the rest of the snapshot.
+**Why this is easier than the screens.** Admins already compare a connector mapping to a rule by hand when a field comes through empty. This writes the comparison down and keeps it with the rest of the local tenant brain.
 
-**Limits.** This does not fix a null, a picklist mismatch, a Salesforce merge, or a user that was deleted in Salesforce and is still active here. Activity is whatever the connector API returns. Warehouse scale failures and Timeline association rules are outside these commands.
+**What this will not tell you.** This does not fix a blank value, a dropdown mismatch, a Salesforce merge, or a user that was deleted in Salesforce and is still active here. Activity is whatever the connector command returns. Warehouse failures and Timeline association rules are outside these commands.
