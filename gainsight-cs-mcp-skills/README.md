@@ -46,7 +46,7 @@ Renders any Gainsight answer as a dashboard instead of a wall of bullets. Fires 
 
 **You say:** *"How is Acme Inc doing?"* · *"Show my portfolio health"* · *"What's Acme's health trend over the last 6 months?"*
 
-**You get** one of 9 fixed layouts — the same request type always produces the same structure:
+**You get** one of 14 fixed layouts — the same request type always produces the same structure:
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
@@ -69,7 +69,9 @@ Renders any Gainsight answer as a dashboard instead of a wall of bullets. Fires 
 
 The discipline is the point: a defined KPI tile is never dropped — a missing value shows `—`, never an invented number. Health bands use *your tenant's* configured colors and labels, not a hardcoded red/amber/green. And "no open CTAs" is rendered differently from "the CTA source isn't connected," because those mean opposite things.
 
-**Layouts:** account summary · portfolio health · success plan · CTA pipeline · KPI dashboard · timeline activity · scorecard measures · trend chart · comparison/ranking
+**Layouts:** account summary · portfolio health · success plan · CTA pipeline · KPI dashboard · NPS gauge · feature adoption · engagement funnel · risk alerts · community activity · timeline activity · scorecard measures · trend chart · comparison/ranking
+
+Five of those (NPS, feature adoption, engagement funnel, risk alerts, community activity) read from Gainsight PX, Staircase AI, and Communities. Without those connectors the skill renders an honest *"not configured"* panel naming the connector you need — deliberately distinct from an empty state, because "no open CTAs" and "the CTA source isn't connected" mean opposite things.
 
 ---
 
