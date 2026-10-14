@@ -6,7 +6,7 @@ This kit builds that brain on your machine from your Gainsight configuration. Yo
 
 An AI agent such as Claude, Cursor, or ChatGPT can use this folder. Point your AI agent at the folder, then describe what you want in plain English. The agent uses the [Gainsight Admin CLI](https://support.gainsight.com/gainsight_nxt/AI_Assistants/Admin_CLI/Configure_Admin_CLI) you already have. You do not need a new command.
 
-The [Starter Kit](../../cs-admin-cli-starter-kit/) answers "what is this tenant configured to do?" This kit is for the questions that come after that.
+The [Starter Kit](../cs-admin-cli-starter-kit/) answers "what is this tenant configured to do?" This kit is for the questions that come after that.
 
 ## Questions you can ask
 
@@ -30,7 +30,7 @@ A one-time setup (`prompts/initialize.md`) writes the brain under `tenants/<your
 - **Your conventions.** Naming, folders, and the CTA types and reasons your team actually uses, so new work looks like your team built it.
 - **Where your core fields live** (ARR, renewal date, health, CSM, stage), including where the same idea exists in more than one field.
 
-> Part of the Gainsight AI Cookbook. The files in this folder are plain text you can read: how the agent behaves, the questions above, and `scripts/snapshot.py`, which only reads configuration.
+> Part of the [Gainsight AI Cookbook](../). Sample code — not a supported product. The files in this folder are plain text you can read: how the agent behaves, the questions above, and `scripts/snapshot.py`, which only reads configuration.
 
 ---
 
