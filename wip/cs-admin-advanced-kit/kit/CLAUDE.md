@@ -27,7 +27,7 @@ If the user has more than one tenant (for example sandbox and production), each 
 These rules come from how the CLI is actually called. Break one and you will throttle the tenant or loop on a bad id.
 
 - **Search the local tenant brain before you call.** If `schema/objects/`, `raw/`, or a `config/*.tsv` already has the object, rule, or report, read that. Do not describe it again in this session.
-- **One inventory call, then drill in.** For rules, `gs-admin re r list-and-describe --limit 20 --page N --json` until `totalRules` is covered. Never omit `--limit` (the default is every rule). Never describe every rule in a loop.
+- **One inventory call, then drill in.** For rules, one call: `gs-admin re r list-and-describe --limit <count> --json`, where `<count>` is the number of rules (from `rules list`, or `totalRules` if the first call came back short). Never omit `--limit` (the default is every rule). Do not pass `--page`. On CLI 1.0.10 `--page` is ignored and every page is the same first page. Never describe every rule in a loop. The describe payload has no schedule. For each rule whose page you write, run `gs-admin re r schedules --id <id> --json`. If it returns nothing, say no schedule was returned.
 - **Stop on a repeated failure.** If a command fails, read the error. Do not run that same command with the same arguments again. Run `gs-admin <command> --help` once if the error is an unknown flag or the wrong id kind, then stop and tell the user. Journey program fetches take the id the list command returned. Do not send a GSID to a command that returned a UUID, or the reverse.
 - **Stop on HTTP 429.** Wait. Do not send more calls in parallel, and do not keep going down the list.
 - **Saved reports answer data questions.** Find the report with `rp list` or `rp describe --id`, then run `report run-saved --id`. `rp run --name` is a test run that is not saved: `--name` is a temporary label and `--object` is required. It is not how you run a saved report. That test run cannot express relative dates or OR filters.
@@ -79,7 +79,7 @@ All paths are under `tenants/<slug>/`. The `.tsv` index files can be large: **se
 
 ## Building or changing configuration
 
-- **Reports** → follow `prompts/build-report.md`. Do not write report setup from memory. Start from the closest key definition in `exemplars/reports/` and the command shapes in `reference/cli-reference.md`. Get it working with `report run` before any `report create`.
+- **Reports** → follow `prompts/build-report.md`. Do not write report setup from memory. Start from the closest key definition in `exemplars/reports/` whose copy is **exact**. A **partial** copy ran, but filters were left out, so its row count is not the saved report. The command shapes are in `reference/cli-reference.md`. Get it working with `report run` before any `report create`.
 - **Rules, Journey programs, scorecards, objects/fields, dropdowns** → follow `prompts/change-config.md`.
 - Match the tenant's conventions (`conventions.md`): naming prefixes, folders, which CTA types and reasons to use. A new report or rule should look like the admin built it.
 

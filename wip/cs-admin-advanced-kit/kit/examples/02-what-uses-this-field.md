@@ -11,7 +11,7 @@ What uses Company.Segment? Read-only. Follow CLAUDE.md and examples/02-what-uses
    tenants/<slug>/raw/dependencies-Company.json. This is object-level. Say that in the answer.
 2. Search the local tenant brain for the field name. In reports, look at the fields shown, the fields grouped, and the filters inside raw/reports.json. The report list already includes them.
    Rules: if tenants/<slug>/raw/rules-described.json is missing or older than 14 days, page
-   `gs-admin re r list-and-describe --limit 20 --page N --json` until `totalRules` and save the `rules` array there. Never omit `--limit`. Do not describe each rule.
+   `gs-admin re r list-and-describe --limit <rule count> --json` once and save the `rules` array there. Do not pass `--page`. Never omit `--limit`. Do not describe each rule.
 3. Data Designer: `gs-admin dd templates list --json`, then describe only templates whose name or
    list payload mentions the field or the object. Journey: search raw/jo_programs.json and
    raw/email_templates.json.

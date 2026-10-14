@@ -48,6 +48,7 @@ READ_COMMANDS = {
     ("rules-engine", "rules", "list"),
     ("rules-engine", "rules", "list-external-actions"),
     ("re", "r", "list-and-describe"),
+    ("re", "r", "schedules"),
     ("rules-engine", "chains", "list"),
     ("scorecard", "list"),
     ("scorecard", "measure", "list"),
@@ -263,42 +264,60 @@ def pull_rules(d):
     print(f"  {len(rules)} rules (reported {total}), {len(chains)} chains{flag}")
 
 
+def _describe_rules_once(limit):
+    """CLI 1.0.10 ignores --page and repeats the first page. One --limit returns that many rules."""
+    return gs("re", "r", "list-and-describe", "--limit", str(limit))
+
+
 def pull_rule_details(d):
-    """One paged inventory. Omitting --limit asks the CLI to describe every rule."""
-    out, page, total = [], 1, None
-    while page <= 40:
-        resp = gs("re", "r", "list-and-describe", "--limit", "20", "--page", str(page))
-        if not isinstance(resp, dict) or resp.get("_error"):
-            err = (resp.get("_error") if isinstance(resp, dict) else "no json") or "empty"
-            if out:
-                save(d, "raw/rules-described.json", out)
-            mark(d, "rule_details", error=str(err)[:300], pages=page, count=len(out),
-                 command="re r list-and-describe --limit 20 --page N")
-            print("  list-and-describe failed:", str(err)[:200])
-            return
-        if "rules" not in resp and resp.get("totalRules") is None:
-            mark(d, "rule_details", error="response had no rules or totalRules", pages=page,
-                 count=len(out), command="re r list-and-describe --limit 20 --page N")
-            if out:
-                save(d, "raw/rules-described.json", out)
-            print("  list-and-describe returned an unexpected shape; saved", len(out))
-            return
-        rules = resp.get("rules") or []
-        if resp.get("totalRules") is not None:
-            total = resp.get("totalRules")
-        if not rules:
-            break
-        out.extend(rules)
-        if total is not None and len(out) >= int(total):
-            break
-        if total is None and len(rules) < 20:
-            break
-        page += 1
+    """One call. Do not pass --page: on CLI 1.0.10 every page is the same first page."""
+    known = rd(d, "raw/rules.json", []) or []
+    limit = len(known) if known else 200
+    resp = _describe_rules_once(limit)
+    command = "re r list-and-describe --limit N (no --page; 1.0.10 ignores it)"
+    if not isinstance(resp, dict) or resp.get("_error"):
+        err = (resp.get("_error") if isinstance(resp, dict) else "no json") or "empty"
+        mark(d, "rule_details", error=str(err)[:300], count=0, command=command)
+        print("  list-and-describe failed:", str(err)[:200])
+        return
+    if "rules" not in resp and resp.get("totalRules") is None:
+        mark(d, "rule_details", error="response had no rules or totalRules", count=0, command=command)
+        print("  list-and-describe returned an unexpected shape")
+        return
+    out = list(resp.get("rules") or [])
+    total = resp.get("totalRules")
+    if total is not None and len(out) < int(total) and int(total) <= 500 and limit < int(total):
+        resp = _describe_rules_once(int(total))
+        if isinstance(resp, dict) and not resp.get("_error") and resp.get("rules"):
+            out = list(resp.get("rules") or [])
+            total = resp.get("totalRules", total)
     save(d, "raw/rules-described.json", out)
-    mark(d, "rule_details", count=len(out), total_reported=total,
-         command="re r list-and-describe --limit 20 --page N")
-    flag = "" if total is None or len(out) == int(total) else f"  WARNING: got {len(out)} of {total}"
+    _attach_schedules(d, out)
+    save(d, "raw/rules-described.json", out)
+    mark(d, "rule_details", count=len(out), total_reported=total, command=command)
+    flag = "" if total is None or len(out) == int(total) else f"  WARNING: got {len(out)} of {total}; --page does not advance on CLI 1.0.10"
     print(f"  {len(out)} rules described (reported {total}){flag}")
+
+
+def _rule_id(item):
+    rule = item.get("rule") if isinstance(item.get("rule"), dict) else {}
+    body = item.get("rd") if isinstance(item.get("rd"), dict) else {}
+    return rule.get("ruleId") or rule.get("id") or body.get("ruleId") or body.get("id")
+
+
+def _attach_schedules(d, rules):
+    """Describe does not include the schedule. re r schedules does."""
+    def one(item):
+        if not isinstance(item, dict):
+            return
+        rid = _rule_id(item)
+        if not rid:
+            item["_schedule"] = {"_error": "no rule id"}
+            return
+        item["_schedule"] = gs("re", "r", "schedules", "--id", str(rid))
+
+    with cf.ThreadPoolExecutor(max_workers=DESCRIBE_WORKERS) as ex:
+        list(ex.map(one, [r for r in rules if isinstance(r, dict)]))
 
 
 def pull_reports(d):
@@ -487,9 +506,10 @@ def index(d):
             rule.get("active"),
             json.dumps(body.get("_sourceObject"), default=str)[:300],
             json.dumps(body.get("_flatMappings"), default=str)[:800],
+            json.dumps(item.get("_schedule"), default=str)[:500],
         ])
     counts["rule_details"] = write_tsv(d, "config/rule_mappings.tsv",
-        ["name", "active", "source_object", "mappings"], detail_rows)
+        ["name", "active", "source_object", "mappings", "schedule"], detail_rows)
 
     # Scorecards
     sc = rd(d, "raw/scorecards.json", {})
@@ -595,10 +615,12 @@ def translate_report(r):
     if ob:
         flags["--order-by"] = ob
     wf = r.get("whereFilters") or {}
-    expr = (wf.get("expression") or "").upper()
+    expr = wf.get("expression") or ""
     if wf.get("conditions"):
-        if " OR " in f" {expr} " or "(" in expr:
-            notes.append(f"where filter uses OR/nesting (`{wf.get('expression')}`): not passable to run/create; save then `report update --where-filters`")
+        # (A AND B) is still AND. Parentheses alone are not OR. Drop the filters only for OR or NOT.
+        ops = set(re.findall(r"\b(AND|OR|NOT)\b", expr.upper()))
+        if "OR" in ops or "NOT" in ops:
+            notes.append(f"where filter uses OR or NOT (`{expr}`): not passable to run/create; run the saved report instead")
         else:
             conds = []
             for c in wf["conditions"]:
@@ -654,11 +676,22 @@ def exemplar(d, ids):
         cmd = "gs-admin " + " ".join(shlex.quote(a) for a in args) + " --limit 3 --json"
         create = cmd.replace("gs-admin report run", "gs-admin report create --name '<NEW UNIQUE NAME>'", 1) \
                     .replace(" --limit 3 --json", " --json")
+        if not ok:
+            copy = "failed"
+            copy_line = "The test command did not run. Do not copy this definition."
+        elif notes:
+            copy = "partial"
+            copy_line = ("The test command ran, but this is not the saved report. "
+                         "Something was left out, so the row count is not the report's count.")
+        else:
+            copy = "exact"
+            copy_line = "The test command ran, and every filter on the saved report is in the command."
         md = [f"# Key definition: {r.get('reportName')}", "",
               "A real report from this tenant, written as a command. Copy it when you build a similar report.", "",
               f"- report id: `{rid}` | object: `{flags['--object']}` | display: `{flags['--display-type']}`",
               f"- server JSON: `{slug}.server.json` (from `gs-admin report describe --id {rid} --json`)",
-              f"- check (`report run`, nothing saved, {now()}): **{'✅ ' if ok else '❌ '}{result}**", "",
+              f"- copy: **{copy}**. {copy_line}",
+              f"- test run (`report run`, nothing saved, {now()}): {result}", "",
               "## Command that runs this report (does not save it)", "```", cmd, "```", "",
               "## Command that would save a copy (ask the admin first)", "```", create, "```", ""]
         if notes:
@@ -667,11 +700,14 @@ def exemplar(d, ids):
                " what it shows about how this team builds reports, and when to copy it.)_", ""]
         open(os.path.join(outdir, f"{slug}.md"), "w").write("\n".join(md))
         existing[rid] = [rid, slug, r.get("reportName"), flags["--object"], flags["--display-type"],
-                         "verified" if ok else "failed", str(len(notes))]
-        print(f"{'OK  ' if ok else 'FAIL'} {r.get('reportName')}  -> exemplars/reports/{slug}.md" + (f"  ({len(notes)} note(s))" if notes else ""))
-    write_tsv(d, "exemplars/reports/_index.tsv", ["report_id", "file", "name", "object", "display_type", "status", "notes"],
+                         copy, str(len(notes))]
+        print(f"{copy.upper():7} {r.get('reportName')}  -> exemplars/reports/{slug}.md" + (f"  ({len(notes)} left out)" if notes else ""))
+    write_tsv(d, "exemplars/reports/_index.tsv", ["report_id", "file", "name", "object", "display_type", "copy", "left_out"],
               list(existing.values()))
-    mark(d, "exemplars_reports", count=len(existing), verified=sum(1 for v in existing.values() if v[5] == "verified"))
+    mark(d, "exemplars_reports", count=len(existing),
+         exact=sum(1 for v in existing.values() if len(v) > 5 and v[5] == "exact"),
+         partial=sum(1 for v in existing.values() if len(v) > 5 and v[5] == "partial"),
+         failed=sum(1 for v in existing.values() if len(v) > 5 and v[5] == "failed"))
 
 
 def status(d):
