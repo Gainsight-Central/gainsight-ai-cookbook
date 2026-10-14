@@ -1,0 +1,4 @@
+# Tenant snapshots are exports of your Gainsight configuration — keep them local.
+tenants/*
+!tenants/README.md
+__pycache__/

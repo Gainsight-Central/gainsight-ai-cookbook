@@ -1,0 +1,64 @@
+{
+  "$comment": "Starter CS ontology for tenant intent extraction. SEED ONLY — the nomination pass extends this with tenant-specific concept types and instances discovered bottom-up. Every extracted concept instance follows `concept_instance_schema`.",
+  "version": "0.1",
+  "concept_types": [
+    {
+      "type": "Segment",
+      "aka": ["Cohort", "Tier", "Book of Business slice"],
+      "definition": "A named partition of accounts/relationships the tenant treats differently (e.g. Enterprise, SMB, Strategic, by region/product/ARR band).",
+      "typical_encodings": ["report whereFilters on Company fields (ARR, employees, tier, segment picklist)", "rule source filters", "JO program audiences", "scorecard scoping"],
+      "why_it_matters": "Most-scattered concept; the same segment is usually re-expressed as a filter in dozens of assets with drift."
+    },
+    {
+      "type": "Risk",
+      "aka": ["Churn risk", "Red flag", "At-risk trigger"],
+      "definition": "A condition the tenant treats as a threat to retention/health and responds to.",
+      "typical_encodings": ["rule thresholds that create risk CTAs", "scorecard measures scoring red", "report filters isolating at-risk accounts", "risk CTA reason fields"],
+      "why_it_matters": "Encodes 'what is risky here' — the core semantic the AI agents need."
+    },
+    {
+      "type": "HealthDriver",
+      "aka": ["Health measure", "Scorecard driver"],
+      "definition": "A factor that contributes to the tenant's notion of account health.",
+      "typical_encodings": ["scorecard measures + weights", "measure groups", "rules that set measure scores", "usage/adoption fields"],
+      "why_it_matters": "Defines 'what healthy looks like' and how it's weighted."
+    },
+    {
+      "type": "LifecycleStage",
+      "aka": ["Journey stage", "Customer phase"],
+      "definition": "A phase of the customer relationship the tenant orchestrates against (onboarding, adoption, renewal, expansion, offboarding).",
+      "typical_encodings": ["JO program structure + audiences", "lifecycle stage picklists", "stage-gated rules/CTAs"],
+      "why_it_matters": "Sequencing/gating of response depends on stage."
+    },
+    {
+      "type": "KPI",
+      "aka": ["Metric", "Derived measure"],
+      "definition": "A quantitative measure the tenant computes and monitors (HAU, NPS, adoption %, ARR movement).",
+      "typical_encodings": ["Data Designer templates", "derived MDA fields", "report aggregations", "scorecard measure sources"],
+      "why_it_matters": "The units the definitions are expressed in; often re-derived inconsistently."
+    },
+    {
+      "type": "ResponsePattern",
+      "aka": ["Play", "Playbook", "CTA response"],
+      "definition": "A canned response the tenant fires when a condition is met (CTA + playbook task sequence, email cadence, JO email).",
+      "typical_encodings": ["rules create-CTA actions with attached playbooks", "cs_task sequences grouped by playbook", "JO email nodes", "call_to_action data"],
+      "why_it_matters": "Encodes 'how we respond' — the action half of the operating model."
+    }
+  ],
+  "concept_instance_schema": {
+    "id": "stable slug, e.g. segment.enterprise",
+    "type": "one of concept_types[].type OR a new tenant-specific type (flag as extended:true)",
+    "name": "human label as the tenant uses it",
+    "definition_nl": "one-sentence natural-language definition inferred from the assets",
+    "criteria": "structured criteria when recoverable (field, operator, value) — else null",
+    "source_assets": [
+      {"asset_type": "report|rule|scorecard_measure|jo_program|dd_template|connector|object", "asset_id": "id", "asset_name": "name", "where": "the specific filter/threshold/clause that encodes this concept"}
+    ],
+    "confidence": "0.0-1.0 — high for direct inventory facts, low for inferred clustering",
+    "extended": "true if this type/instance was discovered beyond the seed ontology",
+    "drift": [
+      {"variant_definition": "a conflicting/alternate definition found", "source_assets": ["..."], "note": "why it conflicts"}
+    ],
+    "notes": "free text"
+  }
+}
