@@ -14,6 +14,33 @@ Do not use any other Gainsight MCP server or integration in place of `gs-admin`.
 
 If the user has more than one tenant (e.g. sandbox and production), each has its own `tenants/<slug>/` folder. Always work in the one that matches `whoami`, and never apply knowledge from one tenant's snapshot to another without saying so.
 
+## How to behave on the CLI
+
+These rules come from how the CLI is actually called. Break one and you will throttle the tenant or loop on a bad id.
+
+- **Search the snapshot before you call.** If `schema/objects/`, `raw/`, or a `config/*.tsv` already has the object, rule, or report, read that. Do not describe it again in this session.
+- **One inventory call, then drill in.** For rules, `gs-admin re r list-and-describe --limit 20 --page N --json` until `totalRules` is covered. Never omit `--limit` (the default is every rule). Never describe every rule in a loop.
+- **Stop on a repeated failure.** If a command fails, read the error. Do not run that same command with the same arguments again. Run `gs-admin <command> --help` once if the error is an unknown flag or the wrong id kind, then stop and tell the user. Journey program fetches take the id the list command returned. Do not send a GSID to a command that returned a UUID, or the reverse.
+- **Stop on HTTP 429.** Wait. Do not raise parallelism and do not continue the fan-out.
+- **Saved reports answer data questions.** Find the report with `rp list` or `rp describe --id`, then run `report run-saved --id`. `rp run --name` is an ad-hoc run: `--name` is a temporary label and `--object` is required. It is not how you run a saved report. Ad-hoc JSON cannot express relative dates or OR filters.
+- **Commands move between CLI versions.** `reference/cli-reference.md` §§1–6 match CLI 1.0.10. If a command is not there, run `--help` once and treat the syntax as unverified.
+
+## Jobs
+
+| The admin is asking | Follow |
+|---|---|
+| Where a concept lives, or which field is canonical | `examples/01-tenant-handbook.md` |
+| What uses a field, or what breaks if it changes | `examples/02-what-uses-this-field.md` |
+| Which rules failed, or which look healthy and are not | `examples/03-rule-health.md` |
+| What creates CTAs, or what writes a measure | `examples/04-cta-and-score-sources.md` |
+| Which connector and which rule write a Company field | `examples/05-connector-ownership.md` |
+| How sandbox and production differ | `examples/06-sandbox-prod-diff.md` |
+| A number a saved report already computes | `examples/07-saved-report-answers.md` |
+| Build a new report | `prompts/build-report.md` |
+| Change a rule, program, field, or dropdown | `prompts/change-config.md` |
+
+If the ask is on the list in `DOES-NOT-COVER.md`, say the CLI cannot do that and stop.
+
 ## Where to look
 
 All paths are under `tenants/<slug>/`. The `.tsv` index files can be large: **search them with `grep`/`awk`/`python`, don't read them whole.** Never print a `raw/` file. Extract only the part you need with `python3` or `jq` (one object describe can be 170 KB+).

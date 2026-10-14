@@ -1,6 +1,8 @@
 # gs-admin CLI reference (verified)
 
-Everything here was checked against a live tenant with `@gainsight/gs-admin-cli` 1.0.10 (Oct 2026). If the CLI version you have is newer and something disagrees, trust `gs-admin <command> --help` and tell the user what changed.
+Sections 1–5 were checked against a live tenant with `@gainsight/gs-admin-cli` 1.0.10 (Oct 2026). Section 6 is `--help` from that same 1.0.10 build for the commands the seven jobs use. If `--help` disagrees, trust `--help`.
+
+Short aliases (`re`, `rp`, `dm`, `cn`, `jo`, `sc`, `dd`) and the long names are the same commands. Prefer the alias when `--help` shows it. Do not invent a long-form flag from an alias, or the reverse.
 
 Always pass `--json` when you parse output.
 
@@ -130,3 +132,36 @@ A bare array of rows. Each key is a column alias and each cell is `{k, v, fv}`:
 | Email template tokens | `journey email template --id <id>` |
 | BI field metadata incl. lookups for one object | `report schema --object <bi_name>` (large; extract what you need) |
 | Run a saved report | `report run-saved --id <id>` (read-only) |
+
+## 6. Commands the jobs use (checked with `--help` on 1.0.10)
+
+Checked on `@gainsight/gs-admin-cli` 1.0.10. The 1.0.11 npm readme names commands this build does not have. Trust this table over that readme. Always pass `--limit` when the table says the default is "all" or 20.
+
+| Job | Command that exists | Flags that exist | Do not use |
+|---|---|---|---|
+| Handbook, field use, CTA and score sources | `re r list-and-describe` | `--search` (partial name), `--limit` (default **all**), `--page` | A call with no `--limit`. One rule at a time. |
+| Field use | `dm dependencies check` | `--name` (object, required) | A field name. This is object-level. |
+| Field use | `dd templates describe` | `--template-id`, `--template-name` (first match), `--task-id` | |
+| Rule health | `re r debug` | `--id` (rule GUID) or `--name` (first match), `--recent` (1–50, default 5) | `re r list-executions` — not on 1.0.10 |
+| Rule health | `re r schedules` | `--id` (rule GUID) or `--name` (exact, then contains) | |
+| Rule health | `re chains debug` | `--id` (chain id) or `--name` (first match), `--recent` | |
+| Connector ownership | `cn list` | `--name` (contains), `--limit` (default 20), `--page` | |
+| Connector ownership | `cn jobs` | `--id` (connector) or `--name` (first match), `--job-name`, `--limit` (default 20), `--page` | `--connector-id`, `--describe` |
+| Connector ownership | `cn activity` | `--name` (connection), `--id` (realtime only), `--job-id`, `--job-name`, `--limit` (default 20), `--page` | `--connector-id` |
+| Connector ownership | `cn audit` | `--id` (connector) or `--name` (contains), `--limit` (default 20), `--page` | `--connector-id` |
+| Score sources | `sc list` | `--name` (contains), `--limit`, `--page` | |
+| Score sources | `sc measures` | `--id` or `--name` of a **scorecard** | `sc measures list` — not on 1.0.10 |
+| Find a saved report | `rp describe` | `--id` (preferred) or `--name` (fragment) | |
+| Run a saved report | `report run-saved --id <id>` | See §5 | `rp run --name`. On 1.0.10 `--name` is a temporary label for an **ad-hoc** run and `--object` is required. |
+
+`re r list-and-describe` returns `totalRules`, `rules[]`, and `_flatSummary`. Each rule has `rule` (list fields) and `rd` (`taskDetails`, `_sourceObject`, `_flatMappings`). Page with `--limit 20` until the collected count equals `totalRules`.
+
+`re r list` rows include `lastRunResult` and `lastRunDate`. Either can be empty on an active rule. Empty is not proof of success. Use `re r debug --recent` for those rules.
+
+`rp list` rows include `showFields`, `groupByFields`, and `filterVariations`. Search those before describing a report.
+
+`cn list` defaults to 20 rows and the payload is an array on `data`. Page until a short page comes back.
+
+`re r list-executions` and `sc measures list` are not commands on 1.0.10. Rule history in the jobs is `re r debug --recent`. §5 still lists `rules-engine rules executions` for a single rule. The snapshot lists every measure with `scorecard measure list` (singular). That is a different command from `sc measures`, which takes one scorecard.
+
+Known from an earlier 1.0.10 run, still unfixed: `dm objects list-and-describe` returned zero objects. The snapshot describes objects one by one for that reason. `dropdowns describe` was verified with `--id`. Use whichever `--help` accepts.

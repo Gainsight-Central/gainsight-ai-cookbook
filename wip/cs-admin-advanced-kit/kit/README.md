@@ -1,8 +1,24 @@
 # CS Admin CLI Advanced Kit
 
-**Teach Claude your Gainsight tenant once. Then ask it anything, and have it build reports and configuration the way your tenant already does them.**
+**Seven jobs admins already do by hand, run through the Gainsight Admin CLI, with the answers saved on your machine so the next question does not start over.**
 
-The Starter Kit is read-only and answers "what does my tenant do?". This kit is for admins who want to **work** through the CLI, reading and writing. It starts with a one-time initialization that gives Claude a working knowledge of your tenant:
+The [Starter Kit](../../cs-admin-cli-starter-kit/) answers "what is this tenant configured to do?". This kit is the next set of questions: who writes a field, what uses it, which rules failed, what creates CTAs, what sets a measure, and what differs between sandbox and production.
+
+A one-time snapshot (`prompts/initialize.md`) is how the agent remembers the tenant. Refresh it when the tenant changes (`prompts/refresh.md`). The jobs below are the reason to take the snapshot. They use the CLI you already have (`@gainsight/gs-admin-cli`). They do not require a new command.
+
+| You are dealing with | Say this | Example |
+|---|---|---|
+| Nobody can say which ARR is real, or a new admin is taking over | "Build the tenant handbook." | [01](examples/01-tenant-handbook.md) |
+| You are about to change or retire a field | "What uses Company.Segment?" | [02](examples/02-what-uses-this-field.md) |
+| A rule says success and the score did not move | "Audit rule and chain health." | [03](examples/03-rule-health.md) |
+| Cockpit is full, or two things write the same measure | "What creates CTAs, and what writes each measure?" | [04](examples/04-cta-and-score-sources.md) |
+| A connector sync and a rule both write Company | "Who writes Company fields?" | [05](examples/05-connector-ownership.md) |
+| Sandbox and production have drifted | "Diff sandbox and production." | [06](examples/06-sandbox-prod-diff.md) |
+| A saved report already answers the question | "Run the saved report. Do not rebuild it." | [07](examples/07-saved-report-answers.md) |
+
+What this kit does not claim is listed in [DOES-NOT-COVER.md](DOES-NOT-COVER.md). Null Salesforce fields, license counts, X-Org promotion, and Journey sends that never leave are product gaps. The CLI can show the configuration around them. It cannot repair them.
+
+The snapshot also holds:
 
 - **Every object and field**, every lookup path between objects, and every picklist value (with the internal IDs that filters need).
 - **Your rules, reports, scorecards, Journey programs and integrations**, indexed and searchable.
@@ -10,7 +26,7 @@ The Starter Kit is read-only and answers "what does my tenant do?". This kit is 
 - **Your conventions.** Naming, folders, which CTA types and reasons you actually use, so new work looks like your team built it.
 - **Where your core concepts live** (ARR, renewal date, health, CSM, stage…), including where they're duplicated.
 
-> Built and maintained by Gainsight. Everything here is plain text you can read: `CLAUDE.md` (how Claude behaves), `prompts/` (what it does), and `scripts/snapshot.py` (the only code, read-only by construction).
+> Built and maintained by Gainsight. Everything here is plain text you can read: `CLAUDE.md` (how Claude behaves), `examples/` (the jobs), `prompts/` (initialize, refresh, and the write paths), and `scripts/snapshot.py` (the only code, read-only by construction).
 
 ---
 
@@ -24,12 +40,11 @@ gs-admin whoami          # look for "Token: valid"
 ```
 You need a **super-admin** login and one OAuth app in your tenant (Scopes: Read, Write · PKCE: enabled · Callback: `http://localhost:19876/callback`).
 
-**2. Open this folder in Claude Code** (or Claude cowork). Download the folder, then:
+**2. Open this folder in Cursor** (or Claude Code). Use a copy of this folder as the workspace, outside the cookbook repo, so the tenant export is never committed.
 ```
 cd "CS Admin CLI Advanced Kit"
-claude
 ```
-Claude reads `CLAUDE.md` automatically, checks your login, and sees whether your tenant has been initialized.
+Cursor reads `AGENTS.md`.
 
 **3. Say "initialize my tenant."** Claude runs `prompts/initialize.md`. It's read-only, takes about 10–20 minutes, and asks you two questions first (is this sandbox or production, and is it OK to start). When it's done you'll have `tenants/<your-tenant>/TENANT.md` and a short self-test showing it works.
 
@@ -37,17 +52,17 @@ Requirements: Node.js, Python 3 (preinstalled on macOS; used for the snapshot sc
 
 ---
 
-## Then just ask
+## Then ask for a job
+
+Use the table at the top. A few more that sit on the same snapshot:
 
 | You say | What happens |
 |---|---|
-| *"Where is ARR defined, and which one is canonical?"* | Answered from the snapshot, with the evidence |
-| *"Which rules create Risk CTAs, and what triggers them?"* | Rules index → live `describe` of the matches |
-| *"How many customers renew next quarter, by CSM?"* | Ad-hoc `report run` (nothing saved) → a table |
-| *"Build a report of ARR by stage as a stacked column, and save it to the CS Ops folder."* | `prompts/build-report.md`: closest exemplar → test run → shows you → saves **only on your yes** |
-| *"Add a 'Budget cut' value to the churn reason dropdown."* | `prompts/change-config.md`: checks dependencies → plan → your yes → verify → changelog |
-| *"What would break if I retire the Segment field?"* | Dependency check plus rule/report references |
+| *"Build a report of ARR by stage as a stacked column, and save it to the CS Ops folder."* | `prompts/build-report.md`: closest exemplar → test run → shows you → saves **only on your yes**. Relative dates and OR filters cannot be set this way. |
+| *"Add a 'Budget cut' value to the churn reason dropdown."* | `prompts/change-config.md`: plan → your yes → verify → changelog |
 | *"Refresh my snapshot."* | `prompts/refresh.md`: re-pull, diff, re-verify exemplars |
+
+Building a new report is a separate job from running one you already have. If a saved report answers the question, use [example 07](examples/07-saved-report-answers.md).
 
 ## How writes work
 
@@ -63,6 +78,8 @@ New rules are left inactive and Journey programs unpublished unless you ask othe
 ```
 CLAUDE.md            how Claude works in this folder (loaded automatically): routing, write gate, CLI facts
 GUARDRAILS.md        the safety model, in 1 minute
+DOES-NOT-COVER.md    admin pains this CLI cannot close
+examples/            the seven jobs: what to say, what runs, what it will not claim
 prompts/
   initialize.md      one-time snapshot of your tenant (start here)
   build-report.md    plain English → verified report

@@ -27,6 +27,8 @@ PHASE 1: PULL + INDEX (scripted, read-only)
 4. Run: `python3 scripts/snapshot.py pull all` then `python3 scripts/snapshot.py index`.
    - If it stops on token expiry, ask me to `gs-admin login`, then re-run only the sections that didn't finish
      (e.g. `pull reports rules`).
+   - If it stops on HTTP 429, stop. Tell me to wait and re-run that section. Do not raise parallelism and do not
+     describe the same object again.
    - If python3 isn't available, do the same pulls by hand with gs-admin --json and write the same files
      (schema/_object_index.tsv, schema/_field_index.tsv, schema/_lookup_index.tsv, config/*.tsv).
 5. Sanity-check the result: rules and reports pulled must equal the reported totals (the script warns if not),

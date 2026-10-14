@@ -17,3 +17,5 @@
 **8. Dates lie in sandboxes.** A sandbox refresh resets created/modified dates and deactivates Journey programs. Claude judges live vs. legacy from date-free signals: active flags, whether a scorecard uses a measure, and names like DNU / "copy of" / test.
 
 **9. You stay accountable.** Claude drafts, checks and executes on your instruction. Review plans the way you'd review a teammate's change, especially in production.
+
+**10. The agent does not hammer the API.** It reads the snapshot instead of describing the same object again, it inventories rules in one call, and it stops when a command fails twice with the same arguments or when the API returns 429. The snapshot script describes two objects at a time and stops the pull on a throttle.

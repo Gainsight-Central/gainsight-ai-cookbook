@@ -9,7 +9,7 @@ READ-ONLY BY CONSTRUCTION: every CLI call goes through `gs()`, which refuses
 any command not listed in READ_COMMANDS below. Read that list before you run this.
 
 Usage (from the kit folder):
-  python3 scripts/snapshot.py pull  [all|objects|bi|picklists|rules|reports|scorecards|journey|integrations]
+  python3 scripts/snapshot.py pull  [all|objects|bi|picklists|rules|rule-details|reports|scorecards|journey|integrations]
   python3 scripts/snapshot.py index
   python3 scripts/snapshot.py report-candidates
   python3 scripts/snapshot.py exemplar <reportId> [<reportId> ...]
@@ -47,6 +47,7 @@ READ_COMMANDS = {
     ("journey", "surveys", "list"),
     ("rules-engine", "rules", "list"),
     ("rules-engine", "rules", "list-external-actions"),
+    ("re", "r", "list-and-describe"),
     ("rules-engine", "chains", "list"),
     ("scorecard", "list"),
     ("scorecard", "measure", "list"),
@@ -63,6 +64,15 @@ class AuthExpired(Exception):
     pass
 
 
+class Throttled(Exception):
+    """The tenant API returned 429. Stop. Do not fan out more calls."""
+    pass
+
+
+# Object describes are the call that throttles real tenants. Two at a time, not a fan-out.
+DESCRIBE_WORKERS = 2
+
+
 def now():
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
@@ -76,6 +86,8 @@ def gs(*args, json_out=True):
     out = (p.stdout or "") + (p.stderr or "")
     if re.search(r"token.*(expired|invalid)|unauthori[sz]ed|run 'gs-admin login'", out, re.I) and args[0] != "whoami":
         raise AuthExpired(out.strip()[:300])
+    if re.search(r"\b429\b|too many requests|rate limit", out, re.I):
+        raise Throttled(out.strip()[:300])
     if not json_out:
         return out
     try:
@@ -199,7 +211,7 @@ def pull_objects(d):
         return n, (r.get("_error") if isinstance(r, dict) else "unknown")[:200]
 
     fails = []
-    with cf.ThreadPoolExecutor(max_workers=6) as ex:
+    with cf.ThreadPoolExecutor(max_workers=DESCRIBE_WORKERS) as ex:
         for i, (n, e) in enumerate(ex.map(one, names), 1):
             if e:
                 fails.append((n, e))
@@ -230,7 +242,7 @@ def pull_picklists(d):
         cat["childItems"] = g(r, "data", "childItems", default=[]) if isinstance(r, dict) else []
         return cat
 
-    with cf.ThreadPoolExecutor(max_workers=6) as ex:
+    with cf.ThreadPoolExecutor(max_workers=DESCRIBE_WORKERS) as ex:
         dd = list(ex.map(values, cats))
     save(d, "raw/dropdowns.json", dd)
     cta = gs("journey", "cta", "options")
@@ -249,6 +261,44 @@ def pull_rules(d):
          command="rules-engine rules list --limit 200 --page N; rules-engine chains list")
     flag = "" if total is None or len(rules) == int(total) else f"  WARNING: got {len(rules)} of {total}"
     print(f"  {len(rules)} rules (reported {total}), {len(chains)} chains{flag}")
+
+
+def pull_rule_details(d):
+    """One paged inventory. Omitting --limit asks the CLI to describe every rule."""
+    out, page, total = [], 1, None
+    while page <= 40:
+        resp = gs("re", "r", "list-and-describe", "--limit", "20", "--page", str(page))
+        if not isinstance(resp, dict) or resp.get("_error"):
+            err = (resp.get("_error") if isinstance(resp, dict) else "no json") or "empty"
+            if out:
+                save(d, "raw/rules-described.json", out)
+            mark(d, "rule_details", error=str(err)[:300], pages=page, count=len(out),
+                 command="re r list-and-describe --limit 20 --page N")
+            print("  list-and-describe failed:", str(err)[:200])
+            return
+        if "rules" not in resp and resp.get("totalRules") is None:
+            mark(d, "rule_details", error="response had no rules or totalRules", pages=page,
+                 count=len(out), command="re r list-and-describe --limit 20 --page N")
+            if out:
+                save(d, "raw/rules-described.json", out)
+            print("  list-and-describe returned an unexpected shape; saved", len(out))
+            return
+        rules = resp.get("rules") or []
+        if resp.get("totalRules") is not None:
+            total = resp.get("totalRules")
+        if not rules:
+            break
+        out.extend(rules)
+        if total is not None and len(out) >= int(total):
+            break
+        if total is None and len(rules) < 20:
+            break
+        page += 1
+    save(d, "raw/rules-described.json", out)
+    mark(d, "rule_details", count=len(out), total_reported=total,
+         command="re r list-and-describe --limit 20 --page N")
+    flag = "" if total is None or len(out) == int(total) else f"  WARNING: got {len(out)} of {total}"
+    print(f"  {len(out)} rules described (reported {total}){flag}")
 
 
 def pull_reports(d):
@@ -294,6 +344,7 @@ def pull_integrations(d):
 
 SECTIONS = {
     "objects": pull_objects, "bi": pull_bi, "picklists": pull_picklists, "rules": pull_rules,
+    "rule-details": pull_rule_details,
     "reports": pull_reports, "scorecards": pull_scorecards, "journey": pull_journey, "integrations": pull_integrations,
 }
 
@@ -307,6 +358,28 @@ def safe(name):
 def rd(d, rel, default=None):
     p = os.path.join(d, rel)
     return json.load(open(p)) if os.path.exists(p) else default
+
+
+def names_from(node):
+    """Field names mentioned under show/group/filter nodes. Ignores other 'name' keys."""
+    found = []
+
+    def walk(n):
+        if isinstance(n, dict):
+            if isinstance(n.get("fieldName"), str) and n["fieldName"]:
+                found.append(n["fieldName"])
+            for v in n.values():
+                walk(v)
+        elif isinstance(n, list):
+            for v in n:
+                walk(v)
+
+    walk(node)
+    out = []
+    for name in found:
+        if name not in out:
+            out.append(name)
+    return ",".join(out[:50])
 
 
 def g(o, *path, default=None):
@@ -396,10 +469,27 @@ def index(d):
         sig = f"{r.get('reportDisplayType')}|gb{min(len(gb), 2)}|{'lookup' if lookups else 'nolookup'}|{'pivot' if pivot else ''}"
         rrows.append([r.get("reportId"), r.get("reportName"), r.get("objectName"), r.get("reportDisplayType"), len(sf),
                       len(gb), lookups, ",".join(aggs), pivot, sig,
-                      "dead-name" if DEAD_NAME.search(r.get("reportName") or "") else ""])
+                      "dead-name" if DEAD_NAME.search(r.get("reportName") or "") else "",
+                      names_from(sf + gb), names_from(r.get("filterVariations"))])
     counts["reports"] = write_tsv(d, "config/reports.tsv",
         ["report_id", "name", "object", "display_type", "n_show", "n_groupby", "n_lookup_fields", "aggregations",
-         "pivot", "pattern", "dead_signal"], rrows)
+         "pivot", "pattern", "dead_signal", "field_names", "filter_fields"], rrows)
+
+    described = rd(d, "raw/rules-described.json", [])
+    detail_rows = []
+    for item in described:
+        if not isinstance(item, dict):
+            continue
+        rule = item.get("rule") if isinstance(item.get("rule"), dict) else {}
+        body = item.get("rd") if isinstance(item.get("rd"), dict) else {}
+        detail_rows.append([
+            rule.get("ruleName") or body.get("ruleName"),
+            rule.get("active"),
+            json.dumps(body.get("_sourceObject"), default=str)[:300],
+            json.dumps(body.get("_flatMappings"), default=str)[:800],
+        ])
+    counts["rule_details"] = write_tsv(d, "config/rule_mappings.tsv",
+        ["name", "active", "source_object", "mappings"], detail_rows)
 
     # Scorecards
     sc = rd(d, "raw/scorecards.json", {})
@@ -621,6 +711,11 @@ def main():
         print("\nSTOPPED: your gs-admin login token expired or is unauthorized.\n"
               "Run `gs-admin login`, then re-run the same command (finished sections are kept).\n", e)
         sys.exit(2)
+    except Throttled as e:
+        print("\nSTOPPED: the tenant API throttled this pull (HTTP 429).\n"
+              "Wait a few minutes, then re-run the same section. Do not raise parallelism.\n"
+              "Finished sections are kept.\n", e)
+        sys.exit(3)
     print(f"\nTenant folder: {d}")
 
 
