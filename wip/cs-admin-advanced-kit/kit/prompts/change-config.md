@@ -2,7 +2,7 @@
 
 **What this does:** plans a configuration change against your real tenant, checks what it touches, drafts it in your tenant's conventions, and makes the change only after you approve each write.
 
-**How to run:** describe the change, e.g. *"Add a rule that creates a Risk CTA when health drops to red,"* *"Add a 'Churn Reason Detail' text field to Company,"* or *"Add a value 'Budget cut' to the churn reason dropdown."* Claude follows the steps below. You can also paste the box.
+**How to run:** describe the change, for example *"Add a rule that creates a Risk CTA when health drops to red,"* *"Add a Churn Reason Detail text field to Company,"* or *"Add a value Budget cut to the churn reason dropdown."* The AI agent follows the steps below. You can also paste the box.
 
 ---
 

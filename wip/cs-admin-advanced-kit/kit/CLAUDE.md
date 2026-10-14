@@ -59,7 +59,7 @@ All paths are under `tenants/<slug>/`. The `.tsv` index files can be large: **se
 | Journey programs | `config/jo_programs.tsv` |
 | Naming, folders, and other conventions | `conventions.md` |
 | CS processes the tenant runs (standard vs bespoke) | `intent/process_inventory.md` |
-| What has been changed through Claude | `changelog.md` |
+| What has been changed through the AI agent | `changelog.md` |
 | CLI syntax, output shapes, known bugs | `reference/cli-reference.md` (kit root) |
 
 ## Answering questions

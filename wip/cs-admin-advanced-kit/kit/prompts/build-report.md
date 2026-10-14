@@ -1,8 +1,8 @@
 # Build a report
 
-**What this does:** turns a plain-English report request into a working Gainsight report. Claude starts from your tenant's own reports, proves the report with an ad-hoc run (nothing saved), and saves it only after you say yes.
+**What this does:** turns a plain-English report request into a working Gainsight report. The AI agent starts from your tenant's own reports, checks the report with a test run (nothing saved), and saves it only after you say yes.
 
-**How to run:** just ask, e.g. *"Build a report of ARR by CSM for customers renewing in the next 6 months, as a bar chart."* Claude follows the steps below automatically. You can also paste the box.
+**How to run:** ask, for example, *"Build a report of ARR by CSM for customers renewing in the next 6 months, as a bar chart."* The AI agent follows the steps below. You can also paste the box.
 
 ---
 

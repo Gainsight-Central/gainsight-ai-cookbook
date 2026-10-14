@@ -1,8 +1,8 @@
-# Refresh the snapshot
+# Refresh the local tenant brain
 
-**What this does:** re-pulls the parts of your tenant snapshot that are out of date and updates TENANT.md. Read-only.
+**What this does:** re-reads the parts of your local tenant brain that are out of date and updates TENANT.md. Read-only.
 
-**How to run:** say *"refresh my tenant snapshot"* (or name a section, e.g. *"refresh reports and rules"*), or paste the box.
+**How to run:** say *"Refresh my tenant brain"* (or name a section, for example *"refresh reports and rules"*), or paste the box.
 
 ---
 

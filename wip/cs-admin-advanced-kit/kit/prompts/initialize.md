@@ -1,10 +1,10 @@
 # Initialize: build the tenant snapshot
 
-**What this does:** reads your tenant's configuration (read-only) and builds a local workspace under `tenants/<your-tenant>/`. It covers every object and field, picklist values, rules, reports, scorecards, Journey programs, integrations, plus **verified report exemplars** that show Claude exactly how your tenant's reports are built. After this, Claude can answer questions about your tenant and draft new configuration in your tenant's own shape.
+**What this does:** reads your tenant's configuration (read-only) and builds a local tenant brain under `tenants/<your-tenant>/`. It covers every object and field, picklist values, rules, reports, scorecards, Journey Orchestrator programs, connectors, and report examples taken from your own tenant. After this, your AI agent can answer questions about your tenant and draft new configuration in your tenant's own shape.
 
 **Time:** about 10–20 minutes, depending on tenant size. **Writes to your tenant:** none.
 
-**How to run:** in Claude Code (opened on this folder), say **"initialize my tenant"**. Or paste everything in the box below.
+**How to run:** point your AI agent at this folder and say **"Initialize my tenant."** You can also paste everything in the box below. Claude, Cursor, and ChatGPT can all use this folder.
 
 ---
 
@@ -97,4 +97,4 @@ or ask you to build a report.
 
 ---
 
-**Next:** just ask questions. To build a report, describe it in plain English (Claude follows `prompts/build-report.md`). To keep the snapshot current, use `prompts/refresh.md`.
+**Next:** ask your question in plain English. To build a report, describe it (the AI agent follows `prompts/build-report.md`). To bring the local tenant brain up to date, use `prompts/refresh.md`.
