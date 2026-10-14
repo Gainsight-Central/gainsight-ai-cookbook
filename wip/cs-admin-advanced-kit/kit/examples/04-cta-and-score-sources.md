@@ -11,7 +11,7 @@ Follow CLAUDE.md and examples/04-cta-and-score-sources.md.
 1. Run `gs-admin sc list --json`. For each scorecard, run `gs-admin sc measures --name "<scorecard>" --json`.
    `sc measures list` is not a command on CLI 1.0.10. Save both under tenants/<slug>/raw/.
 2. Use tenants/<slug>/raw/rules-described.json if it is under 14 days old. Otherwise page
-   `gs-admin re r list-and-describe --limit 20 --page N --json` until `totalRules` and save the `rules` array.
+   `gs-admin re r list-and-describe --limit <rule count> --json` once and save the `rules` array. Do not pass `--page`.
 3. From that payload, list every action that creates or closes a CTA, and every action that sets a score.
    For a measure with two writers, run `gs-admin re r describe --name "<rule>" --action-id <id> --json`
    only for those actions, so the field mappings are exact.

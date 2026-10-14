@@ -24,7 +24,8 @@ Refresh my local tenant brain. Read only. Follow CLAUDE.md.
 
 4. Check the key definitions for reports. The files are under exemplars/reports/.
    Run `python3 scripts/snapshot.py exemplar` with every report id in exemplars/reports/_index.tsv.
-   Tell me which ones no longer run. A field may have been renamed or removed.
+   Tell me which copies are exact, which are partial, and which failed.
+   A partial copy ran, but a filter was left out. Do not call it verified.
    Call them key definitions when you talk to me.
 
 5. Update TENANT.md (counts, the date, and the main fields if they changed) and conventions.md

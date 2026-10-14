@@ -16,7 +16,7 @@ Read-only. Follow CLAUDE.md and examples/05-connector-ownership.md.
    `gs-admin cn activity --name "<connection>" --limit 20 --json` and
    `gs-admin cn audit --id <connectionId> --limit 20 --json`.
    `--id` on activity is for realtime connections only. Use `--name` for a batch connection.
-3. From raw/rules-described.json (page `re r list-and-describe --limit 20` if older than 14 days),
+3. From raw/rules-described.json (one `re r list-and-describe --limit <rule count>` if older than 14 days; do not pass `--page`),
    keep `rd._flatMappings` whose target is Company or which name a Company field.
 4. Write tenants/<slug>/intent/company-writers.md:
    field, connector job and source field, rule that also writes it, last activity status, last audit change.

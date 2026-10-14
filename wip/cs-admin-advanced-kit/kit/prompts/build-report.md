@@ -24,7 +24,8 @@ Build the report I describe. Follow CLAUDE.md and reference/cli-reference.md.
      The CLI cannot store a rolling date.
 
 3. Start from a key definition. Open exemplars/reports/_index.tsv and pick the closest report
-   (same chart type, or the same object). Copy its working command and change it.
+   (same chart type, or the same object) whose copy column is exact. Copy its command and change it.
+   If the closest one is partial, tell me what was left out and do not treat its row count as the saved report.
    Those files are key definitions. Do not call them exemplars when you talk to me.
    If none are close, use the command shapes in reference/cli-reference.md.
 
