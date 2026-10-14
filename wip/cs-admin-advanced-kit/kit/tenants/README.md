@@ -1,5 +1,5 @@
 # tenants/
 
-`prompts/initialize.md` creates one folder here per Gainsight tenant, named after the first part of the tenant URL (`https://acme.gainsightcloud.com` → `acme/`). Sandbox and production sit side by side.
+`prompts/initialize.md` creates one folder here per Gainsight tenant. The folder name is the first part of the tenant URL (`https://acme.gainsightcloud.com` becomes `acme/`). Sandbox and production sit side by side.
 
-These folders contain an export of your tenant's configuration. Keep them on your machine, and don't commit them to a shared or public repository.
+Each folder is the local tenant brain for that tenant: a copy of the configuration, plus the key definitions the agent uses when it builds something new. Keep these folders on your machine. Do not commit them to a shared or public repository.

@@ -1,25 +1,33 @@
-# Refresh the snapshot
+# Refresh the local tenant brain
 
-**What this does:** re-pulls the parts of your tenant snapshot that are out of date and updates TENANT.md. Read-only.
+**What you get.** An updated copy of the configuration on your machine, plus a short list of what changed since the last copy. This step only reads. It does not change Gainsight.
 
-**How to run:** say *"refresh my tenant snapshot"* (or name a section, e.g. *"refresh reports and rules"*), or paste the box.
+**How to run.** Say **"Refresh my tenant brain."** You can name a part, for example **"Refresh reports and rules."** You can also paste the box below.
 
 ---
 
 ```
-Refresh my tenant snapshot. Read-only. Follow CLAUDE.md.
+Refresh my local tenant brain. Read only. Follow CLAUDE.md.
 
-1. `gs-admin whoami` → confirm the tenant matches tenants/<slug>/. Run `python3 scripts/snapshot.py status` and
-   show me each section's pulled_at age.
-2. Before pulling, copy the current indexes so you can diff them: copy `config/` and `schema/_*.tsv` into
-   `tenants/<slug>/.previous/` (replace any older copy).
-   Then refresh what I asked for, or by default anything older than 14 days:
-   `python3 scripts/snapshot.py pull <sections…>` then `python3 scripts/snapshot.py index`.
-   Sections: objects, bi, picklists, rules, reports, scorecards, journey, integrations.
-3. Diff the new indexes against `.previous/` (with a small python script, not by reading whole files). Tell me what changed: new/removed objects and fields, rules added, removed or
-   activated/deactivated, new reports, picklist values added/removed.
-4. Re-verify existing report exemplars: `python3 scripts/snapshot.py exemplar <all ids in exemplars/reports/_index.tsv>`.
-   Report any that now fail (a field may have been renamed or removed).
-5. Update TENANT.md (counts, snapshot date, core concepts if they changed) and conventions.md if new patterns
-   appeared. Don't add to changelog.md (that file is for writes only).
+1. Run `gs-admin whoami` and confirm it is the same tenant as tenants/<slug>/.
+   Run `python3 scripts/snapshot.py status` and show me when each part was last read.
+
+2. Copy the current indexes to tenants/<slug>/.previous/ so you can compare them.
+   Replace any older copy. Then refresh what I asked for.
+   If I did not name a part, refresh anything older than 14 days:
+   `python3 scripts/snapshot.py pull <sections>` then `python3 scripts/snapshot.py index`.
+   Parts: objects, bi, picklists, rules, rule-details, reports, scorecards, journey, integrations.
+
+3. Compare the new indexes with .previous/. Do not read the files whole.
+   Tell me what changed: objects or fields added or removed, rules added, removed, or turned on or off,
+   new reports, and dropdown values added or removed.
+
+4. Check the key definitions for reports. The files are under exemplars/reports/.
+   Run `python3 scripts/snapshot.py exemplar` with every report id in exemplars/reports/_index.tsv.
+   Tell me which ones no longer run. A field may have been renamed or removed.
+   Call them key definitions when you talk to me.
+
+5. Update TENANT.md (counts, the date, and the main fields if they changed) and conventions.md
+   if a new naming pattern showed up. Do not add a changelog line. The changelog is only for changes
+   made in Gainsight.
 ```

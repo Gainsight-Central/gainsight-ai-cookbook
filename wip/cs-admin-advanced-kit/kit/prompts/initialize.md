@@ -1,98 +1,95 @@
-# Initialize: build the tenant snapshot
+# Build the local tenant brain
 
-**What this does:** reads your tenant's configuration (read-only) and builds a local workspace under `tenants/<your-tenant>/`. It covers every object and field, picklist values, rules, reports, scorecards, Journey programs, integrations, plus **verified report exemplars** that show Claude exactly how your tenant's reports are built. After this, Claude can answer questions about your tenant and draft new configuration in your tenant's own shape.
+**What you get.** A folder on your machine that your AI agent reads before it calls Gainsight again. It holds your objects and fields, dropdown values, rules, reports, scorecards, Journey Orchestrator programs, and connectors.
 
-**Time:** about 10–20 minutes, depending on tenant size. **Writes to your tenant:** none.
+It also holds **key definitions**: a short set of notes about how this tenant is set up. The agent uses them so the next report or rule looks like the ones your team already built.
 
-**How to run:** in Claude Code (opened on this folder), say **"initialize my tenant"**. Or paste everything in the box below.
+**What a key definition is.** It is not a screen in Gainsight. It is a note the agent writes from your tenant:
+
+- Which field is the ARR, renewal date, health score, CSM, stage, segment, or churn value your reports and rules actually use.
+- How your team names things, and which folders you keep reports and rules in.
+- A few real reports, rules, and Journey Orchestrator programs, written out as commands, so a new one can be copied from a real one.
+
+Those sample reports and rules are saved under a folder named `exemplars/`. That is only the folder name. When you talk to the agent, ask for key definitions.
+
+**Time.** About 10–20 minutes, depending on the size of the tenant.
+
+**Does this change Gainsight?** No. This step only reads.
+
+**How to run.** Point your AI agent at this folder and say **"Initialize my tenant."** You can also paste the box below. Claude, Cursor, and ChatGPT can all use this folder.
 
 ---
 
 ```
-Initialize my Gainsight tenant workspace. Follow CLAUDE.md. This whole task is READ-ONLY: the only
-gs-admin commands allowed are list / describe / schema / list-objects / query execute / journey cta options /
-dependencies check / report run (ad-hoc, saves nothing). Never run a write command.
+Initialize my Gainsight tenant. Follow CLAUDE.md.
 
-PHASE 0: PREFLIGHT (then pause for me)
-1. Run `gs-admin whoami`. Confirm the token is valid and note the Base URL and tenant slug.
-2. Get counts (one cheap call each, `--limit 1 --json`): reports, rules, objects, JO programs, scorecards.
-   Use the count paths in reference/cli-reference.md §1.
-3. Ask me two things, in one message:
-   a) Is this tenant SANDBOX or PRODUCTION? (Recorded in TENANT.md; it governs future writes.)
-   b) OK to start the snapshot? Show the counts and the rough size (e.g. "~550 objects → ~15 MB on disk,
-      ~3–5 min of pulling").
-   Wait for my answer.
+This task only reads. You may list, describe, and run a report as a test.
+A test run does not save a report. Do not create, edit, delete, schedule, or publish anything.
 
-PHASE 1: PULL + INDEX (scripted, read-only)
-4. Run: `python3 scripts/snapshot.py pull all` then `python3 scripts/snapshot.py index`.
-   - If it stops on token expiry, ask me to `gs-admin login`, then re-run only the sections that didn't finish
-     (e.g. `pull reports rules`).
-   - If python3 isn't available, do the same pulls by hand with gs-admin --json and write the same files
-     (schema/_object_index.tsv, schema/_field_index.tsv, schema/_lookup_index.tsv, config/*.tsv).
-5. Sanity-check the result: rules and reports pulled must equal the reported totals (the script warns if not),
-   and spot-check 3 objects in schema/objects/. Report anything missing.
+Before you start, stop and ask me two things in one message:
+- Is this sandbox or production?
+- May you build the local tenant brain?
 
-PHASE 2: REPORT EXEMPLARS (the key step for building reports later)
-6. Run `python3 scripts/snapshot.py report-candidates`. From its output, pick 10–15 reports that together cover:
-   - the most common patterns (KPI, GRID, grouped BAR/COLUMN, STACKED, LINE/date trend, pivot GRID)
-   - at least 3 with lookup fields (fieldPath), at least 3 with where-filters, one with a date bucket
-   - the most-reported objects (company, call_to_action, plus whatever this tenant reports on most)
-   - real production-looking reports rather than "Demo"/"Sample"/"Test" ones where possible
-7. Run `python3 scripts/snapshot.py exemplar <id1> <id2> …`. Each one is described, translated to CLI flags,
-   and verified with `report run` (nothing saved). For any FAILED exemplar, read the error, fix the flags using
-   reference/cli-reference.md, re-run the corrected command with `gs-admin report run … --limit 3 --json`, and update that
-   exemplar's .md with the working command. If you can't fix it, leave it marked failed and say why.
-8. In each exemplar .md, fill in "What this exemplar teaches" (2–4 bullets: the pattern, conventions it shows,
-   when to copy it).
+With that question, show counts for objects, rules, reports, scorecards, and Journey Orchestrator programs.
+One small call each is enough (`--limit 1 --json`). Use the count paths in reference/cli-reference.md.
+Also say roughly how long it will take and how much disk it will use.
+Wait for my answer. Run `gs-admin whoami` first and confirm the token is valid.
 
-PHASE 3: RULE + PROGRAM EXEMPLARS (lighter)
-9. From config/rules.tsv, pick up to 8 LIVE rules covering different action types (create CTA, close CTA,
-   set score, load to object/company, success plan, external action, if present). Run
-   `gs-admin rules-engine rules describe --id <ruleId> --json` for each. Save to exemplars/rules/<slug>.json
-   and write exemplars/rules/<slug>.md: source object, criteria pattern, actions + key parameters (CTA type,
-   reason, priority, playbook, owner field), schedule type. Keep it short.
-10. From config/jo_programs.tsv, describe 2–3 representative programs (`journey programs describe --id`).
-    Save them and write a short .md each (participant source, steps, emails/CTAs created).
+After I say yes, build the brain:
 
-PHASE 4: CONVENTIONS + CONCEPTS
-11. Write tenants/<slug>/conventions.md from evidence in the indexes:
-    - naming patterns/prefixes for reports, rules, programs, custom fields (e.g. "CSMPF:", "(JO)", "__gc")
-    - report folders and rule folders in use
-    - CTA types/reasons/priorities actually used by live rules (vs. merely configured)
-    - dead/legacy signals (DNU, "copy of", test…) and how common they are
-    Cite counts. Don't invent conventions that the data doesn't show.
-12. Find where the core CS concepts live. For each of ARR, renewal date, health score, CSM/owner, customer
-    stage/lifecycle, segment/tier, churn/risk, NPS: grep schema/_field_index.tsv. List the candidate fields
-    and pick the likely canonical one, with evidence: it's on Company, it's used by the most reports, rules
-    write to it. Flag ambiguity explicitly (e.g. "ARR exists on 8 objects; Company.Arr is used by N reports").
+1. Run `python3 scripts/snapshot.py pull all`, then `python3 scripts/snapshot.py index`.
+   If the login expires, ask me to run `gs-admin login`, then pull only the sections that did not finish.
+   If the API returns HTTP 429, stop. Ask me to wait. Do not describe the same object again.
+   If Python is missing, make the same reads with `gs-admin --json` and write the same index files.
+2. Check the result. The number of rules and reports saved must match the totals the API reported.
+   Open three object pages under schema/objects/ and tell me if something is missing.
 
-PHASE 5: PROCESS INVENTORY
-13. Using config/da_picklist.tsv (live = active and not deleted) and reference/cs_ontology.seed.json, classify
-    the live CTA reasons/types and Success Plan types into CS processes (standard vs bespoke). Size each with
-    live rules and live measures (by name match). Write tenants/<slug>/intent/process_inventory.md.
-    On a clean/demo tenant it's fine to report "clean"; don't manufacture drift.
+Then write the key definitions. These are what you will copy later, so do not skip them.
 
-PHASE 6: TENANT.md + SELF-TEST
-14. Write tenants/<slug>/TENANT.md, at most ~120 lines. It's what you'll read at the start of every future session:
-    - tenant URL, slug, SANDBOX/PRODUCTION, snapshot date, CLI version (`gs-admin --version`)
-    - counts table (objects, fields, rules live/total, reports, scorecards, JO programs)
-    - top 15 objects by report usage, with their BI names
-    - core concepts table from step 12 (concept → canonical object.field → alternates)
-    - the processes from step 13 in one line each
-    - pointers: exemplars index, conventions.md, changelog.md
-    - any gaps (sections that failed or were skipped)
-15. Create tenants/<slug>/changelog.md with just a header (no writes have been made).
-16. SELF-TEST, then tell me the results:
-    a) Answer from the snapshot: "Where is ARR defined and which one is canonical?"
-    b) Answer from the snapshot: "Which live rules create CTAs, and with which types/reasons?"
-    c) Build and RUN (not save) one new report using an exemplar: "ARR by customer stage, GRID", with
-       `report run --limit 5`. Show the command and the result.
+3. Reports. Run `python3 scripts/snapshot.py report-candidates`.
+   Choose 10 to 15 real reports that together show how this tenant builds reports:
+   a single number, a grid, a chart grouped by one field, a stacked chart, a trend over time,
+   at least three reports that look up a related object, at least three with filters, and one grouped by date.
+   Prefer reports your team uses. Skip names that are Demo, Sample, or Test when you have a real one.
+4. For each chosen report, run `python3 scripts/snapshot.py exemplar <report id>`.
+   The script saves a file under exemplars/reports/. The file is a key definition.
+   It contains the command that recreates the report, checked with a test run that saves nothing.
+   If a file fails, read the error, fix the command using reference/cli-reference.md, and test it with
+   `gs-admin report run … --limit 3 --json`. Update that file. If you cannot fix it, mark it failed and say why.
+   In each file, add two to four sentences: what kind of report this is, what it shows about how this tenant
+   builds reports, and when to copy it. When you talk to me, call these key definitions. Do not say "exemplar."
+5. Rules. From config/rules.tsv, pick up to eight rules that are turned on and do different jobs
+   (create a CTA, close a CTA, set a score, load data to Company, create a Success Plan, call an external action).
+   Describe each one. Save the JSON under exemplars/rules/ and write a short page: source object, filters,
+   what the action does, and whether it is scheduled.
+6. Programs. Describe two or three Journey Orchestrator programs that represent how this tenant sends email
+   or creates CTAs. Save a short page for each: who enters the program, and what the steps do.
 
-FINISH: summarize in chat (counts, the exemplars that verified vs failed, the 3 most useful things you learned
-about this tenant, any gaps) and point me to TENANT.md. Remind me I can now ask anything about the tenant
-or ask you to build a report.
+Then write the pages a person can read:
+
+7. conventions.md. Only what the indexes show: name prefixes, folders in use, CTA types and reasons that
+   live rules actually use, and names that look retired (DNU, "copy of", test). Cite counts. Do not invent a standard.
+8. Where the main fields live. For ARR, renewal date, health score, CSM, stage, segment, and churn,
+   search schema/_field_index.tsv. List every field that might be it. Say which one the most reports and
+   live rules use. If two are both plausible, say so.
+9. intent/process_inventory.md. Using the live dropdown values and reference/cs_ontology.seed.json,
+   group CTA reasons and Success Plan types into the Customer Success processes this tenant runs,
+   and which of those look specific to this tenant. On a clean demo tenant, say it is clean.
+10. TENANT.md, about 120 lines. This is the page you will read at the start of later sessions.
+    Include: tenant URL, sandbox or production, date, CLI version, counts, the main fields from step 8,
+    the processes from step 9, where the key definitions are (exemplars/), conventions.md, and changelog.md.
+    Note any section that failed.
+11. Create changelog.md with a heading only. Nothing has been changed in Gainsight yet.
+12. Check your own work, then tell me the results:
+    - Where is ARR, and which field looks like the one this tenant uses?
+    - Which live rules create CTAs, and with which type and reason?
+    - Using one key definition, run (do not save) a grid of ARR by customer stage, limit 5.
+      Show the command and the rows.
+
+When you finish, tell me the counts, which key definitions worked, which failed, and three things you
+learned about this tenant. Point me to TENANT.md.
 ```
 
 ---
 
-**Next:** just ask questions. To build a report, describe it in plain English (Claude follows `prompts/build-report.md`). To keep the snapshot current, use `prompts/refresh.md`.
+**Next.** Ask your question in plain English. To build a report, describe it. The agent follows `prompts/build-report.md` and starts from a key definition. To bring the local tenant brain up to date, use `prompts/refresh.md`.
