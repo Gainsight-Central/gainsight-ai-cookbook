@@ -21,7 +21,9 @@
       <a class="btn btn-quiet" href="index.html#kits">Browse all kits</a>
     </div>
   </header>
-  <div class="crumb">Gainsight AI Cookbook &nbsp;/&nbsp; <strong>I'm in CS Ops</strong></div>
+  <div class="crumb">Gainsight AI Cookbook &nbsp;/&nbsp; <strong>I'm in CS Ops</strong>
+    <div class="crumb-escape">Looking for call-prep prompts? <a href="customers.html">I manage customers</a></div>
+  </div>
 
   <section class="hero left">
     <div class="hero-grid">
@@ -55,27 +57,6 @@
     </div>
   </section>
 
-  <section class="block">
-    <div class="block-head">
-      <div class="over">Two jobs, two paths</div>
-      <h2 class="title">Which one are you here for?</h2>
-    </div>
-    <div class="fork">
-      <div class="fork-card lead">
-        <div class="over">Configure and audit the tenant</div>
-        <h3>Admin CLI kits</h3>
-        <p>Rules, reports, scorecards, Journey programs, and the data model. An AI agent in your terminal reads them through the Admin CLI, and changes them only with your approval.</p>
-        <div class="cta-row"><a class="btn btn-blue" href="#path">Open the starter kit</a><span class="dest">Continue below for the full path</span></div>
-      </div>
-      <div class="fork-card">
-        <div class="over">Help your CSMs use the skills</div>
-        <h3>Gainsight for CSMs</h3>
-        <p>CSMs can paste the Copilot prompts today. Connect Gainsight MCP with OAuth when they should use the Claude skills, each person running as themselves.</p>
-        <div class="cta-row"><a class="btn btn-outline" href="#rollout">Rollout checklist</a><a class="btn btn-quiet" href="customers.html#skills">CSM skills</a></div>
-      </div>
-    </div>
-  </section>
-
   <section class="block alt" id="path">
     <div class="block-head">
       <div class="over">The Admin CLI path</div>
@@ -87,7 +68,7 @@
         <span class="tag">Starter kit</span>
         <h3>Read-only tenant audit</h3>
         <p>Copy one prompt into an AI agent that can run the Admin CLI.</p>
-        <ul class="facts"><li>Never creates, edits, or deletes</li><li>Typically under $2 for a full run</li><li>You get: reports in <code>intent/</code></li></ul>
+        <ul class="facts"><li>You get: <code>intent/tenant-overview.md</code></li><li>Where ARR, health, and risk are defined</li><li>Duplicated processes and inactive rules</li></ul>
         <a class="open" href="https://github.com/Gainsight-Central/gainsight-ai-cookbook/tree/main/cs-admin-cli-starter-kit">Open the starter kit</a>
       </div>
       <div class="arrow">→</div>
@@ -103,7 +84,7 @@
         <span class="tag gray">Advanced kit · with approval</span>
         <h3>Build and change</h3>
         <p>Reports and supported configuration changes, matched to how your team already builds.</p>
-        <ul class="facts"><li>Plan and exact command first</li><li>Your yes on each change</li><li>You get: an entry in <code>changelog.md</code></li></ul>
+        <ul class="facts"><li>Sandbox or production named in the plan</li><li>Exact command shown before it runs</li><li>You get: an entry in <code>changelog.md</code></li></ul>
         <a class="open" href="#changes">See how changes work</a>
       </div>
     </div>
@@ -138,18 +119,27 @@
       <div class="phase"><div class="gn">02 · IMPACT</div><h4>What it will do</h4><ul><li>Emails customers? Creates CTAs? Overwrites data?</li><li>The exact command, shown first</li><li>Sandbox recommended for production changes</li></ul></div>
       <div class="phase"><div class="gn">03 · APPROVE</div><h4>Your yes, then proof</h4><ul><li>A yes covers one change only</li><li>Result read back and compared</li><li>Logged in <code>changelog.md</code></li></ul><span class="boundary">Nothing runs before this step</span></div>
     </div>
-    <p class="gate-note">New rules are left inactive and Journey programs unpublished unless you ask otherwise.</p>
+    <div class="trust cols-3">
+      <div><h4>Sandbox named first</h4><p>The plan names sandbox or production. A production change includes a recommendation to try it in sandbox.</p></div>
+      <div><h4>Inactive until you ask</h4><p>New rules stay inactive. Journey programs stay unpublished unless you ask otherwise.</p></div>
+      <div><h4>Read the rules first</h4><p><a href="https://github.com/Gainsight-Central/gainsight-ai-cookbook/blob/main/cs-admin-cli-starter-kit/SAFETY.md">Starter kit safety</a> and <a href="https://github.com/Gainsight-Central/gainsight-ai-cookbook/blob/main/cs-admin-cli-advanced-kit/GUARDRAILS.md">advanced kit guardrails</a>.</p></div>
+    </div>
   </section>
 
   <section class="block" id="rollout">
     <div class="block-head">
       <div class="over">For your security review</div>
       <h2 class="title">What you need, and what to check before rollout.</h2>
+      <p class="lede">The Admin CLI is for tenant configuration: rules, reports, Journey programs, scorecards. MCP is how Claude skills query accounts with each CSM's own permissions.</p>
     </div>
     <div class="checklist">
       <div class="check"><div class="scope">Starter kit</div><h3>To run the audit</h3><ul><li>Gainsight Admin CLI, logged in</li><li>An AI agent that can run terminal commands</li><li>A working folder; add <code>intent/</code> to its ignore list</li></ul></div>
       <div class="check"><div class="scope">Advanced kit</div><h3>To build and change</h3><ul><li>Super admin CLI login</li><li>One OAuth app: Read and Write scopes, PKCE, local callback</li><li>Node.js and Python 3</li><li>A folder outside any git repository</li></ul></div>
-      <div class="check"><div class="scope">MCP for Claude skills</div><h3>Before CSMs use skills</h3><ul><li>Copilot prompts need no MCP setup</li><li>OAuth with PKCE, per user, for Claude</li><li>Sign in as a non-admin and a region-restricted user, and compare the agent with the product</li><li>Confirm your AI provider's data handling</li></ul></div>
+      <div class="check"><div class="scope">CSM handoff</div><h3>Before the team uses skills</h3><ul><li>Copilot prompts need no setup from you</li><li>Claude skills: OAuth with PKCE, one login per person</li><li>Sign in as a non-admin and a region-restricted user, and compare the agent with the product</li><li>Confirm the provider's data handling, then send the team to the <a href="customers.html">CSM cookbook</a></li></ul></div>
+    </div>
+    <div class="small-cross">
+      <span><b>Salesforce Agentforce.</b> The same answer structures ship as a subagent plus four templates. An admin deploys that kit.</span>
+      <a class="open-btn" href="https://github.com/Gainsight-Central/gainsight-ai-cookbook/tree/main/agentforce-cs-agent">Open Agentforce templates</a>
     </div>
     <div class="block-head" style="margin-top:48px">
       <div class="over">Before you ask</div>
@@ -157,15 +147,13 @@
     </div>
     <div class="faq">
       <div class="faq-item"><h4>Where does tenant data go?</h4><p>Audit files and the tenant brain stay in your local folder. Your AI agent processes what it reads under your provider's policy. Do not commit these files.</p></div>
-      <div class="faq-item"><h4>Can it change production by accident?</h4><p>The starter kit cannot write. The advanced kit stops before each write and waits for a yes on that specific change.</p></div>
-      <div class="faq-item"><h4>Admin CLI or MCP?</h4><p>The Admin CLI is for tenant configuration: rules, reports, Journey programs, scorecards. MCP is how Claude skills query accounts with each CSM's own permissions. Copilot prompts don't need that connection.</p></div>
-      <div class="faq-item"><h4>Is this a supported Gainsight product?</h4><p>No. These are sample kits maintained in the open. For CLI or MCP help, use <a href="https://support.gainsight.com/">Gainsight Support</a>.</p></div>
+      <div class="faq-item"><h4>Is this a supported Gainsight product?</h4><p>These are sample kits maintained in the open. For CLI or MCP help, use <a href="https://support.gainsight.com/">Gainsight Support</a>.</p></div>
     </div>
   </section>
 
   <section class="final">
     <h2>Run the audit before your next change.</h2>
-    <p>Start read-only. One run tells you what your tenant does and where its definitions live.</p>
+    <p>Open the starter kit on GitHub, or download just that folder.</p>
     <div class="hero-actions">
       <a class="btn btn-blue" href="https://github.com/Gainsight-Central/gainsight-ai-cookbook/tree/main/cs-admin-cli-starter-kit">Open the starter kit</a>
       <a class="btn btn-white" href="downloads/cs-admin-cli-starter-kit.zip">Download the starter kit</a>
