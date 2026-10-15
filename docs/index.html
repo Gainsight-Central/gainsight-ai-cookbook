@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gainsight AI Cookbook</title>
+  <meta name="description" content="Prompts for Gainsight Copilot, Claude skills for CSMs, and Admin CLI kits for CS Ops. Sample code from Gainsight, ready to copy." />
+  <link rel="stylesheet" href="css/site.css" />
+</head>
+<body>
+  <div class="banner">Prompts for Copilot. Skills for Claude. Admin kits that read your tenant before anything changes.</div>
+  <header class="header">
+    <a class="logo" href="index.html">Gainsight</a>
+    <nav class="nav">
+      <a class="active" href="index.html">Cookbook</a>
+      <a href="customers.html">I manage customers</a>
+      <a href="ops.html">I'm in CS Ops</a>
+    </nav>
+    <div class="header-actions">
+      <a class="btn btn-quiet" href="https://github.com/Gainsight-Central/gainsight-ai-cookbook">View on GitHub</a>
+    </div>
+  </header>
+
+  <section class="hero home-hero">
+    <div class="eyebrow">Gainsight AI Cookbook</div>
+    <h1>Put Gainsight to work in the AI tool you already use.</h1>
+    <p class="sub">CSMs copy a prompt into Copilot and prep the next call. CS Ops points an agent at the Admin CLI and reads the tenant before anything changes.</p>
+    <div class="hero-actions">
+      <a class="btn btn-blue" href="customers.html">I manage customers</a>
+      <a class="btn btn-ghost" href="ops.html">I'm in CS Ops</a>
+    </div>
+  </section>
+
+  <section class="home-section">
+    <div class="wrap">
+      <div class="doors">
+        <a class="door" href="customers.html">
+          <div class="kicker">For CSMs and CS leaders</div>
+          <h3>I manage customers</h3>
+          <p>Walk into the next call prepared. Copy a prompt into Gainsight Copilot. Name the customer. Staircase adds what they said, when it's connected.</p>
+          <span class="go">Copy a Copilot prompt</span>
+        </a>
+        <a class="door" href="ops.html">
+          <div class="kicker">For CS Ops and Gainsight admins</div>
+          <h3>I'm in CS Ops</h3>
+          <p>Know the tenant before an agent touches it. Start with a read-only audit of rules, reports, scorecards, and where ARR, health, and risk are defined.</p>
+          <span class="go">Open the read-only starter kit</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="kits">
+    <div class="block-head">
+      <div class="over">Everything in the cookbook</div>
+      <h2 class="title">Five kits. Take the one that matches the job.</h2>
+      <p class="lede">Each kit is sample code you can read. Nothing here is a supported Gainsight product. Open the folder, or download just that kit.</p>
+    </div>
+    <div class="kit-grid">
+      <div class="kit">
+        <span class="tag">CSMs · no setup</span>
+        <h3>Copilot prompts</h3>
+        <p>Six prompts for call prep, account health, renewals, risks, timeline, and a note for your VP. Customer name only. Staircase is used when Copilot already has it.</p>
+        <div class="meta"><span class="chip">Copy and paste</span><span class="chip">Reads Gainsight</span></div>
+        <div class="row-actions"><a class="btn btn-blue" href="customers.html#prompts">Open the prompts</a><a class="btn btn-quiet" href="downloads/gainsight-cs-mcp-skills.zip">Download kit</a></div>
+      </div>
+      <div class="kit">
+        <span class="tag purple">CSMs · Claude</span>
+        <h3>Claude skills</h3>
+        <p>Weekly call briefs from your calendar, an exec prep note, risk updates on Timeline, and account dashboards. Each card says what it writes.</p>
+        <div class="meta"><span class="chip">Calendar + email</span><span class="chip">One skill at a time</span></div>
+        <div class="row-actions"><a class="btn btn-quiet" href="customers.html#skills">See the four skills</a><a class="btn btn-quiet" href="downloads/gainsight-cs-mcp-skills.zip">Download kit</a></div>
+      </div>
+      <div class="kit">
+        <span class="tag">CS Ops · read only</span>
+        <h3>Admin CLI starter</h3>
+        <p>A prompt that asks an AI agent what the tenant is configured to do. It never creates, edits, or deletes. A full run is typically under $2 of API usage.</p>
+        <div class="meta"><span class="chip">Reports in intent/</span><span class="chip">Read only</span></div>
+        <div class="row-actions"><a class="btn btn-quiet" href="ops.html">Open the starter kit</a><a class="btn btn-quiet" href="downloads/cs-admin-cli-starter-kit.zip">Download</a></div>
+      </div>
+      <div class="kit">
+        <span class="tag gray">CS Ops · after a yes</span>
+        <h3>Admin CLI advanced</h3>
+        <p>A local copy of the tenant so later questions don't start over. Changes wait for a yes on that change, then a read-back and a changelog entry.</p>
+        <div class="meta"><span class="chip">10–20 min setup</span><span class="chip">Stays on your machine</span></div>
+        <div class="row-actions"><a class="btn btn-quiet" href="ops.html#path">See the path</a><a class="btn btn-quiet" href="downloads/cs-admin-cli-advanced-kit.zip">Download</a></div>
+      </div>
+    </div>
+    <div class="skills-foot" style="margin-top:16px">
+      <span><b>Salesforce Agentforce.</b> A subagent plus four response templates, so account, renewal, transition, and expansion answers stay evidence-backed.</span>
+      <span class="row-actions"><a class="open-btn" href="https://github.com/Gainsight-Central/gainsight-ai-cookbook/tree/main/agentforce-cs-agent">Open Agentforce templates</a><a class="btn btn-quiet" href="downloads/agentforce-cs-agent.zip">Download</a></span>
+    </div>
+  </section>
+
+  <section class="band">
+    <div>
+      <div class="over">Start with one prompt</div>
+      <h2>Prep the next call without installing anything.</h2>
+      <p>Paste this into Gainsight Copilot and replace the customer name. The same prompt is in the repository, with five more beside it.</p>
+    </div>
+    <div class="prompt-card" style="box-shadow:none;border:1px solid #e6e8ee">
+      <div class="ph"><span>Gainsight Copilot</span><button class="copy-btn" type="button" data-copy="prep-for-a-call">Copy prompt</button></div>
+      <div class="prompt-text">Prep me for my next call with <span class="fill">[customer name]</span>.
+Tell me where the account stands (health, renewal, ARR, stage),
+the open risks and CTAs, what happened recently on the timeline,
+and 3 questions I should ask.
+If Staircase is connected, include sentiment and what the customer said on recent calls. If it is not connected, say so.
+If a value is missing, say so. Do not invent numbers.</div>
+    </div>
+  </section>
+
+  <section class="final">
+    <h2>Pick the job in front of you.</h2>
+    <p>Customers to prep, or a tenant to understand. Both start from this repository.</p>
+    <div class="hero-actions">
+      <a class="btn btn-blue" href="customers.html">I manage customers</a>
+      <a class="btn btn-white" href="ops.html">I'm in CS Ops</a>
+    </div>
+  </section>
+  <div class="legal"><span>Sample prompts, skills, and kits. Not a supported Gainsight product.</span><span>Gainsight-Central / gainsight-ai-cookbook</span></div>
+
+  <pre id="prep-for-a-call" class="copy-source">Prep me for my next call with [customer name].
+Tell me where the account stands (health, renewal, ARR, stage),
+the open risks and CTAs, what happened recently on the timeline,
+and 3 questions I should ask.
+If Staircase is connected, include sentiment and what the customer said on recent calls. If it is not connected, say so.
+If a value is missing, say so. Do not invent numbers.</pre>
+  <script src="js/site.js"></script>
+</body>
+</html>

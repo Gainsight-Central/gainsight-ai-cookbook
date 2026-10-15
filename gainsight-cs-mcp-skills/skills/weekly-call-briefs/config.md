@@ -8,12 +8,10 @@ Save your changes and the skill will use them on the next run.
 ## Identity
 
 - **CSM_NAME**: `Your Full Name`
-  Your full display name as it appears in your CRM (e.g. "Jane Smith").
+  Your name, as it appears in Gainsight (for example, "Jane Smith"). This is the only identity field you fill in.
 
-- **CSM_USER_ID**: `PASTE_YOUR_CRM_USER_ID_HERE`
-  Your unique user GUID/GSID in your CRM. In Gainsight you can find this by running
-  `search_user(name="Your Name")` once and pasting the GSID returned. Other CRMs use
-  similar lookup patterns.
+- **CSM_USER_ID**: ``
+  Leave this blank. The skill looks up your Gainsight user GSID from `CSM_NAME`. Paste a GSID here only when that lookup matches the wrong person.
 
 - **TIMEZONE**: `America/New_York`
   IANA timezone identifier (e.g. `America/Phoenix`, `Europe/London`, `Asia/Tokyo`).

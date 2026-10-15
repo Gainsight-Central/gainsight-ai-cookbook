@@ -1,0 +1,6 @@
+Montserrat
+Copyright 2024 The Montserrat.Git Project Authors (https://github.com/JulietaUla/Montserrat.git)
+
+These font files are licensed under the SIL Open Font License, Version 1.1.
+The license text and FAQ are at https://openfontlicense.org
+Source: https://github.com/JulietaUla/Montserrat

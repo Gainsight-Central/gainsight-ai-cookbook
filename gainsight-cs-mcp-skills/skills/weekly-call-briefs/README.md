@@ -9,11 +9,11 @@ emails, talking points, and one-click CRM update actions.
 For every external client call on your calendar this week, it produces:
 - A 2-3 sentence account brief grounded in conversation intelligence + CRM data
 - 3-4 prioritized talking points
-- A pre-call agenda email draft (one-click to Gmail)
-- 3 ghost exec email variants (one-click to Gmail)
+- A pre-call agenda email draft (one click, saved as a draft in the connected email tool)
+- 3 exec email variants (one click, saved as a draft in the connected email tool)
 - A "Update Success Plan" / "Generate Risk Update" action panel
 
-Everything renders in a single interactive HTML widget. Gmail drafts and CRM timeline
+Everything renders in a single interactive HTML widget. Email drafts and timeline
 posts fire silently with one click; success plan and risk updates open a draft in
 chat for your review.
 
@@ -21,8 +21,9 @@ chat for your review.
 
 1. Drop this skill folder into your skills directory (or upload the `.skill` package
    to Claude.ai).
-2. **Edit `config.md`** — fill in your name, CRM user ID, timezone, calendar filters,
-   and MCP names. The skill will refuse to run until placeholders are replaced.
+2. **Edit `config.md`** — fill in your name, time zone, and calendar filters.
+   Leave the user id blank. The skill looks up your Gainsight user from your name.
+   The skill will refuse to run while your name is still the placeholder.
 3. Make sure your CRM MCP and (optionally) conversation intelligence MCP are connected
    in your Claude settings.
 
