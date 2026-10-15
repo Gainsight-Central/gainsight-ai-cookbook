@@ -565,6 +565,8 @@ h1 {
 .conn span { background: #f1f5fb; border: 1px solid #e1e8f2; border-radius: 999px; padding: 3px 9px; font-size: 12px; font-weight: 600; color: #3d4852; }
 .conn span.gs { background: #eef4ff; border-color: #c9dafc; color: #0f4fc4; }
 
+.shelf-label { margin: 28px 0 12px; font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #8b95a1; }
+.shelf-label:first-of-type { margin-top: 0; }
 .shelf { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 .pcard { background: #fff; border: 1px solid #e6e8ee; border-radius: 16px; padding: 20px 22px; display: flex; flex-direction: column; gap: 10px; }
 .pcard.feat { border: 2px solid #146aff; }
