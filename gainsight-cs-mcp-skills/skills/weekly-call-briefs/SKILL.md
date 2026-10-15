@@ -16,8 +16,9 @@ description: >
 # Weekly Call Briefs
 
 A generic, shareable version of the weekly call brief dashboard. **Before first use,
-edit `config.md` in this skill folder** to fill in your CSM name, CRM user ID, timezone,
-calendar filters, and CRM/conversation-intel MCP names.
+edit `config.md` in this skill folder** to fill in your name, timezone, calendar
+filters, and the names of your Gainsight and conversation-intelligence connections.
+Leave the user id blank. The skill looks up your Gainsight user GSID from your name.
 
 When this SKILL.md references `{{CONFIG.X}}`, read the value from `config.md`. If a
 required config value is missing, surface a clear error in the closing message and
@@ -48,14 +49,18 @@ Read `config.md` from this skill's folder. Parse out:
 - `CRM_MCP_NAME`, `CONVERSATION_INTEL_MCP_NAME`
 - Branding colors (use defaults if absent)
 
-If `CSM_USER_ID` or `CSM_NAME` is still a placeholder ("PASTE_..." or "Your Full Name"),
-abort and tell the user to edit `config.md` first.
+If `CSM_NAME` is still the placeholder "Your Full Name", abort and tell the user to
+edit `config.md` first.
+
+If `CSM_USER_ID` is empty or still a placeholder, look up the Gainsight user GSID from
+`CSM_NAME` and use that for the rest of the run. If more than one person matches, ask
+which name to use. Do not ask the user to paste an id.
 
 ---
 
 ## Step 1 — Calendar Fetch
 
-Use the user's connected Google Calendar MCP (or equivalent). Call `list_events` for
+Use the user's connected calendar tool. Call `list_events` for
 the date range:
 
 - **Default range:** Monday 00:00 → Friday 23:59 of the current week, in `{{CONFIG.TIMEZONE}}`
@@ -380,15 +385,13 @@ bullets · `⚠ Staircase` pill if `staircaseWarning`
 
 **③ Agenda Email section:**
 - Left border `{{CONFIG.PRIMARY_COLOR}}`. Render the agenda body. Single button:
-  "Draft agenda in Gmail ↗" — fires silently.
-- **HARD RULE:** Gmail draft body MUST wrap content in `<span style="color:#ffffff">...</span>`.
+  "Draft agenda in email ↗" — fires silently. Create a draft in the connected email tool. Do not send it.
 
 **④ Ghost Exec Email section:**
 - Left border `{{CONFIG.ACCENT_COLOR}}`. Render 3 variants with dot-nav (JS-only swap, no
   separate buttons per variant).
-- Single button: **"Draft exec note in Gmail ↗"** — never "Draft Variant 1 in Gmail" or
-  similar. Sends the currently-selected variant to Gmail silently.
-- **HARD RULE:** Gmail draft body MUST wrap content in `<span style="color:#ffffff">...</span>`.
+- Single button: **"Draft exec note in email ↗"** — never "Draft Variant 1 in email" or
+  similar. Creates a draft of the currently selected variant in the connected email tool. Do not send it.
 
 **⑤ Footer:** "Send to CRM Timeline ↗" — HTML body only, fires silently.
 
@@ -420,25 +423,29 @@ function fireAction(btn, statusEl, prompt) {
 ```
 
 **Silent buttons** (append `"Handle this silently — do NOT respond unless error."` to the prompt):
-- Draft agenda in Gmail
-- Draft exec note in Gmail
+- Draft agenda in email
+- Draft exec note in email
 - Send to CRM Timeline
 
 **Chat-response buttons** (omit the silent line — user wants to review the draft):
 - Update Success Plan
 - Generate Risk Update
 
-**Gmail draft prompt format:**
+**Email draft prompt format:**
 
 ```
-Create a Gmail draft:
+Create a draft in the connected email tool. Do not send it.
 To: ${to}
 Subject: ${subj}
 Body:
-<span style="color:#ffffff">${body}</span>
+${body}
 
 Handle this silently — do NOT respond unless error.
 ```
+
+If the draft is created in Gmail and the body renders as invisible text, recreate that
+draft with the body wrapped in `<span style="color:#ffffff">...</span>`. Do this only
+for that Gmail rendering failure.
 
 **CRM Timeline post format:**
 - HTML body only (`<h3>`, `<p>`, `<ul>`, `<li>`, `<strong>`, `<hr>`).
@@ -478,7 +485,7 @@ Followed by a one-line-per-call list:
 Then a final tip line:
 
 ```
-Tip: Gmail and Timeline buttons fire silently (✓ in-card). Update Success Plan and Generate Risk Update open a draft in chat for review.
+Tip: Email and Timeline buttons fire silently (✓ in-card). Update Success Plan and Generate Risk Update open a draft in chat for review.
 ```
 
 That's the entire output after the widget. No other narration.

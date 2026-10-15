@@ -8,6 +8,12 @@ All four run on the Gainsight CS MCP server. Three of them go further when **Sta
 
 Each skill is installed independently. Take the ones that match your role.
 
+## Prompts for Gainsight Copilot
+
+The [prompts](prompts/) folder is for Gainsight Copilot, where there is nothing to install. Copy a prompt, paste it into Copilot, and add the customer name when the prompt asks for one. Copilot reads Gainsight. When Staircase is connected, the same prompts also use conversation intelligence, and they say so when it is not.
+
+The skills below are for Claude, where Gainsight can sit next to your calendar, email, and chat tool.
+
 ## Prerequisites
 
 These skills are instructions for an AI agent — they don't ship code. They call MCP servers, which you need connected first:
@@ -17,7 +23,7 @@ These skills are instructions for an AI agent — they don't ship code. They cal
 | **Gainsight CS MCP** | all four | Accounts, scorecards, CTAs, Success Plans, Timeline |
 | **Visualizer** (`mcp__visualize__*`) | `gainsight-viz`, `weekly-call-briefs` | Renders dashboards inline in the conversation |
 | ***Staircase AI MCP*** | *`exec-prep-note`, `weekly-call-briefs`, `risk-update`* | *Conversation intelligence — sentiment, transcripts, risk scores. Optional; without it these skills fall back to Gainsight data and say so.* |
-| **Gmail / Calendar** | `weekly-call-briefs` | Reads your week, drafts pre-call emails |
+| **Calendar / email** | `weekly-call-briefs` | Reads your week, drafts pre-call emails in the connected email tool |
 | **Web search** | `exec-prep-note` | Business-model and earnings research for the "how they make money" section |
 
 ## Install
@@ -99,12 +105,12 @@ An interactive Mon–Fri dashboard of every external client call on your calenda
              3. Close the three open P1s before pricing comes up
 
    ┌─ Draft pre-call agenda ──┐ ┌─ Exec email (3 variants) ──┐
-   │  → one click to Gmail    │ │  → one click to Gmail      │
+   │  → one click to email    │ │  → one click to email      │
    └──────────────────────────┘ └────────────────────────────┘
    [ Update Success Plan ]  [ Generate Risk Update ]
 ```
 
-Ships with [`config.md`](skills/weekly-call-briefs/config.md) — set your name, CRM user ID, and timezone once and the skill reads them on every run. Gmail drafts are drafts: nothing sends without your click.
+Ships with [`config.md`](skills/weekly-call-briefs/config.md) — set your name and time zone once and the skill reads them on every run. It looks up your Gainsight user from your name, so you never paste an id. Email drafts stay drafts: nothing sends without your click.
 
 ---
 
