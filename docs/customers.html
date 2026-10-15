@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>I manage customers — Gainsight AI Cookbook</title>
+  <meta name="description" content="Copy a prompt into Gainsight Copilot and prep your next customer call. Go further in Claude with skills for your calendar and email." />
+  <link rel="stylesheet" href="css/site.css" />
+</head>
+<body>
+  <div class="banner">Copilot today, with Staircase when it's connected. Claude skills add your calendar and email.</div>
+  <header class="header">
+    <a class="logo" href="index.html">Gainsight</a>
+    <nav class="nav">
+      <a href="index.html">Cookbook</a>
+      <a class="active" href="customers.html">I manage customers</a>
+      <a href="ops.html">I'm in CS Ops</a>
+    </nav>
+    <div class="header-actions">
+      <a class="btn btn-quiet" href="index.html#kits">Browse all kits</a>
+    </div>
+  </header>
+  <div class="crumb">Gainsight AI Cookbook &nbsp;/&nbsp; <strong>I manage customers</strong></div>
+
+  <section class="hero left">
+    <div class="hero-grid wide-right">
+      <div>
+        <div class="eyebrow">For CSMs and CS leaders</div>
+        <h1>Walk into your next customer call prepared.</h1>
+        <p class="sub">Try it in Gainsight Copilot today. Copy the prompt, paste it in, and type the customer's name. It reads Gainsight, and Staircase when that is connected.</p>
+        <div class="hero-actions">
+          <button class="btn btn-blue" type="button" data-copy="prep-for-a-call">Copy the Copilot prompt</button>
+          <a class="btn btn-ghost" href="#prompts">Browse all prompts and skills</a>
+        </div>
+      </div>
+      <div class="prompt-card">
+        <div class="ph"><span>Paste into Gainsight Copilot</span><button class="copy-btn" type="button" data-copy="prep-for-a-call">Copy prompt</button></div>
+        <div class="prompt-text">Prep me for my next call with <span class="fill">[customer name]</span>.
+Tell me where the account stands (health, renewal, ARR, stage),
+the open risks and CTAs, what happened recently on the timeline,
+and 3 questions I should ask.
+If Staircase is connected, include sentiment and what the customer said on recent calls. If it is not connected, say so.
+If a value is missing, say so. Do not invent numbers.</div>
+        <div class="pf"><span>No setup</span><span>Customer name only</span><span>Gainsight + Staircase when connected</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block alt">
+    <div class="block-head">
+      <div class="over">What comes back</div>
+      <h2 class="title">A one-screen read on the account, with the gaps called out.</h2>
+      <p class="lede">Try it first on an account you know well. If the answer and your instinct disagree, check the dates.</p>
+    </div>
+    <div class="answer">
+      <div class="chat rel">
+        <span class="illus">Illustrative</span>
+        <div class="you">Prep me for my next call with Acme Inc.</div>
+        <h3>Acme Inc: where the account stands</h3>
+        <div class="tiles">
+          <div class="tile"><div class="tk">Health</div><div class="tv y">62</div><div class="tn">Down from 71 in Aug</div></div>
+          <div class="tile"><div class="tk">Renewal</div><div class="tv">Mar 14</div><div class="tn">151 days out</div></div>
+          <div class="tile"><div class="tk">ARR</div><div class="tv m">—</div><div class="tn">Not set on this account</div></div>
+          <div class="tile"><div class="tk">Stage</div><div class="tv">Adopt</div><div class="tn">Since June</div></div>
+        </div>
+        <div class="sec"><div class="sk">Risks and CTAs</div><div class="sv"><ul><li>Risk · Sentiment, high, due Nov 2</li><li>Risk · Support, medium, due Nov 11</li><li>Objective · Rollout to EMEA, overdue 14 days</li></ul></div></div>
+        <div class="sec"><div class="sk">Recent timeline</div><div class="sv"><ul><li>Oct 8 · Executive sync · renewal scoping started</li><li>Sep 29 · Support escalation · 3 open P1s</li></ul></div></div>
+        <div class="sec"><div class="sk">From Staircase</div><div class="sv">Sentiment down across the last three calls. The champion asked whether the rollout date was still realistic.</div></div>
+        <div class="sec"><div class="sk">Ask</div><div class="sv"><ol><li>What date can you commit to for the EMEA rollout?</li><li>Who else should join the renewal conversation?</li><li>Are the three P1s blocking anything we haven't heard about?</li></ol></div></div>
+      </div>
+      <div class="callouts">
+        <div class="callout-item"><h4>Gaps stay visible</h4><p>No ARR on the record? The prompt asks Copilot to say so instead of guessing.</p></div>
+        <div class="callout-item"><h4>Dates help you judge freshness</h4><p>Renewal, last activity, and due dates sit next to each risk, so a stale flag is easy to spot.</p></div>
+        <div class="callout-item"><h4>Staircase when it's connected</h4><p>Sentiment and what the customer said come from Staircase. If it isn't connected, Copilot says so.</p></div>
+        <div class="callout-item"><h4>A read-only request</h4><p>It asks for a summary. It doesn't ask Copilot to post to Timeline or update a CTA.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head">
+      <div class="over">Two ways to use the cookbook</div>
+      <h2 class="title">Start in Copilot. Go further where your other tools live.</h2>
+      <p class="lede">Gainsight Copilot works with what's in Gainsight, plus Staircase when your admin has connected it. In Claude, that same data sits next to the calendar, email, and chat tool your company has connected, so a skill can do more of the job.</p>
+    </div>
+    <div class="ways">
+      <div class="way lead">
+        <span class="tag">Today, no setup</span>
+        <h3>In Gainsight Copilot</h3>
+        <p class="wsub">Copy a prompt, paste it in, add the customer name.</p>
+        <div class="wrow"><div class="wk">Sees</div><div class="conn"><span class="gs">Gainsight</span><span>Staircase, when connected</span></div></div>
+        <div class="wrow"><div class="wk">Good for</div><div>Call prep, account health, open risks, recent activity, and what customers said on calls</div></div>
+        <div class="wrow"><div class="wk">You get</div><div>An answer in the chat</div></div>
+        <div class="wrow"><div class="wk">Setup</div><div>None. Staircase is used only when it is already connected.</div></div>
+        <div class="cta-row"><a class="btn btn-blue" href="#prompts">Copy prompts</a></div>
+      </div>
+      <div class="way">
+        <span class="tag purple">When Gainsight is connected to Claude</span>
+        <h3>In Claude, with skills</h3>
+        <p class="wsub">Add a skill once, then ask in plain words, like "prep my week."</p>
+        <div class="wrow"><div class="wk">Sees</div><div class="seeslist"><div><span class="gs-chip">Gainsight</span> all four skills</div><div><span class="o-chip">Calendar + email</span> weekly call briefs</div><div><span class="o-chip">Web search</span> exec prep</div><div><span class="o-chip">Staircase</span> optional for three skills</div></div></div>
+        <div class="wrow"><div class="wk">Good for</div><div>A brief for every call this week, exec prep notes, risk updates from your calls, account dashboards</div></div>
+        <div class="wrow"><div class="wk">You get</div><div>Dashboards, email drafts, and Timeline notes, each labeled on its card</div></div>
+        <div class="wrow"><div class="wk">Setup</div><div>Your admin connects Gainsight once. You add the skill folder.</div></div>
+        <div class="cta-row"><a class="btn btn-quiet" href="#skills">See the four skills</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block alt" id="prompts">
+    <div class="block-head">
+      <div class="over">Copy directly, no install</div>
+      <h2 class="title">Prompts for the questions you ask every week.</h2>
+      <p class="lede">Each one needs only a customer name, or nothing at all. The same text lives in the <a href="https://github.com/Gainsight-Central/gainsight-ai-cookbook/tree/main/gainsight-cs-mcp-skills/prompts">prompts folder</a>.</p>
+    </div>
+    <div class="shelf">
+      <div class="pcard feat">
+        <div class="pt"><h4>Prep for a call</h4><button class="copy-btn" type="button" data-copy="prep-for-a-call">Copy</button></div>
+        <div class="q">Prep me for my next call with [customer name]. Tell me where the account stands, the open risks and CTAs, recent timeline, and 3 questions to ask.</div>
+        <div class="when">Before any customer call</div>
+      </div>
+      <div class="pcard">
+        <div class="pt"><h4>How is this account doing?</h4><button class="copy-btn ghost" type="button" data-copy="how-is-this-account">Copy</button></div>
+        <div class="q">How is [customer name] doing? Show health, the trend, renewal, stage, and what moved health.</div>
+        <div class="when">Quick check-in</div>
+      </div>
+      <div class="pcard">
+        <div class="pt"><h4>Renewals coming up</h4><button class="copy-btn ghost" type="button" data-copy="renewals-coming-up">Copy</button></div>
+        <div class="q">List my renewals in the next 90 days with health, ARR, stage, and open risks.</div>
+        <div class="when">Monday planning</div>
+      </div>
+      <div class="pcard">
+        <div class="pt"><h4>Risks across my book</h4><button class="copy-btn ghost" type="button" data-copy="risks-across-my-book">Copy</button></div>
+        <div class="q">Which of my accounts have open risk CTAs? Sort by due date.</div>
+        <div class="when">Pipeline review</div>
+      </div>
+      <div class="pcard">
+        <div class="pt"><h4>Last quarter of activity</h4><button class="copy-btn ghost" type="button" data-copy="last-quarter-of-activity">Copy</button></div>
+        <div class="q">What happened on [customer name]'s timeline in the last 90 days?</div>
+        <div class="when">QBR prep</div>
+      </div>
+      <div class="pcard">
+        <div class="pt"><h4>Draft a VP call note</h4><button class="copy-btn ghost" type="button" data-copy="draft-a-vp-call-note">Copy</button></div>
+        <div class="q">Draft a short note for my VP joining the [customer name] call. Don't post or change anything.</div>
+        <div class="when">Exec joining a call</div>
+      </div>
+    </div>
+    <div class="shelf-note">Every prompt uses Staircase when it is connected, and ends with the same rule: if a value is missing, say so, and don't invent numbers.</div>
+  </section>
+
+  <section class="block" id="skills">
+    <div class="block-head">
+      <div class="over">Go further in Claude</div>
+      <h2 class="title">Four skills that do more of the job.</h2>
+      <p class="lede">Each skill installs on its own. Every card says what it reads, what it writes, and what it needs. <a href="downloads/gainsight-cs-mcp-skills.zip">Download all four skills</a>.</p>
+    </div>
+    <div class="skills">
+      <div class="skill">
+        <div class="st"><div><h3>Weekly call briefs</h3><span class="say">"Prep my week"</span></div><a class="open-btn" href="https://github.com/Gainsight-Central/gainsight-ai-cookbook/tree/main/gainsight-cs-mcp-skills/skills/weekly-call-briefs">Open</a></div>
+        <p>A Monday-to-Friday view of your external calls. Each one opens into a brief, talking points, a draft agenda, and exec email options.</p>
+        <div class="kv"><div class="k">Reads</div><div>Gainsight, your calendar</div><div class="k">Writes</div><div>Email drafts. Timeline only when you click</div><div class="k">Needs</div><div>Calendar and email, your name and time zone</div></div>
+        <span class="badge write">Writes on click</span><span class="badge need">Staircase optional</span>
+      </div>
+      <div class="skill">
+        <div class="st"><div><h3>Executive prep note</h3><span class="say">"Get my VP ready for Acme"</span></div><a class="open-btn" href="https://github.com/Gainsight-Central/gainsight-ai-cookbook/tree/main/gainsight-cs-mcp-skills/skills/exec-prep-note-generic">Open</a></div>
+        <p>Seven sections: executive summary, why this call, how they make money, objectives, contacts, risks, and maturity.</p>
+        <div class="kv"><div class="k">Reads</div><div>Gainsight, web search</div><div class="k">Writes</div><div>Posts the note to Timeline automatically</div><div class="k">Needs</div><div>The customer name</div></div>
+        <span class="badge write">Posts to Timeline</span><span class="badge need">Staircase optional</span>
+      </div>
+      <div class="skill">
+        <div class="st"><div><h3>Risk updates</h3><span class="say">"Update my risk tasks"</span></div><a class="open-btn" href="https://github.com/Gainsight-Central/gainsight-ai-cookbook/tree/main/gainsight-cs-mcp-skills/skills/risk-update-skill">Open</a></div>
+        <p>Reads your recent calls, checks what Timeline already says, and adds only what's missing to each open risk task.</p>
+        <div class="kv"><div class="k">Reads</div><div>Gainsight risk tasks, call transcripts</div><div class="k">Writes</div><div>Timeline entries linked to your open risk tasks</div><div class="k">Needs</div><div>Staircase, or another conversation intelligence tool</div></div>
+        <span class="badge write">Writes to risk tasks</span>
+      </div>
+      <div class="skill">
+        <div class="st"><div><h3>Account dashboards</h3><span class="say">"How is Acme doing?"</span></div><a class="open-btn" href="https://github.com/Gainsight-Central/gainsight-ai-cookbook/tree/main/gainsight-cs-mcp-skills/skills/gainsight-viz">Open</a></div>
+        <p>Fourteen fixed layouts, from account summary to portfolio health. A missing value shows a dash, never a made-up number.</p>
+        <div class="kv"><div class="k">Reads</div><div>Gainsight</div><div class="k">Writes</div><div>Nothing</div><div class="k">Needs</div><div>Claude, which draws the dashboard inline</div></div>
+        <span class="badge read">Read only</span>
+      </div>
+    </div>
+    <div class="skills-foot">
+      <span><b>Your team answers from Salesforce?</b> The same answer structures ship as four Agentforce templates.</span>
+      <a class="open-btn" href="https://github.com/Gainsight-Central/gainsight-ai-cookbook/tree/main/agentforce-cs-agent">Open Agentforce templates</a>
+    </div>
+  </section>
+
+  <section class="block alt">
+    <div class="block-head">
+      <div class="over">How these behave</div>
+      <h2 class="title">Built so you can check the answer.</h2>
+    </div>
+    <div class="trust">
+      <div><h4>Told not to invent</h4><p>Every prompt and skill says to label missing values. Verify high-stakes numbers in Gainsight.</p></div>
+      <div><h4>You approve sends</h4><p>Emails land as drafts. Nothing sends until you send it.</p></div>
+      <div><h4>Writes are labeled</h4><p>Exec prep posts automatically. Risk updates post to task Timelines. Weekly briefs write only when you click.</p></div>
+      <div><h4>No extra access</h4><p>These recipes don't widen what the connector can see. If a result looks wrong, stop and tell your admin.</p></div>
+    </div>
+    <div class="faq">
+      <div class="faq-item"><h4>Do I need to set anything up for Copilot?</h4><p>No. Copy a prompt, paste it into Gainsight Copilot, and add the customer name. Staircase is included when it is already connected.</p></div>
+      <div class="faq-item"><h4>Why would I use Claude instead?</h4><p>Claude can also see your calendar, email, and chat tool, so a skill can prep your whole week and draft the follow-up.</p></div>
+      <div class="faq-item"><h4>Do I need an ID?</h4><p>No. When a prompt or skill needs an account, you give the customer name. The skills find the Gainsight records for you.</p></div>
+      <div class="faq-item"><h4>What if a risk flag looks wrong?</h4><p>Check the date next to it. Stale or noisy signals are worth flagging to CS Ops.</p></div>
+    </div>
+  </section>
+
+  <section class="final">
+    <h2>Prep your next call in Copilot.</h2>
+    <p>Copy the prompt, paste it in, add the customer name. When you want your whole week prepped, add the skills in Claude.</p>
+    <div class="hero-actions">
+      <button class="btn btn-blue" type="button" data-copy="prep-for-a-call">Copy the Copilot prompt</button>
+      <a class="btn btn-white" href="#skills">See the Claude skills</a>
+    </div>
+  </section>
+  <div class="legal"><span>Sample prompts and skills. Not a supported Gainsight product. For help, use Gainsight Support.</span><span>Gainsight-Central / gainsight-ai-cookbook</span></div>
+
+  <pre id="prep-for-a-call" class="copy-source">Prep me for my next call with [customer name].
+Tell me where the account stands (health, renewal, ARR, stage),
+the open risks and CTAs, what happened recently on the timeline,
+and 3 questions I should ask.
+If Staircase is connected, include sentiment and what the customer said on recent calls. If it is not connected, say so.
+If a value is missing, say so. Do not invent numbers.</pre>
+  <pre id="how-is-this-account" class="copy-source">How is [customer name] doing?
+Show health, the trend, renewal, stage, and what moved health.
+If Staircase is connected, include sentiment and what the customer said on recent calls. If it is not connected, say so.
+If a value is missing, say so. Do not invent numbers.</pre>
+  <pre id="renewals-coming-up" class="copy-source">List my renewals in the next 90 days.
+For each, give the customer name, renewal date, health, ARR, stage, and open risks.
+If Staircase is connected, flag any account where recent calls sound worse than the health score. If it is not connected, say so.
+If a value is missing, say so. Do not invent numbers.</pre>
+  <pre id="risks-across-my-book" class="copy-source">Which of my accounts have open risk CTAs?
+Sort by due date. For each, give the customer name, the risk, priority, due date, and the latest timeline note.
+If Staircase is connected, add what the customer said that relates to the risk. If it is not connected, say so.
+If a value is missing, say so. Do not invent numbers.</pre>
+  <pre id="last-quarter-of-activity" class="copy-source">What happened on [customer name]'s timeline in the last 90 days?
+Group it into wins, open issues, and decisions still waiting.
+If Staircase is connected, add the calls from that period and how sentiment moved. If it is not connected, say so.
+If a value is missing, say so. Do not invent numbers.</pre>
+  <pre id="draft-a-vp-call-note" class="copy-source">Draft a short note for my VP joining the [customer name] call: why it matters, objectives, contacts, and risks.
+If Staircase is connected, include sentiment and what the customer said on recent calls. If it is not connected, say so.
+Do not post or change anything in Gainsight.
+If a value is missing, say so. Do not invent numbers.</pre>
+  <script src="js/site.js"></script>
+</body>
+</html>
