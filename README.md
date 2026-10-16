@@ -2,7 +2,7 @@
 
 Example prompts, Claude skills, and Admin CLI kits for putting Gainsight to work in an AI tool you already use.
 
-The site in [`docs/`](docs/) is the front door. GitHub Pages serves it from the `main` branch, `/docs` folder, at `https://gainsight-central.github.io/gainsight-ai-cookbook/` once that folder is selected.
+The site in [`docs/`](docs/) is the front door. GitHub Pages serves it from the `main` branch, `/docs` folder, at [gainsight-central.github.io/gainsight-ai-cookbook](https://gainsight-central.github.io/gainsight-ai-cookbook/) once that folder is selected.
 
 | If you are | Start here |
 |---|---|
