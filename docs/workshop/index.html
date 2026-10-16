@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Turn your LLM into a Customer Expert | Pulse Europe 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--dusk:#2B2160;--violet:#5B4FA8;--pink:#F3B6DA;--teal:#1F6F6B;--teal-bg:#E5F3F1;--gold:#E9B44C;--paper:#FCFBFF;--card:#FFFFFF;--line:#E4E0F2;--ink:#1C1830;--muted:#5E5878;--mark:#FFF1C9;color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--paper:#141026;--card:#1E1938;--line:#332B57;--ink:#EDEAF7;--muted:#B3ACD0;--teal:#7FD1C8;--teal-bg:#173634;--mark:#4A3C10;--violet:#B9AEF5;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;font-family:Montserrat,system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--paper);color:var(--ink);line-height:1.55;font-size:16px}
+.hero{background:var(--dusk);color:#fff;padding:56px 22px 44px}
+.wrap{max-width:680px;margin:0 auto}
+.hero .event{color:var(--pink);font-weight:700;font-size:15px;margin:0 0 14px}
+.hero h1{font-size:clamp(30px,7vw,46px);line-height:1.08;font-weight:800;margin:0 0 16px;letter-spacing:-.01em}
+.hero p.lede{font-size:17px;color:#DCD6F5;margin:0;max-width:34em}
+main{padding:8px 22px 64px}
+h2{font-size:24px;font-weight:800;margin:44px 0 6px;letter-spacing:-.005em}
+.sub{color:var(--muted);margin:0 0 18px}
+ol.steps{list-style:none;padding:0;margin:0;counter-reset:s}
+ol.steps li{counter-increment:s;position:relative;padding:0 0 18px 46px}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--gold);color:#2B2160;font-weight:800;display:grid;place-items:center;font-size:15px}
+ol.steps strong{display:block}
+code{display:inline-block;max-width:100%;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:1px 6px;font-size:14px;overflow-wrap:anywhere;word-break:break-word;vertical-align:top}
+.prompt{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 20px 18px;margin:0 0 16px}
+.prompt header{display:flex;gap:14px;align-items:flex-start;margin-bottom:10px}
+.num{flex:none;font-size:34px;font-weight:800;line-height:1;color:var(--violet)}
+.prompt h3{margin:2px 0 0;font-size:19px;font-weight:700}
+.theme{margin:2px 0 0;color:var(--muted);font-size:14px}
+.text p{margin:0 0 9px}
+.text p.li{padding-left:16px;position:relative}.text p.li::before{content:"";position:absolute;left:3px;top:.65em;width:5px;height:5px;border-radius:50%;background:var(--violet)}
+.text p.st{background:var(--teal-bg);border-left:3px solid var(--teal);padding:8px 10px;border-radius:0 8px 8px 0}
+.tag{display:inline-block;font-size:12.5px;font-weight:700;color:var(--teal);margin-right:6px}
+mark{background:var(--mark);color:inherit;border-radius:4px;padding:0 3px}
+.copy{font:inherit;font-weight:700;font-size:15px;margin-top:6px;padding:10px 16px;border-radius:10px;border:2px solid var(--violet);background:transparent;color:var(--violet);cursor:pointer;min-height:44px}
+.copy[data-done]{background:var(--violet);color:var(--paper)}
+.copy:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+a{color:var(--violet);font-weight:700}
+.know p{margin:0 0 10px}
+footer{color:var(--muted);font-size:14px;padding:0 22px 40px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head>
+<body>
+<div class="hero"><div class="wrap">
+<p class="event">Pulse Europe 2026 workshop</p>
+<h1>Turn your LLM into a Customer Expert</h1>
+<p class="lede">Connect Gainsight to the AI tool you already use, then copy the five prompts we ran live. Each one works with Gainsight on its own and gets richer if you also have Staircase AI.</p>
+</div></div>
+<main class="wrap">
+<h2>Get connected</h2>
+<p class="sub">About five minutes, once your admin has turned MCP on.</p>
+<ol class="steps">
+<li><strong>Ask your Gainsight admin to turn on MCP</strong>and to share your MCP address. It usually looks like <code>https://yourcompany.gainsightcloud.com/v1/ds-mcp/mcp</code></li>
+<li><strong>Add Gainsight as a connector in your AI tool</strong>Claude, ChatGPT and Microsoft Copilot all support custom MCP connectors. Paste the address from step 1.</li>
+<li><strong>Sign in with your Gainsight account</strong>The AI sees only what you can see in Gainsight.</li>
+<li><strong>Optional: add Staircase AI the same way</strong>The highlighted lines in each prompt use it when it's there and are skipped when it isn't.</li>
+</ol>
+<p>Step-by-step guides for each AI tool: <a href="https://support.gainsight.com/Gainsight_AI/Gainsight_MCPs">Gainsight MCP documentation</a></p>
+<h2>The five prompts</h2>
+<p class="sub">Replace anything in <mark>[brackets]</mark> with your own account or notes.</p>
+
+<article class="prompt" id="p1">
+  <header><span class="num" aria-hidden="true">1</span><div><h3>Prep me for my call</h3><p class="theme">Know the account</p></div></header>
+  <div class="text"><p>I have a call with <mark>[Account]</mark> this week. Using Gainsight, give me a prep brief under 250 words:</p><p class="li">Snapshot: ARR, renewal date, CSM, segment, and anything unusual on the account (overdue payments, owner changes)</p><p class="li">Health: overall score, the two weakest measures, and the trend</p><p class="li">Open work: open CTAs and success plan objectives, flag anything overdue</p><p class="li">Recent history: the last 5 meetings or calls in the past 90 days (skip newsletters and automated emails)</p><p class="st"><span class="tag">Staircase AI</span>If Staircase AI is connected, add what the customer has said recently: their worries, key stakeholders and how engaged they are, commitments we made that are still open, and anything they asked for that we haven&#x27;t answered. Cite the source for each.</p><p>End with the top 3 things to raise and one question to ask.</p></div>
+  <button class="copy" data-i="1" type="button">Copy prompt</button>
+  <textarea hidden id="t1">I have a call with [Account] this week. Using Gainsight, give me a prep brief under 250 words:
+- Snapshot: ARR, renewal date, CSM, segment, and anything unusual on the account (overdue payments, owner changes)
+- Health: overall score, the two weakest measures, and the trend
+- Open work: open CTAs and success plan objectives, flag anything overdue
+- Recent history: the last 5 meetings or calls in the past 90 days (skip newsletters and automated emails)
+If Staircase AI is connected, add what the customer has said recently: their worries, key stakeholders and how engaged they are, commitments we made that are still open, and anything they asked for that we haven&#x27;t answered. Cite the source for each.
+End with the top 3 things to raise and one question to ask.</textarea>
+</article>
+<article class="prompt" id="p2">
+  <header><span class="num" aria-hidden="true">2</span><div><h3>Which renewals need me now?</h3><p class="theme">Protect and grow</p></div></header>
+  <div class="text"><p>Show me my active accounts (ARR above zero) renewing in the next 120 days. If my portfolio isn&#x27;t set up, use accounts where I&#x27;m the CSM.</p><p>For each: renewal date, ARR, health label and open risk CTAs. Rank by lowest health, then soonest renewal, then highest ARR. Top 10 only.</p><p>Flag any renewal date that has already passed as a data issue.</p><p class="st"><span class="tag">Staircase AI</span>If Staircase AI is connected, look up each account by name and add its sentiment and last customer engagement, and call out any account where that disagrees with the health score.</p></div>
+  <button class="copy" data-i="2" type="button">Copy prompt</button>
+  <textarea hidden id="t2">Show me my active accounts (ARR above zero) renewing in the next 120 days. If my portfolio isn&#x27;t set up, use accounts where I&#x27;m the CSM.
+For each: renewal date, ARR, health label and open risk CTAs. Rank by lowest health, then soonest renewal, then highest ARR. Top 10 only.
+Flag any renewal date that has already passed as a data issue.
+If Staircase AI is connected, look up each account by name and add its sentiment and last customer engagement, and call out any account where that disagrees with the health score.</textarea>
+</article>
+<article class="prompt" id="p3">
+  <header><span class="num" aria-hidden="true">3</span><div><h3>Why is this account red?</h3><p class="theme">Protect and grow</p></div></header>
+  <div class="text"><p>Why is <mark>[Account]</mark>&#x27;s health where it is? Show the measures that carry weight in the overall score, which are weakest, and when the score last changed.</p><p>Check what happened around that date (new CTAs, risks flagged, key meetings) to explain the change.</p><p class="st"><span class="tag">Staircase AI</span>If Staircase AI is connected, compare with the customer&#x27;s sentiment and recent communications, and tell me where they tell a different story.</p><p>Then suggest 3 actions that would move the weakest measures.</p></div>
+  <button class="copy" data-i="3" type="button">Copy prompt</button>
+  <textarea hidden id="t3">Why is [Account]&#x27;s health where it is? Show the measures that carry weight in the overall score, which are weakest, and when the score last changed.
+Check what happened around that date (new CTAs, risks flagged, key meetings) to explain the change.
+If Staircase AI is connected, compare with the customer&#x27;s sentiment and recent communications, and tell me where they tell a different story.
+Then suggest 3 actions that would move the weakest measures.</textarea>
+</article>
+<article class="prompt" id="p4">
+  <header><span class="num" aria-hidden="true">4</span><div><h3>Clean up my CTAs</h3><p class="theme">Get the work done</p></div></header>
+  <div class="text"><p>Pull all open CTAs on <mark>[Account]</mark>, whoever owns them. Flag anything overdue, not updated in 60+ days, or owned by someone no longer on the account.</p><p>For each, check the timeline, and Staircase AI if connected: if the work looks done, recommend closing it and show the evidence; if not, draft the next step.</p><p>Show me the list first. Do not change anything until I tell you which ones.</p></div>
+  <button class="copy" data-i="4" type="button">Copy prompt</button>
+  <textarea hidden id="t4">Pull all open CTAs on [Account], whoever owns them. Flag anything overdue, not updated in 60+ days, or owned by someone no longer on the account.
+For each, check the timeline, and Staircase AI if connected: if the work looks done, recommend closing it and show the evidence; if not, draft the next step.
+Show me the list first. Do not change anything until I tell you which ones.</textarea>
+</article>
+<article class="prompt" id="p5">
+  <header><span class="num" aria-hidden="true">5</span><div><h3>Turn my call into Gainsight updates</h3><p class="theme">Get the work done</p></div></header>
+  <div class="text"><p>Here are my notes from today&#x27;s call with <mark>[Account]</mark>: <mark>[paste notes or transcript]</mark></p><p>Draft a timeline entry with the date, attendees, a short summary, decisions and next steps.</p><p>For each follow-up, propose a CTA or task with an owner and due date. Check for an existing open CTA first and add to it instead of creating a duplicate. If an owner isn&#x27;t a Gainsight user, assign it to me and name them in the task.</p><p class="st"><span class="tag">Staircase AI</span>If Staircase AI is connected, flag anything that conflicts with what we told the customer earlier.</p><p>Show me everything first and only log it after I approve.</p></div>
+  <button class="copy" data-i="5" type="button">Copy prompt</button>
+  <textarea hidden id="t5">Here are my notes from today&#x27;s call with [Account]: [paste notes or transcript]
+Draft a timeline entry with the date, attendees, a short summary, decisions and next steps.
+For each follow-up, propose a CTA or task with an owner and due date. Check for an existing open CTA first and add to it instead of creating a duplicate. If an owner isn&#x27;t a Gainsight user, assign it to me and name them in the task.
+If Staircase AI is connected, flag anything that conflicts with what we told the customer earlier.
+Show me everything first and only log it after I approve.</textarea>
+</article>
+<h2>Good to know</h2>
+<div class="know">
+<p><strong>Your permissions apply.</strong> The AI can only read and change what your Gainsight user can.</p>
+<p><strong>You approve every change.</strong> Prompts 4 and 5 show you the plan first, and your AI tool asks before anything is written to Gainsight.</p>
+<p><strong>Want more?</strong> Browse ready-made prompts and skills in the <a href="https://www.gainsight.com/mcp/library/">Gainsight MCP library</a>.</p>
+</div>
+</main>
+<footer class="wrap">Gainsight Pulse Europe 2026. Questions after the session: talk to your CSM.</footer>
+<div aria-live="polite" id="live" style="position:absolute;left:-9999px"></div>
+<script>
+document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',async()=>{
+ const t=document.getElementById('t'+b.dataset.i).value;
+ try{await navigator.clipboard.writeText(t)}catch(e){const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}
+ document.querySelectorAll('.copy').forEach(x=>{x.removeAttribute('data-done');x.textContent='Copy prompt'});
+ b.setAttribute('data-done','');b.textContent='Copied';document.getElementById('live').textContent='Prompt '+b.dataset.i+' copied';
+}));
+</script>
+</body></html>
