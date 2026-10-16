@@ -13,7 +13,7 @@ The site in [`docs/`](docs/) is the front door. GitHub Pages serves it from the 
 
 | Kit | What it does |
 |---|---|
-| **[Copilot prompts](gainsight-cs-mcp-skills/prompts/)** | Six prompts a CSM pastes into Gainsight Copilot. Nothing to install. |
+| **[Copilot prompts](gainsight-cs-mcp-skills/prompts/)** | Fourteen prompts a CSM pastes into Gainsight Copilot. Nothing to install. |
 | **[CS Admin CLI Starter Kit](cs-admin-cli-starter-kit/)** | Use the Gainsight Admin CLI with an AI coding agent to understand what your CS tenant is configured to do. Read-only prompts plus an optional skill. |
 | **[CS Admin CLI Advanced Kit](cs-admin-cli-advanced-kit/)** | Give an AI agent a local copy of your tenant so later questions do not start over. It can also change configuration, and only after you say yes. |
 | **[Agentforce CS Agent](agentforce-cs-agent/)** | A Salesforce Agentforce subagent that answers Customer Success questions from Gainsight data, plus four response templates that keep its answers evidence-backed. |

@@ -37,8 +37,8 @@
         <div class="ph"><span>Paste into Gainsight Copilot</span><button class="copy-btn" type="button" data-copy="prep-for-a-call">Copy prompt</button></div>
         <div class="prompt-text">Prep me for my next call with <span class="fill">[customer name]</span>.
 Tell me where the account stands (health, renewal, ARR, stage),
-the open risks and CTAs, what happened recently on the timeline,
-and 3 questions I should ask.
+who I should talk to, the open risks and CTAs, what happened recently on the timeline,
+the landmines to avoid, and 3 questions I should ask.
 If Staircase is connected, include sentiment and what the customer said on recent calls. If it is not connected, say so.
 If a value is missing, say so. Do not invent numbers.</div>
         <div class="pf"><span>No setup</span><span>Customer name only</span><span>Gainsight + Staircase when connected</span></div>
@@ -89,7 +89,7 @@ If a value is missing, say so. Do not invent numbers.</div>
         <h3>In Gainsight Copilot</h3>
         <p class="wsub">Copy a prompt, paste it in, add the customer name.</p>
         <div class="wrow"><div class="wk">Sees</div><div class="conn"><span class="gs">Gainsight</span><span>Staircase, when connected</span></div></div>
-        <div class="wrow"><div class="wk">Good for</div><div>Call prep, account health, open risks, recent activity, and what customers said on calls</div></div>
+        <div class="wrow"><div class="wk">Good for</div><div>Call prep, account health, renewals, open CTAs, success plans, stakeholder maps, and follow-up drafts</div></div>
         <div class="wrow"><div class="wk">You get</div><div>An answer in the chat</div></div>
         <div class="wrow"><div class="wk">Setup</div><div>None. Staircase is used only when it is already connected.</div></div>
         <div class="cta-row"><a class="btn btn-blue" href="#prompts">Copy prompts</a></div>
@@ -111,12 +111,13 @@ If a value is missing, say so. Do not invent numbers.</div>
     <div class="block-head">
       <div class="over">Copy directly, no install</div>
       <h2 class="title">Prompts for the questions you ask every week.</h2>
-      <p class="lede">Each one needs only a customer name, or nothing at all. The same text lives in the <a href="https://github.com/Gainsight-Central/gainsight-ai-cookbook/tree/main/gainsight-cs-mcp-skills/prompts">prompts folder</a>.</p>
+      <p class="lede">Fourteen prompts, matched to the jobs CSMs already ask and to the published Customer Success library. Each one needs only a customer name, or nothing at all. The same text lives in the <a href="https://github.com/Gainsight-Central/gainsight-ai-cookbook/tree/main/gainsight-cs-mcp-skills/prompts">prompts folder</a>.</p>
     </div>
+    <h3 class="shelf-label">On one account</h3>
     <div class="shelf">
       <div class="pcard feat">
         <div class="pt"><h4>Prep for a call</h4><button class="copy-btn" type="button" data-copy="prep-for-a-call">Copy</button></div>
-        <div class="q">Prep me for my next call with [customer name]. Tell me where the account stands, the open risks and CTAs, recent timeline, and 3 questions to ask.</div>
+        <div class="q">Prep me for my next call with [customer name]. Where it stands, who to talk to, risks, landmines, and 3 questions.</div>
         <div class="when">Before any customer call</div>
       </div>
       <div class="pcard">
@@ -125,19 +126,39 @@ If a value is missing, say so. Do not invent numbers.</div>
         <div class="when">Quick check-in</div>
       </div>
       <div class="pcard">
-        <div class="pt"><h4>Renewals coming up</h4><button class="copy-btn ghost" type="button" data-copy="renewals-coming-up">Copy</button></div>
-        <div class="q">List my renewals in the next 90 days with health, ARR, stage, and open risks.</div>
-        <div class="when">Monday planning</div>
+        <div class="pt"><h4>Catch me up</h4><button class="copy-btn ghost" type="button" data-copy="catch-me-up">Copy</button></div>
+        <div class="q">Summarize the last 30 days on [customer name]: highlights, open issues, and the next meeting.</div>
+        <div class="when">Back from time away</div>
       </div>
       <div class="pcard">
-        <div class="pt"><h4>Risks across my book</h4><button class="copy-btn ghost" type="button" data-copy="risks-across-my-book">Copy</button></div>
-        <div class="q">Which of my accounts have open risk CTAs? Sort by due date.</div>
-        <div class="when">Pipeline review</div>
+        <div class="pt"><h4>QBR outline</h4><button class="copy-btn ghost" type="button" data-copy="qbr-outline">Copy</button></div>
+        <div class="q">Outline a QBR for [customer name] from the last 90 days: wins, open challenges, next priorities, expansion signals.</div>
+        <div class="when">Before a QBR</div>
       </div>
       <div class="pcard">
-        <div class="pt"><h4>Last quarter of activity</h4><button class="copy-btn ghost" type="button" data-copy="last-quarter-of-activity">Copy</button></div>
-        <div class="q">What happened on [customer name]'s timeline in the last 90 days?</div>
-        <div class="when">QBR prep</div>
+        <div class="pt"><h4>Renewal conversation</h4><button class="copy-btn ghost" type="button" data-copy="renewal-conversation">Copy</button></div>
+        <div class="q">Prepare [customer name]'s renewal: health, value delivered, open concerns, risks, and talking points.</div>
+        <div class="when">Before a renewal meeting</div>
+      </div>
+      <div class="pcard">
+        <div class="pt"><h4>Who matters here</h4><button class="copy-btn ghost" type="button" data-copy="who-matters-here">Copy</button></div>
+        <div class="q">Who matters at [customer name]? Role, last engagement, recent topics, and who has gone quiet.</div>
+        <div class="when">Stakeholder map</div>
+      </div>
+      <div class="pcard">
+        <div class="pt"><h4>Success plan check</h4><button class="copy-btn ghost" type="button" data-copy="success-plan-check">Copy</button></div>
+        <div class="q">What is the success plan on [customer name]? Show it, or propose objectives. Don't create anything.</div>
+        <div class="when">Plan review</div>
+      </div>
+      <div class="pcard">
+        <div class="pt"><h4>Taking over this account</h4><button class="copy-btn ghost" type="button" data-copy="taking-over-this-account">Copy</button></div>
+        <div class="q">I'm taking over [customer name]. Brief me on the people, the history, the red flags, and the first 30 days.</div>
+        <div class="when">Account handoff</div>
+      </div>
+      <div class="pcard">
+        <div class="pt"><h4>Draft a follow-up</h4><button class="copy-btn ghost" type="button" data-copy="draft-a-follow-up">Copy</button></div>
+        <div class="q">Draft a follow-up email after my last call with [customer name]. Don't send it.</div>
+        <div class="when">After a call</div>
       </div>
       <div class="pcard">
         <div class="pt"><h4>Draft a VP call note</h4><button class="copy-btn ghost" type="button" data-copy="draft-a-vp-call-note">Copy</button></div>
@@ -145,7 +166,30 @@ If a value is missing, say so. Do not invent numbers.</div>
         <div class="when">Exec joining a call</div>
       </div>
     </div>
-    <div class="shelf-note">Every prompt uses Staircase when it is connected, and ends with the same rule: if a value is missing, say so, and don't invent numbers.</div>
+    <h3 class="shelf-label">Across the book</h3>
+    <div class="shelf">
+      <div class="pcard">
+        <div class="pt"><h4>What needs me this week</h4><button class="copy-btn ghost" type="button" data-copy="what-needs-me-this-week">Copy</button></div>
+        <div class="q">What needs me this week? Rank accounts by urgency and give the one action for each.</div>
+        <div class="when">Monday morning</div>
+      </div>
+      <div class="pcard">
+        <div class="pt"><h4>Renewals coming up</h4><button class="copy-btn ghost" type="button" data-copy="renewals-coming-up">Copy</button></div>
+        <div class="q">List my renewals in the next 90 days with health, ARR, stage, and open risk CTAs.</div>
+        <div class="when">Renewal calendar</div>
+      </div>
+      <div class="pcard">
+        <div class="pt"><h4>Risks across my book</h4><button class="copy-btn ghost" type="button" data-copy="risks-across-my-book">Copy</button></div>
+        <div class="q">Which of my accounts have open risk CTAs? Group them by how urgent they look.</div>
+        <div class="when">Pipeline review</div>
+      </div>
+      <div class="pcard">
+        <div class="pt"><h4>Open CTAs to clean up</h4><button class="copy-btn ghost" type="button" data-copy="open-ctas-to-clean-up">Copy</button></div>
+        <div class="q">List my open CTAs. Flag ones that look already done or stale. Don't close anything.</div>
+        <div class="when">CTA cleanup</div>
+      </div>
+    </div>
+    <div class="shelf-note">Every prompt uses Staircase when it is connected, and ends with the same rule: if a value is missing, say so, and don't invent numbers. Drafts stay in the chat. Nothing is sent, closed, or posted.</div>
   </section>
 
   <section class="block" id="skills">
@@ -217,29 +261,73 @@ If a value is missing, say so. Do not invent numbers.</div>
 
   <pre id="prep-for-a-call" class="copy-source">Prep me for my next call with [customer name].
 Tell me where the account stands (health, renewal, ARR, stage),
-the open risks and CTAs, what happened recently on the timeline,
-and 3 questions I should ask.
+who I should talk to, the open risks and CTAs, what happened recently on the timeline,
+the landmines to avoid, and 3 questions I should ask.
 If Staircase is connected, include sentiment and what the customer said on recent calls. If it is not connected, say so.
 If a value is missing, say so. Do not invent numbers.</pre>
   <pre id="how-is-this-account" class="copy-source">How is [customer name] doing?
 Show health, the trend, renewal, stage, and what moved health.
 If Staircase is connected, include sentiment and what the customer said on recent calls. If it is not connected, say so.
 If a value is missing, say so. Do not invent numbers.</pre>
+  <pre id="catch-me-up" class="copy-source">Summarize the last 30 days on [customer name].
+Give the highlights, open issues, decisions still waiting, and the next meeting if one is scheduled.
+If Staircase is connected, include sentiment and what the customer said. If it is not connected, say so.
+If a value is missing, say so. Do not invent numbers.</pre>
+  <pre id="qbr-outline" class="copy-source">I'm preparing a QBR for [customer name].
+Using the last 90 days, outline wins and milestones, challenges and what is still open, priorities and success metrics for the next quarter, and any expansion signals.
+For each point, cite the timeline entry or call it came from.
+If Staircase is connected, add how sentiment moved and quotes that belong in the room. If it is not connected, say so.
+If a value is missing, say so. Do not invent numbers.</pre>
+  <pre id="renewal-conversation" class="copy-source">Help me prepare for [customer name]'s renewal.
+Summarize relationship health and the trend, value delivered (wins they have acknowledged), open concerns to handle before renewal, risk factors, and any expansion signals.
+Give talking points for each.
+If Staircase is connected, include sentiment, competitor mentions, and quotes I can use. If it is not connected, say so.
+Do not post or change anything in Gainsight.
+If a value is missing, say so. Do not invent numbers.</pre>
+  <pre id="who-matters-here" class="copy-source">Who matters at [customer name]?
+For each person, give their role, last engagement date, recent topics, and whether they look active or quiet.
+Call out a single-threaded relationship if you see one.
+If Staircase is connected, include sentiment. If it is not connected, say so.
+If a value is missing, say so. Do not invent names.</pre>
+  <pre id="success-plan-check" class="copy-source">What is the success plan on [customer name]?
+Show the current objectives, status, and what recent timeline activity says about each one.
+If there is no plan, propose 3 to 5 objectives from the open CTAs, risks, and recent activity, and name which template fits. Do not create or update anything.
+If Staircase is connected, include what the customer said they want. If it is not connected, say so.
+If a value is missing, say so. Do not invent numbers.</pre>
+  <pre id="taking-over-this-account" class="copy-source">I'm taking over [customer name].
+Give me a briefing: where the account stands (health, renewal, ARR, stage), the people who matter and who has gone quiet, recent wins and open issues, red flags, and what I should do in the first 30 days.
+If Staircase is connected, include sentiment and what the customer said on recent calls. If it is not connected, say so.
+Do not change anything in Gainsight.
+If a value is missing, say so. Do not invent numbers.</pre>
+  <pre id="draft-a-follow-up" class="copy-source">Draft a follow-up email after my last call with [customer name].
+Use recent timeline and call context. Reference one specific thing they said or we agreed, state the next step, and keep it short.
+If Staircase is connected, use what the customer actually said. If it is not connected, say so and draft from Gainsight only.
+Do not send the email.
+If a value is missing, say so. Do not invent numbers.</pre>
+  <pre id="draft-a-vp-call-note" class="copy-source">Draft a short note for my VP joining the [customer name] call.
+Include health and the trend, why this call matters, wins from the last quarter, active risks, and talking points.
+If Staircase is connected, include sentiment and what the customer said on recent calls. If it is not connected, say so.
+Do not post or change anything in Gainsight.
+If a value is missing, say so. Do not invent numbers.</pre>
+  <pre id="what-needs-me-this-week" class="copy-source">What needs me this week across my book?
+Rank accounts by urgency. For each one that needs attention, give the signal, why it is urgent, the renewal date if there is one, and the one action I should take.
+Look at open risks, renewals in the next 90 days, and CTAs with no recent update.
+If Staircase is connected, move an account up when recent calls sound worse than the health score. If it is not connected, say so.
+If a value is missing, say so. Do not invent numbers.</pre>
   <pre id="renewals-coming-up" class="copy-source">List my renewals in the next 90 days.
-For each, give the customer name, renewal date, health, ARR, stage, and open risks.
+For each, give the customer name, renewal date, health, ARR, stage, open risk CTAs, and the CSM if it is not me.
+Sort by renewal date.
 If Staircase is connected, flag any account where recent calls sound worse than the health score. If it is not connected, say so.
 If a value is missing, say so. Do not invent numbers.</pre>
   <pre id="risks-across-my-book" class="copy-source">Which of my accounts have open risk CTAs?
-Sort by due date. For each, give the customer name, the risk, priority, due date, and the latest timeline note.
+Group them by how urgent they look. For each, give the customer name, the risk, how long it has been open, priority, due date, renewal date if there is one, and the latest timeline note.
 If Staircase is connected, add what the customer said that relates to the risk. If it is not connected, say so.
 If a value is missing, say so. Do not invent numbers.</pre>
-  <pre id="last-quarter-of-activity" class="copy-source">What happened on [customer name]'s timeline in the last 90 days?
-Group it into wins, open issues, and decisions still waiting.
-If Staircase is connected, add the calls from that period and how sentiment moved. If it is not connected, say so.
-If a value is missing, say so. Do not invent numbers.</pre>
-  <pre id="draft-a-vp-call-note" class="copy-source">Draft a short note for my VP joining the [customer name] call: why it matters, objectives, contacts, and risks.
-If Staircase is connected, include sentiment and what the customer said on recent calls. If it is not connected, say so.
-Do not post or change anything in Gainsight.
+  <pre id="open-ctas-to-clean-up" class="copy-source">List my open CTAs.
+For each, give the customer, ARR if it is on the account, CTA type, priority, how long it has been open, and days since the last update.
+Compare them with recent timeline activity. Flag any that look already done, and any with no update for about 60 days.
+Recommend which to close and which still need action. Do not close, edit, or reassign anything.
+If Staircase is connected, use what the customer said when deciding whether the work is already done. If it is not connected, say so.
 If a value is missing, say so. Do not invent numbers.</pre>
   <script src="js/site.js"></script>
 </body>
