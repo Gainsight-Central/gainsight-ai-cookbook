@@ -11,7 +11,7 @@ Help me understand what this Gainsight tenant is configured to do.
 
 USE THE ADMIN CLI:
 - Run the locally installed `gs-admin` command in the terminal.
-- Do not use or silently fall back to another Gainsight MCP server or generic MCP tools.
+- Do not use or silently fall back to another Gainsight CS MCP server or generic MCP tools.
 - First run `gs-admin --help`, then `gs-admin whoami`.
 - Confirm the expected tenant URL and a valid Token line. If either is wrong, stop and tell me what to fix.
 - Ignore the `Auth mode:` line — it says `not configured — run 'gs-admin login'` even when the token is

@@ -19,7 +19,7 @@ description: >
 
 ## Mandatory tool flow (every Gainsight visualization)
 
-1. **Fetch the data** from the Gainsight MCP tools (resolve the entity first, then scorecard / CTAs / timeline / etc.).
+1. **Fetch the data** from the Gainsight CS MCP tools (resolve the entity first, then scorecard / CTAs / timeline / etc.).
 2. **Call `mcp__visualize__read_me` once** with `modules: ["mockup"]` before your first `show_widget` call in the session (loads the live rendering contract). For a **trend / time-series** request (pattern 13), load `modules: ["chart"]` instead so you get the line-chart guidance. Do not narrate this call.
 3. **Call `mcp__visualize__show_widget`** with an HTML fragment. This renders **inline in the conversation.**
 4. In your text reply, add the short narrative + next steps. Do NOT repeat the widget's content as text.
@@ -65,7 +65,7 @@ Decision rule: only render an empty state when a tool **actually ran and returne
 - **Analytical questions render the data + reason in text.** "Why is Acme at risk," "should I escalate Globex," "summarize the risks in my book" → render the supporting visual (risk cards / health / timeline — whatever the answer rests on) via `show_widget`, and put the judgement/recommendation in your text reply. Don't answer text-only when Gainsight data backs the point; don't bury the data in prose.
 - **Genuinely prose deliverables stay text.** A drafted email, a written exec summary, open-ended advice with no underlying dataset → answer in text (optionally render the supporting data if the user also asked to see it). Don't force a dashboard around prose.
 
-> Scope note: `show_widget` is a Claude-side tool (claude.ai and Claude Code). It renders inline **in Claude**. It is not part of the Gainsight MCP server, so other MCP clients (ChatGPT, Copilot, Gemini) do not have it and will not render this inline — there they get your text reply. Cross-client inline UI is a different mechanism (MCP Apps / UI resources served by the MCP server itself), not this skill.
+> Scope note: `show_widget` is a Claude-side tool (claude.ai and Claude Code). It renders inline **in Claude**. It is not part of the Gainsight CS MCP server, so other MCP clients (ChatGPT, Copilot, Gemini) do not have it and will not render this inline — there they get your text reply. Cross-client inline UI is a different mechanism (MCP Apps / UI resources served by the MCP server itself), not this skill.
 
 ## The Visualizer contract — obey it, it overrides Horizon where they conflict
 
@@ -292,7 +292,7 @@ call a tool and re-render in place, with no text round-trip) requires the MCP Ap
 
 ---
 
-# Gainsight MCP tools
+# Gainsight CS MCP tools
 
 ## CS (Customer Success) — live, read + write
 **Tools:** `resolve_customer`, `resolve_user`, `get_records`, `run_query`, `ask_scorecard`, `fetch_cta_list`, `fetch_success_plan_list`, `fetch_timeline_activity_list`, `create_timeline_activity`, `update_timeline_activity`, `manage_cockpit_actions`, `manage_success_plan_actions`, `fetch_report_data`, `report_search_tool`, `get_portfolio_filters`, `fetch_customer_contacts`, `get_object_metadata`, `get_picklist_values`, `get_activity_types_config`.
@@ -348,7 +348,7 @@ the missing connector — do NOT fill it with plausible-looking numbers.
 
 ## Which patterns can pull real data here
 
-Only the **CS** Gainsight MCP is connected in this tenant. PX, Staircase, and
+Only the Gainsight CS MCP is connected in this tenant. PX, Staircase, and
 Communities are not, so their patterns cannot show real data until those connectors
 are added.
 

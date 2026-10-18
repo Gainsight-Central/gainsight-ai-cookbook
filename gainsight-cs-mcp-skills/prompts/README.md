@@ -6,7 +6,7 @@ Copilot reads Gainsight. When Staircase is connected, these prompts also use con
 
 You never paste an id. Where a prompt names an account, replace `[customer name]` with the customer.
 
-These are the jobs CSMs actually ask for, matched to the [Customer Success prompts](https://www.gainsight.com/mcp/library/?_mcp-type=prompt&_products=customer-success) on the Gainsight MCP library. The wording here is the cookbook's: short, read-only, and unwilling to invent a number.
+These are the jobs CSMs actually ask for, matched to the [Customer Success prompts](https://www.gainsight.com/mcp/library/?_mcp-type=prompt&_products=customer-success) on the Gainsight CS MCP library. The wording here is the cookbook's: short, read-only, and unwilling to invent a number.
 
 ## On one account
 
