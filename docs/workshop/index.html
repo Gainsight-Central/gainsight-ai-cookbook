@@ -33,7 +33,16 @@ code{display:inline-block;max-width:100%;background:var(--card);border:1px solid
 mark{background:var(--mark);color:inherit;border-radius:4px;padding:0 3px}
 .copy{font:inherit;font-weight:700;font-size:15px;margin-top:6px;padding:10px 16px;border-radius:10px;border:2px solid var(--violet);background:transparent;color:var(--violet);cursor:pointer;min-height:44px}
 .copy[data-done]{background:var(--violet);color:var(--paper)}
-.copy:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.copy:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+details.connect{margin-top:36px}
+details.connect>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;list-style:none}
+details.connect>summary::-webkit-details-marker{display:none}
+details.connect>summary h2{margin:0}
+details.connect .toggle{flex:none;font-size:14px;font-weight:700;color:var(--violet)}
+details.connect .when-open{display:none}
+details.connect[open] .when-closed{display:none}
+details.connect[open] .when-open{display:inline}
+details.connect .sub{margin-top:14px}
 a{color:var(--violet);font-weight:700}
 .know p{margin:0 0 10px}
 footer{color:var(--muted);font-size:14px;padding:0 22px 40px}
@@ -46,7 +55,8 @@ footer{color:var(--muted);font-size:14px;padding:0 22px 40px}
 <p class="lede">Copy the five prompts we ran live. First, connect whatever you can. Staircase AI needs no admin. Gainsight CS MCP does, so use it when your admin has turned it on. Each prompt uses whichever is connected and skips the rest.</p>
 </div></div>
 <main class="wrap">
-<h2>Get connected</h2>
+<details class="connect">
+<summary><h2>Get connected</h2><span class="toggle"><span class="when-closed">Show</span><span class="when-open">Hide</span></span></summary>
 <p class="sub">If you aren't connected yet, add whichever you can. The prompts use what is available.</p>
 <ol class="steps">
 <li><strong>Connect what you can right now</strong>If Gainsight or Staircase AI is already in your AI tool, leave it. If not, add the one you can sign in to.</li>
@@ -55,6 +65,7 @@ footer{color:var(--muted);font-size:14px;padding:0 22px 40px}
 <li><strong>Add that Gainsight address and sign in</strong>Claude, ChatGPT and Microsoft Copilot all support custom MCP connectors. The AI sees only what you can see in Gainsight.</li>
 </ol>
 <p>Step-by-step guides for each AI tool: <a href="https://support.gainsight.com/Gainsight_AI/Gainsight_MCPs">Gainsight CS MCP documentation</a></p>
+</details>
 <h2>The five prompts</h2>
 <p class="sub">Replace anything in <mark>[brackets]</mark> with your own account or notes.</p>
 
