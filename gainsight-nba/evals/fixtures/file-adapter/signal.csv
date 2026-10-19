@@ -1,0 +1,10 @@
+account,user_email,user_name,last_login_days
+Northwind,ana@northwind.example,Ana Lopez,
+Northwind,ben@northwind.example,Ben Ito,45
+Northwind,cara@northwind.example,Cara Diaz,3
+Contoso,dev@contoso.example,Dev Rao,60
+Contoso,eli@contoso.example,Eli Park,2
+Fabrikam,fay@fabrikam.example,Fay Stone,2
+Fabrikam,gus@fabrikam.example,Gus Hale,5
+Tailspin,hal@tailspin.example,Hal Moss,90
+Tailspin,ivy@tailspin.example,Ivy Chen,120

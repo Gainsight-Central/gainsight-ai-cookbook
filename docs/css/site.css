@@ -49,6 +49,16 @@ body {
   height: 36px;
   line-height: 36px;
 }
+a.banner { display: block; color: #fff; text-decoration: none; }
+a.banner:hover { text-decoration: underline; }
+a.banner.announce { animation: banner-flash 1.1s ease-in-out 3; }
+@keyframes banner-flash {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.45); }
+}
+@media (prefers-reduced-motion: reduce) {
+  a.banner.announce { animation: none; }
+}
 .header {
   height: 76px;
   display: flex;
@@ -612,6 +622,7 @@ button.copy-btn { border: none; cursor: pointer; font-family: inherit; }
 .doors a.door:hover { border-color: #146aff; }
 .kit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .kit { background: #fff; border: 1px solid #e6e8ee; border-radius: 16px; padding: 24px 26px; display: flex; flex-direction: column; gap: 8px; }
+.kit.feat { border: 2px solid #146aff; }
 .kit h3 { margin: 0; font-size: 20px; font-weight: 600; }
 .kit p { margin: 0; color: #5c6770; font-size: 15px; line-height: 1.5; flex: 1; }
 .kit .meta { margin-top: 8px; }

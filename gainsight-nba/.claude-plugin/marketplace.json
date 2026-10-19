@@ -1,0 +1,12 @@
+{
+  "name": "gainsight-nba-agent",
+  "description": "Next-best-action agent plugin for CSMs.",
+  "owner": { "name": "Gainsight" },
+  "plugins": [
+    {
+      "name": "gainsight-nba",
+      "source": "./",
+      "description": "Next-best-action agent for CSMs. Customer-agnostic, config-driven."
+    }
+  ]
+}

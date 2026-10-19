@@ -1,0 +1,15 @@
+Copyright (c) 2026 Gainsight, Inc. All rights reserved.
+
+This software, including its instructions, prompts, reference files, scripts, and configuration (the "Software"), is proprietary to Gainsight, Inc. ("Gainsight").
+
+Permission is granted to Gainsight employees and to others whom Gainsight has authorized in writing to install and use the Software for internal evaluation and testing. This permission is limited, non-exclusive, non-transferable, and revocable at any time.
+
+Without Gainsight's prior written consent, you may not:
+
+1. copy, modify, or distribute the Software, or publish it in any public repository or directory;
+2. sublicense, sell, or lease the Software;
+3. use the Software to process data of any customer other than under an agreement that permits it.
+
+The Software works with data from systems you connect to it. You are responsible for connecting only systems you are allowed to use, and for reviewing every draft before you send it.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. TO THE FULLEST EXTENT PERMITTED BY LAW, GAINSIGHT IS NOT LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY ARISING FROM THE USE OF THE SOFTWARE.

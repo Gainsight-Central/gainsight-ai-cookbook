@@ -18,5 +18,6 @@ The site at <https://gainsight-central.github.io/gainsight-ai-cookbook/>
 | **[CS Admin CLI Advanced Kit](cs-admin-cli-advanced-kit/)** | Give an AI agent a local copy of your tenant so later questions do not start over. It can also change configuration, and only after you say yes. |
 | **[Agentforce CS Agent](agentforce-cs-agent/)** | A Salesforce Agentforce subagent that answers Customer Success questions from Gainsight data, plus four response templates that keep its answers evidence-backed. |
 | **[Gainsight CS MCP Skills](gainsight-cs-mcp-skills/)** | Agent skills for Claude: rendered dashboards, weekly call briefs, executive prep notes, and Timeline risk updates. Install individually. |
+| **[Next best action](gainsight-nba/)** | A Claude plugin. Name a goal, review each draft, and nothing is sent until you approve. The download is release 0.1.36. |
 
 Kit zips for the site live in [`docs/downloads/`](docs/downloads/). Rebuild them with `scripts/package-kits.sh` after a kit changes.

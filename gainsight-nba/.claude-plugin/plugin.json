@@ -1,0 +1,29 @@
+{
+  "name": "gainsight-nba",
+  "displayName": "Gainsight NBA",
+  "version": "0.1.36",
+  "description": "Customer-agnostic next-best-action agent for CSMs. Defines a goal, finds the accounts that raised it, drafts grounded emails, and stops for CSM approval. Adoption is the first use case.",
+  "keywords": [
+    "customer-success",
+    "next-best-action",
+    "adoption",
+    "email"
+  ],
+  "userConfig": {
+    "cs_server_url": {
+      "type": "string",
+      "title": "Gainsight CS MCP server URL",
+      "description": "The https address of your Gainsight CS MCP server. Each Gainsight tenant has its own, for example https://<tenant>.gainsightcloud.com/v1/ds-mcp/mcp.",
+      "sensitive": false,
+      "required": true
+    },
+    "staircase_server_url": {
+      "type": "string",
+      "title": "Staircase AI MCP server URL",
+      "description": "The https address of the Staircase AI MCP server. Pre-filled. Change it only if your Staircase account uses a different address.",
+      "default": "https://mcp.staircase.ai/mcp",
+      "sensitive": false,
+      "required": false
+    }
+  }
+}
