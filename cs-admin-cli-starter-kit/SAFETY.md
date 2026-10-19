@@ -14,7 +14,7 @@ Ignore the `Auth mode:` line. It reads `not configured — run 'gs-admin login'`
 
 ## Use the local CLI
 
-The prompts require the locally installed `gs-admin` executable in the terminal. They tell the agent not to silently substitute another Gainsight MCP integration, which may expose a different capability set.
+The prompts require the locally installed `gs-admin` executable in the terminal. They tell the agent not to silently substitute another Gainsight CS MCP integration, which may expose a different capability set.
 
 ## Protect local output
 

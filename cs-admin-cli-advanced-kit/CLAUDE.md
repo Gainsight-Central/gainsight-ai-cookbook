@@ -10,7 +10,7 @@ When you talk to the admin, use their words:
 - Say **what else this change touches**, not "blast radius."
 - Say you will **ask before you change anything**, not "write gate."
 
-Do not use any other Gainsight MCP server or integration in place of `gs-admin`. They expose less, so answers would be incomplete. If `gs-admin` is unavailable, say so.
+Do not use any other Gainsight CS MCP server or integration in place of `gs-admin`. They expose less, so answers would be incomplete. If `gs-admin` is unavailable, say so.
 
 ## Start of every session
 

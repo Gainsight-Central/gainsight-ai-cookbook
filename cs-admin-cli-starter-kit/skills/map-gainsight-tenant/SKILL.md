@@ -5,7 +5,7 @@ description: Use the locally installed gs-admin CLI to explain a Gainsight CS te
 
 # Map a Gainsight tenant
 
-Use the local `gs-admin` executable in the terminal. Never silently substitute another Gainsight MCP integration.
+Use the local `gs-admin` executable in the terminal. Never silently substitute another Gainsight CS MCP integration.
 
 ## Safety boundary
 
