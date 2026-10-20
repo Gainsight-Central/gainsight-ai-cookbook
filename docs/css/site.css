@@ -622,9 +622,14 @@ button.copy-btn { border: none; cursor: pointer; font-family: inherit; }
 .doors a.door:hover { border-color: #146aff; }
 .kit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .kit { background: #fff; border: 1px solid #e6e8ee; border-radius: 16px; padding: 24px 26px; display: flex; flex-direction: column; gap: 8px; }
-.kit.feat { border: 2px solid #146aff; }
+.kit.feat { border: 2px solid #146aff; grid-column: 1 / -1; }
+.kit .tag { align-self: flex-start; }
 .kit h3 { margin: 0; font-size: 20px; font-weight: 600; }
 .kit p { margin: 0; color: #5c6770; font-size: 15px; line-height: 1.5; flex: 1; }
+.kit-points { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 32px; }
+.kit-points h4 { margin: 0 0 6px; font-size: 15px; font-weight: 600; color: #10283d; }
+.kit-points ul { margin: 0; padding-left: 18px; color: #5c6770; font-size: 14px; line-height: 1.5; }
+.kit-points li + li { margin-top: 8px; }
 .kit .meta { margin-top: 8px; }
 .band { margin: 28px 24px; background: #f6f8fb; border-radius: 20px; padding: 28px; display: grid; grid-template-columns: 1.1fr .9fr; gap: 28px; align-items: center; }
 .band h2 { margin: 0 0 8px; font-size: 28px; font-weight: 500; letter-spacing: -0.02em; color: #10283d; text-transform: none; }
@@ -638,7 +643,7 @@ button.copy-btn { border: none; cursor: pointer; font-family: inherit; }
   .nav { order: 3; width: 100%; flex-wrap: wrap; gap: 14px; }
   .hero.left, .block, .final, .legal { padding-left: 20px; padding-right: 20px; }
   .hero.left { padding-top: 40px; }
-  .hero-grid, .hero-grid.wide-right, .answer, .ways, .shelf, .skills, .two-col, .fork, .checklist, .faq, .kit-grid, .band, .showcase, .featured, .doors { grid-template-columns: 1fr !important; }
+  .hero-grid, .hero-grid.wide-right, .answer, .ways, .shelf, .skills, .two-col, .fork, .checklist, .faq, .kit-grid, .kit-points, .band, .showcase, .featured, .doors { grid-template-columns: 1fr !important; }
   .path { grid-template-columns: 1fr; }
   .arrow { transform: rotate(90deg); height: 24px; }
   h1, .home-hero h1 { font-size: 36px; }
