@@ -12,7 +12,7 @@ Each skill is installed independently. Take the ones that match your role.
 
 The [prompts](prompts/) folder is for Gainsight Copilot, where there is nothing to install. Copy a prompt, paste it into Copilot, and add the customer name when the prompt asks for one. Copilot reads Gainsight. When Staircase is connected, the same prompts also use conversation intelligence, and they say so when it is not.
 
-The skills below are for Claude, where Gainsight can sit next to your calendar, email, and chat tool.
+The skills below run in the AI agent of your choice, where Gainsight can sit next to your calendar, email, and chat tool. Claude and ChatGPT both can, once Gainsight CS MCP is connected.
 
 ## Prerequisites
 
