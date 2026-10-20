@@ -34,13 +34,13 @@ These are the jobs CSMs actually ask for, matched to the [Customer Success promp
 
 ## Left out on purpose
 
-- **Writes.** Closing a CTA, posting Timeline, and assigning an owner are not in this folder. The prompts recommend or draft. The [Claude skills](../skills/) write, and each card says where.
+- **Writes.** Closing a CTA, posting Timeline, and assigning an owner are not in this folder. The prompts recommend or draft. The [skills](../skills/) write, and each card says where.
 - **Hardcoded health bands and ARR cutoffs.** A score of 40, or ARR above $500K, means different things in different tenants. These prompts use the scores Copilot finds.
 - **A 120-day renewal window.** The library uses 120 days. This pack uses 90, which matches a Monday pass. Use [Renewal conversation](renewal-conversation.md) for one account.
 - **Competitor-only and cross-customer feature research.** Competitor mentions sit inside the renewal conversation. A topic search across every customer is a different job.
 - **Expansion as its own prompt.** The output contract already lives in the Agentforce [expansion analysis](../../agentforce-cs-agent/templates/expansion-analysis.md) template. Expansion signals are included in the QBR and renewal prompts.
 - **Admin reports, GSIDs, and rules.** Those belong in the CS Ops kits.
 
-These prompts do not post to Timeline or send email. The [Claude skills](../skills/) do more of the job when calendar, email, or other tools are connected, and the cards on the cookbook site say what each one writes.
+These prompts do not post to Timeline or send email. The [skills](../skills/) do more of the job when calendar, email, or other tools are connected, and the cards on the cookbook site say what each one writes.
 
 > Part of the [Gainsight AI Cookbook](../../). Sample prompts, not a supported Gainsight product.
