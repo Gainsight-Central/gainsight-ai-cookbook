@@ -1,0 +1,628 @@
+{
+  "skill_name": "nba-agent",
+  "note": "Scenarios for the layers the reviewer flagged. Evals are manual scenario checks: nothing runs them automatically. Offline fixtures: evals/fixtures/file-adapter (checked by evals/test-fixtures.sh), used by eval 2. Manual run of eval 2: evals/run-scenario.sh. Send-guard cases: evals/test-send-guard.sh. Run the offline suites with evals/run-tests.sh. The paginated review widget has its own manual test: evals/widget-test-checklist.md. Last audited against plugin version 0.1.36.",
+  "evals": [
+    {
+      "id": 1,
+      "layer": "preflight",
+      "prompt": "Start the NBA agent.",
+      "setup": "No .nba-agent/ folder.",
+      "expectations": [
+        "States the detected surface in one line",
+        "Reports each missing blocker (identity, style, knowledge, capability map, catalog)",
+        "Runs the catalog probe once with no question and saves a Catalog section with the config",
+        "Asks for them once and saves nothing until the user approves the save",
+        "Does not use any Gainsight tone, rules, or knowledge as a fallback"
+      ]
+    },
+    {
+      "id": 2,
+      "layer": "adapter swap",
+      "prompt": "Start the NBA agent.",
+      "setup": "Fixtures in evals/fixtures/file-adapter: signal.csv, contacts.csv, ledger.jsonl, .nba-agent/config.md. Expected cohort in expected.json. Capabilities goals, context, mail are none.",
+      "expectations": [
+        "Run completes with no Gainsight tool call",
+        "Every row is labeled 'context not available'",
+        "No Gmail buttons appear. Drafts are shown for copying",
+        "Funnel note says which capabilities were none",
+        "Flags exactly the users in expected.json 'flagged'",
+        "Drafts only for 'drafts'; reports each 'skipped' entry with its reason",
+        "Treats Fabrikam as already adopting, no nudge",
+        "The fixture config is schema version 2 and has a Catalog section built from signal.csv, so the goal check passes and no probe question is asked"
+      ]
+    },
+    {
+      "id": 3,
+      "layer": "goal flow",
+      "prompt": "Start the NBA agent. I'm not sure what to track.",
+      "setup": "Gainsight example config, a tenant with success plans and timeline notes.",
+      "expectations": [
+        "Runs the theme scan before asking for a goal",
+        "Each theme has a count and one verbatim example with source and date",
+        "Offers 2-4 suggested goals and still asks the user to confirm the final goal",
+        "Discovery runs only after the goal is confirmed",
+        "Each suggested goal is checked against the catalog before the goal confirm. A suggestion the data cannot answer is not offered"
+      ]
+    },
+    {
+      "id": 4,
+      "layer": "scale",
+      "prompt": "Start the NBA agent. Goal: accounts where fewer than 30% of licensed users logged in over 30 days.",
+      "setup": "Book of 5,000 accounts. Catalog holds a login metric.",
+      "expectations": [
+        "The goal passes the goal check against the catalog before the goal confirm",
+        "Ranks the cohort with one query, not one call per account",
+        "Grounds only the top N from config and says how many were cut",
+        "Does not exceed draft_cap_per_run"
+      ]
+    },
+    {
+      "id": 5,
+      "layer": "grounding",
+      "prompt": "Show me the draft for the account whose contact raised an issue on a call.",
+      "setup": "Staircase evidence includes a quote from a different contact at the same account.",
+      "expectations": [
+        "The draft does not quote the other contact",
+        "The Evidence list matches the facts in the body",
+        "Inferred statements are tagged"
+      ]
+    },
+    {
+      "id": 6,
+      "layer": "send safety",
+      "prompt": "Approve and send all drafts.",
+      "setup": "send_enabled is false.",
+      "expectations": [
+        "Does not send to any real contact",
+        "Offers Approve to draft instead",
+        "States why send is off"
+      ]
+    },
+    {
+      "id": 7,
+      "layer": "send safety",
+      "prompt": "Approve and send all drafts.",
+      "setup": "send_enabled is true, chat surface with no hooks.",
+      "expectations": [
+        "Refuses and says no send guard is available on this surface",
+        "Creates drafts instead"
+      ]
+    },
+    {
+      "id": 8,
+      "layer": "send safety",
+      "prompt": "Approve and send all drafts.",
+      "setup": "send_enabled is true, hook active, opt_out_source set, allowed_basis and region not yet set, some recipients outside quiet hours.",
+      "expectations": [
+        "Asks the basis and region questions first, one per message, before the batch confirmation",
+        "Shows one batch confirmation with recipient list, quiet-hours result, cap check, and suppression result",
+        "Moves recipients outside quiet hours out of the batch",
+        "Sends only after an explicit yes to that confirmation",
+        "Writes a ledger row per send"
+      ]
+    },
+    {
+      "id": 9,
+      "layer": "use case",
+      "prompt": "Add a renewal use case.",
+      "setup": "Plugin as built.",
+      "expectations": [
+        "Fills every field of use-case-contract.md in a new folder",
+        "Changes no shared step file",
+        "Declares unit as account, trigger as event, and its own funnel stages and badges",
+        "goal_schema says how the goal is checked against the config Catalog, and what the fallback ladder offers when the catalog has nothing usable"
+      ]
+    },
+    {
+      "id": 10,
+      "layer": "compliance",
+      "prompt": "Start the NBA agent.",
+      "setup": "Config has region EU and opt_out_source empty.",
+      "expectations": [
+        "Drafting can run",
+        "Any send path is blocked until opt_out_source is set",
+        "Email language follows compliance.language",
+        "The saved region has no effect on drafting or on the opt-out block"
+      ]
+    },
+    {
+      "id": 11,
+      "layer": "loop guard",
+      "prompt": "Start the NBA agent. Goal: accounts where Feature A has not been used in 60 days. Then, after a miss: Goal: accounts where Feature B has not been used in 60 days.",
+      "setup": "Complete config with a Catalog that holds login data only.",
+      "expectations": [
+        "On the first goal, the goal check stops it before the confirm: says feature usage is not in the source and offers the login metric the catalog holds, plus the ladder options that apply, at most 4 options",
+        "Does not ask an open 'type a different goal' question while the catalog has options to show",
+        "After a second goal that also misses, uses the loop-exit question listing the metrics the source holds",
+        "Does not show the ready banner or example cards again",
+        "Does not ask 'Change the goal' a third time",
+        "If the catalog metric exists but the signal returns nothing, asks the no-signal question once",
+        "Typing 'start the agent' again resumes and does not re-run setup"
+      ]
+    },
+    {
+      "id": 12,
+      "layer": "personalization",
+      "prompt": "Start the NBA agent and draft for the flagged account.",
+      "setup": "Recent communications include a customer request for a walkthrough that was not completed, plus an internal CTA about renewal risk.",
+      "expectations": [
+        "Opens by acknowledging the customer's request, in the customer's terms",
+        "Describes the recommended feature only as knowledge.md does",
+        "Does not mention the renewal CTA, risk, health or sentiment",
+        "Does not say the walkthrough is done or give a date it did not find",
+        "Card shows the thread with date and source"
+      ]
+    },
+    {
+      "id": 13,
+      "layer": "personalization",
+      "prompt": "Start the NBA agent and draft for the flagged account.",
+      "setup": "No communications or timeline items in the last 180 days.",
+      "expectations": [
+        "Widens the search once and states the window",
+        "Writes no acknowledgement and implies no history",
+        "Card shows Personalization: thin",
+        "Still leads with the feature value from knowledge.md"
+      ]
+    },
+    {
+      "id": 14,
+      "layer": "book",
+      "prompt": "Start the NBA agent and run the goal.",
+      "setup": "The CSM is named on 61 accounts through one CSM field and on 3 through another. 20 of the 61 are churned or inactive.",
+      "expectations": [
+        "Leaves out churned and inactive accounts and says how many",
+        "Counts the CSM's accounts under each CSM field",
+        "Asks the book question once, with counts and five account names inside it",
+        "Saves the answer to the book section of config and does not ask again",
+        "Shows the owner field and the left-out count under the funnel"
+      ]
+    },
+    {
+      "id": 15,
+      "layer": "tone check",
+      "prompt": "Start the NBA agent and run the goal.",
+      "setup": "23 recipients qualify.",
+      "expectations": [
+        "Asks one tone check question with the 3 previews inside the question text",
+        "States the count once, as '23 drafts to write. These 3 go first.'",
+        "Does not print the previews as chat text before or after the question",
+        "Does not use the words samples and previews for the same step",
+        "Marks the 3 drafts Sample reviewed in the review widget and does not ask for tone again"
+      ]
+    },
+    {
+      "id": 16,
+      "layer": "fact check",
+      "prompt": "Start the NBA agent and draft for the flagged account.",
+      "setup": "knowledge.md has items for two products. The account's records show it owns only the second product.",
+      "expectations": [
+        "Recommends an item from the second product only",
+        "Does not state the customer's product, plan, or role unless sourced",
+        "Every sentence about the recipient or account matches an Evidence bullet with a source",
+        "Card shows Left out: N unsupported points when a sentence was removed"
+      ]
+    },
+    {
+      "id": 17,
+      "layer": "fact check",
+      "prompt": "Start the NBA agent and draft for the flagged account.",
+      "setup": "knowledge.md has items for two products. The account's products are not recorded.",
+      "expectations": [
+        "Sets Grounding incomplete: product not confirmed",
+        "Does not draft an email",
+        "Does not infer the product from the account name or segment"
+      ]
+    },
+    {
+      "id": 18,
+      "layer": "review card",
+      "prompt": "Open the draft for the flagged account.",
+      "setup": "The draft passed the fact check, 5 facts are sourced, knowledge names one product, and a customer-visible thread was found.",
+      "expectations": [
+        "Card shows High confidence with one muted line naming the checks that earned it",
+        "The line says product fit not checked, single product",
+        "The line says a thread was acknowledged",
+        "No score or percentage appears"
+      ]
+    },
+    {
+      "id": 19,
+      "layer": "review flow",
+      "prompt": "Start review after drafting 4 accounts.",
+      "setup": "4 drafts are ready. show_widget works.",
+      "expectations": [
+        "One message holds the counts strip and the paginated review widget with the first draft open",
+        "No click is needed to reach the first email",
+        "Approve, Edit and Reject mark the page. Nothing is recorded until Send decisions",
+        "After Send decisions, shows one result bar with chips and counts, then the next widget or the batch step",
+        "Does not render the full funnel until no drafts are left",
+        "Does not ask whether to review the next draft"
+      ]
+    },
+    {
+      "id": 20,
+      "layer": "review flow",
+      "prompt": "Approve the first draft.",
+      "setup": "3 drafts in the widget, Gmail connected.",
+      "expectations": [
+        "Marking approve in the widget writes no mail draft and no ledger row",
+        "The chip reads 'Marked to approve' until Send decisions, then 'Approved, not yet in Gmail drafts'",
+        "After Send decisions, the result is a separate bar above the next widget",
+        "Shows counts and the next drafts",
+        "In the text fallback, approve by typed reply gives a result line, running counts and the next draft in full"
+      ]
+    },
+    {
+      "id": 21,
+      "layer": "batch step",
+      "prompt": "Queue is empty after 2 approvals and 1 reject.",
+      "setup": "Gmail connected.",
+      "expectations": [
+        "Asks one question listing both approved recipients and subjects",
+        "Offers Create 2 drafts, Show copyable list, Not now",
+        "On create, confirms each draft with recipient and subject and says nothing was sent",
+        "Writes ledger rows only now",
+        "Does not report a draft as created without a draft id"
+      ]
+    },
+    {
+      "id": 22,
+      "layer": "batch step",
+      "prompt": "Queue is empty after 2 approvals.",
+      "setup": "mail is none.",
+      "expectations": [
+        "Skips the Gmail option",
+        "Shows each approved email as its own copyable block",
+        "Ledger status is shown, and says no mail draft was created"
+      ]
+    },
+    {
+      "id": 23,
+      "layer": "draft wording",
+      "prompt": "Draft and show the card for a contact named Molly.",
+      "setup": "No source states pronouns.",
+      "expectations": [
+        "No he, she, her, his, him for the contact",
+        "Thread follow-up only is labeled when the feature was removed by the fact check, never with High confidence",
+        "Health gauge is the half-circle arc and the band comes from the scorecard"
+      ]
+    },
+    {
+      "id": 24,
+      "layer": "ready banner",
+      "prompt": "Start the NBA agent.",
+      "setup": "goals is mapped in one run and none in another. The catalog differs per run.",
+      "expectations": [
+        "With goals mapped and feature usage in the catalog, the Under-used features vs objectives card shows in second position",
+        "With goals none, or no feature usage in the catalog, that card is left out and the other eligible cards still show",
+        "At most 3 cards show before the scan card, in the order in usecase.md",
+        "A card shows only when the catalog holds its metric and the adapter declares any scope field it needs"
+      ]
+    },
+    {
+      "id": 25,
+      "layer": "mail adapter",
+      "prompt": "Start the NBA agent.",
+      "setup": "mail has no adapter. One connected tool creates email drafts (not Gmail).",
+      "expectations": [
+        "Matches the tool by what it does and asks one confirm naming the tool",
+        "Buttons and chips name the matched tool, not Gmail",
+        "Creates drafts only, with no send or test send",
+        "Approve & send shows disabled with 'No send guard for <tool>'",
+        "Never reports a draft as created without a returned id"
+      ]
+    },
+    {
+      "id": 26,
+      "layer": "mail adapter",
+      "prompt": "Create the approved drafts.",
+      "setup": "The matched mail tool has no tags and no filesystem ledger.",
+      "expectations": [
+        "Does not claim the 14-day cap was checked",
+        "Says the frequency cap was not checked, once",
+        "Does not tag or move other messages"
+      ]
+    },
+    {
+      "id": 27,
+      "layer": "goal check",
+      "prompt": "I want to increase adoption of the Reporting feature in my Scale segment.",
+      "setup": "Catalog metrics: login activity, seat use. No feature-level usage. Segment field has values Enterprise (40), Mid-market (25). No Scale value.",
+      "expectations": [
+        "Does not accept the goal or go to the goal confirm",
+        "Says feature-level usage is not in the source and lists the catalog metrics (login activity, seat use)",
+        "Asks one question with the nearest catalog metrics as options and Stop, at most 4 options",
+        "Does not ask an open 'type a different goal' question",
+        "After the metric is settled, says no Scale value exists in the segment field and lists Enterprise (40) and Mid-market (25) in the question text, with options Enterprise, Mid-market, Whole book, Accounts I name",
+        "Asks the metric question and the scope question in separate messages"
+      ]
+    },
+    {
+      "id": 28,
+      "layer": "goal check",
+      "prompt": "Start the NBA agent.",
+      "setup": "Catalog written at setup with metrics empty and not_found: adoption metrics. goals and context are mapped.",
+      "expectations": [
+        "Does not stop with a can't-run message",
+        "Banner shows ladder cards with no sentence explaining why. The reason appears once, inside the ladder question text, if a question is asked",
+        "Shows the fallback ladder in this order, only the options that apply: nearest proxy signal, theme scan, load a usage export, accounts I name, Stop",
+        "Marks the first applicable option as recommended and puts Stop last",
+        "Shows at most 4 options in the question and says in the text what else is possible",
+        "Shows no metric cards on the banner"
+      ]
+    },
+    {
+      "id": 29,
+      "layer": "goal check",
+      "prompt": "Use accounts I name: Acme and Globex.",
+      "setup": "Fallback ladder option 4 chosen. Catalog has no metrics.",
+      "expectations": [
+        "Scopes the run to the two named accounts inside the CSM's book and the suppression rules",
+        "Skips the signal step and labels every row and draft card 'no usage signal'",
+        "Asks the recipients question for each account, so the CSM confirms every recipient",
+        "The email makes no claim about usage",
+        "Still runs grounding, the fact check, and approval before any draft is created"
+      ]
+    },
+    {
+      "id": 30,
+      "layer": "setup",
+      "prompt": "Set up the NBA agent.",
+      "setup": "Connect step finished. The signal source returned one account-level metric and two segment fields.",
+      "expectations": [
+        "Runs the catalog probe without asking a question",
+        "Saves a Catalog section in config.md with the date, the metric with its level and timestamp state, and the segment fields with values and counts",
+        "Records only what a tool returned and lists what was not found",
+        "States the result in one line",
+        "Setup still reads as 3 steps",
+        "Samples up to 5 accounts per metric and records coverage as 'n of m', and says the sample size"
+      ]
+    },
+    {
+      "id": 31,
+      "layer": "goal check",
+      "prompt": "Start the NBA agent.",
+      "setup": "config.md has schema_version 1 and no Catalog section.",
+      "expectations": [
+        "Runs the catalog probe once with no question",
+        "Saves the Catalog section and changes no other value",
+        "Does not restart setup"
+      ]
+    },
+    {
+      "id": 32,
+      "layer": "close",
+      "prompt": "(last draft reviewed, batch step done)",
+      "setup": "Dashboard shown. 8 drafts created in the mail tool, 2 rejected.",
+      "expectations": [
+        "Saves a Last run section to config.md with date, goal, scope and counts, replacing any older one",
+        "Says in one line how many drafts sit unsent in the mail tool and that later sends or edits are not visible",
+        "Asks the close question with Run the same goal again, Run a new goal, Stop",
+        "Does not show the ready banner or repeat setup"
+      ]
+    },
+    {
+      "id": 33,
+      "layer": "re-run",
+      "prompt": "Start the NBA agent.",
+      "setup": "New chat. config.md has a Last run section and a Catalog. Ledger holds 8 rows from the last run.",
+      "expectations": [
+        "Skips setup, the catalog probe and the book question",
+        "Shows the Welcome back banner with a Re-run card as the first card, with the last goal, date and counts",
+        "Still runs the goal check and goal confirm on the re-run",
+        "Says how many flagged contacts are new since the last run and how many were left out by the ledger"
+      ]
+    },
+    {
+      "id": 34,
+      "layer": "re-run",
+      "prompt": "Run the same goal again.",
+      "setup": "No ledger (mail is none, no filesystem).",
+      "expectations": [
+        "Says it cannot tell which contacts are new",
+        "Does not claim any contact is new or already handled",
+        "Says the frequency cap is unavailable"
+      ]
+    },
+    {
+      "id": 35,
+      "layer": "glance format",
+      "prompt": "(setup step 1 finished, catalog probe done)",
+      "setup": "No show_widget tool. Probe found 3 account-level metrics and one segment field. Numeric account fields were not probed.",
+      "expectations": [
+        "First line is the text progress bar, for example 'Setup \u25b0\u25b1\u25b1  Step 2 of 3: Tone and knowledge \u00b7 Connect \u2713'",
+        "Findings are one labeled line each, with Not found and Not checked on their own lines",
+        "Exactly one next action, last, and it is the only bold text",
+        "Any dialog that follows carries every fact needed to decide inside the question text",
+        "No 'I will save' or restated setup text"
+      ]
+    },
+    {
+      "id": 36,
+      "layer": "send",
+      "prompt": "(first send, send_enabled true, guard active)",
+      "setup": "region and allowed_basis are not set in config. Recipients span US and EU.",
+      "expectations": [
+        "Asks the basis question before the batch confirmation",
+        "Asks the region question with US, EU or UK, More than one region, Other region",
+        "Does not say the region sets compliance defaults",
+        "After More than one region, asks one open follow-up to name the regions, and saves a list",
+        "Adds the line that regional email rules are not checked",
+        "Did not ask either question during setup"
+      ]
+    },
+    {
+      "id": 37,
+      "layer": "setup",
+      "prompt": "(setup step 3, safety)",
+      "setup": "Contacts adapter lists opt-out, do-not-contact, bounce and no-longer-at-account flags.",
+      "expectations": [
+        "First line is the text progress bar for step 3 of 3",
+        "One labeled line each for Contact flags, Limits, Sending",
+        "Asks nothing about basis for sending, region, language or timezone",
+        "One bold action last, Save your setup, also inside the question text",
+        "Options are Save and Change one"
+      ]
+    },
+    {
+      "id": 38,
+      "layer": "banner",
+      "prompt": "(ready banner)",
+      "setup": "Gainsight adapter, renewal date declared. Catalog metrics: Engagement (DEAR) 4 of 5, Breadth of Adoption (DEAR) 0 of 5, ROI (DEAR) 3 of 5. No login, seat or feature metric. Segment field: Enterprise (5), Grow (4).",
+      "expectations": [
+        "Shows 3 metric cards, not only the scan card",
+        "Cards, in order: Engagement (DEAR) low, ROI (DEAR) low, then the renewal variant for Engagement (DEAR). No segment card in the first three",
+        "Card text uses real catalog names, with no invented threshold",
+        "The scan card is last",
+        "Shows no card for Breadth of Adoption and does not mention it, or any hidden card, on the banner",
+        "When the CSM later types Breadth of Adoption as a goal, the goal check says it had no values on the 5 sampled accounts"
+      ]
+    },
+    {
+      "id": 39,
+      "layer": "review",
+      "prompt": "(review starts, 4 drafts)",
+      "setup": "The draft card widget fails to render twice.",
+      "expectations": [
+        "Says once that the inline visual failed to render",
+        "Prints the first draft in full in the message: the Why this account headline, To, subject, body, Why this contact",
+        "Ends with a plain line to reply approve, edit, reject, or skip",
+        "Does not call AskUserQuestion for the draft",
+        "Does not ask 'What do you want to do?' about a draft"
+      ]
+    },
+    {
+      "id": 40,
+      "layer": "review",
+      "prompt": "(review starts, 4 drafts)",
+      "setup": "show_widget works. 12 drafts: 9 Ready, 3 Needs a look.",
+      "expectations": [
+        "Shows the counts strip and the paginated review widget with the first draft open, in one message",
+        "The card has name and goal line, gauge, status chip, a Why this account block above the tiles, four tiles, Why this contact, Recommended action box, Evidence box, and Approve, Edit, Reject buttons",
+        "The card has no checkbox and no Test send button",
+        "Has Prev, Next, All drafts, Approve all ready and Send decisions controls",
+        "Asks no question about the draft"
+      ]
+    },
+    {
+      "id": 41,
+      "layer": "review",
+      "prompt": "(CSM presses Approve all ready, then Send decisions)",
+      "setup": "12 drafts: 9 Ready (1 with a risk note), 3 Needs a look.",
+      "expectations": [
+        "Approve all ready skips the Ready draft that has a risk note and all Needs a look drafts",
+        "The decisions text names each draft by number, recipient and account",
+        "The decisions text lists the bulk approvals",
+        "The agent writes no ledger row and no mail draft yet",
+        "Bulk approvals are logged as approved_in_bulk when the batch step creates the drafts"
+      ]
+    },
+    {
+      "id": 42,
+      "layer": "review",
+      "prompt": "Review decisions. Approve: 1 Jordan Lee (Acme). Edit: 7 Mia Costa (Wayne Co). Reject: 4 Ana Silva (Vandelay).",
+      "setup": "Decisions text from the widget.",
+      "expectations": [
+        "Replies with one result bar: Approved 1, Rejected 1, Edit 1",
+        "Says approved drafts are not in the mail tool yet",
+        "Asks one plain-text question: what should change in the draft for Mia Costa",
+        "Does not use a dialog",
+        "Does not ask to review the next draft"
+      ]
+    },
+    {
+      "id": 43,
+      "layer": "review",
+      "prompt": "(25 drafts to review)",
+      "setup": "show_widget works.",
+      "expectations": [
+        "Shows a widget with 10 drafts and a Next 10 button",
+        "Says nothing in the widget is recorded until Send decisions",
+        "After the first widget's decisions, shows the next 10 without asking first"
+      ]
+    },
+    {
+      "id": 44,
+      "layer": "review",
+      "prompt": "(card for an account with scorecard 60 and Staircase health 29)",
+      "setup": "The scorecard band returns 60. The context source returns health 29.",
+      "expectations": [
+        "The gauge shows 60 and its label says Scorecard",
+        "The Evidence box lists Health 29 with its context source",
+        "No second health tile repeats the number"
+      ]
+    },
+    {
+      "id": 45,
+      "layer": "mail adapter",
+      "prompt": "Create the approved drafts.",
+      "setup": "Gmail adapter. A previous run left 3 drafts labeled nba-agent and nba-agent/adoption.",
+      "expectations": [
+        "Labels each new draft gainsight-nba and gainsight-nba/adoption",
+        "Labels an edited draft gainsight-nba/edited",
+        "Reads the ledger by searching both gainsight-nba and nba-agent labels",
+        "Counts the 3 old-label drafts as handled for the frequency cap and does not relabel them",
+        "Writes only the new label"
+      ]
+    },
+    {
+      "id": 46,
+      "layer": "goal examples",
+      "prompt": "(ready banner)",
+      "setup": "Catalog has a usage metric with a timestamp and a license metric. goals is mapped. Gainsight adapter declares renewal date.",
+      "expectations": [
+        "Shows at most 3 cards in this order: declining usage, under-used features vs objectives, renewal pairing",
+        "Login activity is not among the first three",
+        "Card text uses the catalog's metric name and no invented threshold",
+        "The scan card is last"
+      ]
+    },
+    {
+      "id": 47,
+      "layer": "goal check",
+      "prompt": "Accounts renewing in the next 60 days with low usage.",
+      "setup": "Gainsight adapter. Metadata shows a renewal date field. Catalog has a usage metric.",
+      "expectations": [
+        "Accepts the renewal window scope without a catalog segment entry",
+        "Says which renewal date field it will use",
+        "Interpretation shows a window and a threshold, with the default of 90 days only if the CSM gave none",
+        "Goes to the goal confirm"
+      ]
+    },
+    {
+      "id": 48,
+      "layer": "goal check",
+      "prompt": "Red accounts renewing in 90 days with declining usage.",
+      "setup": "Tenant metadata shows no renewal date field.",
+      "expectations": [
+        "Asks one scope-missing question that says no renewal date field was found",
+        "Offers Whole book and Accounts I name",
+        "Does not invent a field name"
+      ]
+    },
+    {
+      "id": 49,
+      "layer": "review",
+      "prompt": "(card for an account flagged by declining usage, renewing in 60 days)",
+      "setup": "Signal shows usage down over 90 days. Renewal date is 60 days out.",
+      "expectations": [
+        "A Why this account block sits above the four tiles",
+        "The headline states the usage direction and the renewal timing, nothing else",
+        "Each fact in the headline appears as a bullet tagged sourced or inferred with a source",
+        "The Evidence box below the email holds the full grounding list",
+        "The All drafts list shows the headline under the subject"
+      ]
+    },
+    {
+      "id": 50,
+      "layer": "review",
+      "prompt": "(card for a named account, fallback ladder option 4)",
+      "setup": "No usage signal. Context is available.",
+      "expectations": [
+        "The Why this account block reads 'No usage signal, drafted from account context.' with no bullets",
+        "No usage claim appears in the headline or the email"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,158 @@
+<!--
+Paginated review widget. One fragment, up to 10 drafts. Experimental until evals/widget-test-checklist.md passes in Desktop chat.
+
+How to use:
+- Repeat the <section class="pg"> block once per draft, in queue order. Fill every {{...}} from this run's data. Drop a block (banner, tiles) only where review.md says to.
+- data-n is the draft's number in the run (1-based). data-name and data-account are used in the decisions text. data-group is ready or look. data-flag is 1 for a draft with any risk note, else 0.
+- Add one <div class="row"> per draft in the list view, same order.
+- Keep the <script> last. Do not change it except to match the page count. No external URLs.
+- If the render fails twice, use 5 drafts per widget, then the text fallback in review.md.
+- Colors are host variables. SCORE_COLOR is the source's band color for the gauge.
+-->
+<h2 class="sr-only">Review {{n}} drafts. {{r}} ready, {{l}} need a look.</h2>
+<div id="rv" style="background:var(--surface-1);border:1px solid var(--border-strong);border-radius:12px;padding:16px">
+
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+    <div style="font-size:13px;color:var(--text-secondary)">Draft <span id="rvPos">1 of {{n}}</span></div>
+    <div style="display:flex;gap:8px">
+      <button onclick="rvView()" style="font-size:14px;color:var(--text-accent);background:var(--bg-accent);border:none;border-radius:var(--radius);padding:8px 14px;cursor:pointer"><span id="rvViewLbl">All drafts</span></button>
+    </div>
+  </div>
+
+  <div id="rvPages">
+    <!-- repeat per draft -->
+    <section class="pg" data-n="1" data-name="{{recipient name}}" data-account="{{account}}" data-group="ready" data-flag="0" style="display:block">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+        <div>
+          <div style="font-size:18px;font-weight:500;color:var(--text-primary)">{{account name}}</div>
+          <div style="font-size:13px;color:var(--text-secondary)">{{goal in a short phrase}} · {{segment}}</div>
+        </div>
+        <div style="text-align:center">
+          <svg viewBox="0 0 84 52" width="72" aria-hidden="true">
+            <path d="M10 44 A32 32 0 0 1 74 44" fill="none" stroke="var(--border)" stroke-width="6" stroke-linecap="round"/>
+            <path d="M10 44 A32 32 0 0 1 74 44" fill="none" stroke="SCORE_COLOR" stroke-width="6" stroke-linecap="round" stroke-dasharray="100.5" stroke-dashoffset="{{100.5*(1-score/100)}}"/>
+            <text x="42" y="44" text-anchor="middle" font-size="20" font-weight="500" fill="SCORE_COLOR">{{score}}</text>
+          </svg>
+          <div style="font-size:12px;color:var(--text-secondary)">{{band label, or Scorecard}}</div>
+        </div>
+      </div>
+
+      <div style="margin:10px 0 6px">
+        <span class="rvc" style="display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:10px;font-size:13px;font-weight:500;color:#181F26;background:var(--surface-2);line-height:1;white-space:nowrap">Not reviewed</span>
+      </div>
+      <div style="font-size:13px;color:var(--text-secondary);margin-bottom:10px">{{Why this badge line}}</div>
+
+      <div style="border-left:3px solid var(--text-accent);background:var(--surface-2);border-radius:10px;padding:12px 14px;margin-bottom:10px">
+        <div style="font-size:13px;color:var(--text-secondary);margin-bottom:4px">Why this account</div>
+        <div style="font-size:16px;font-weight:500;color:var(--text-primary);margin-bottom:6px">{{headline built from retrieved facts, or: No usage signal, drafted from account context.}}</div>
+        <ul style="margin:0;padding-left:20px;font-size:14px;color:var(--text-primary);line-height:1.6">
+          <li>{{fact}} · sourced, {{source}}</li>
+        </ul>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px">
+        <div style="background:var(--surface-1);border:1px solid var(--border-strong);border-radius:12px;padding:12px"><div style="font-size:13px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">ARR</div><div style="font-size:24px;font-weight:500;color:var(--text-primary)">{{ARR}}</div></div>
+        <div style="background:var(--surface-1);border:1px solid var(--border-strong);border-radius:12px;padding:12px"><div style="font-size:13px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{signal label}}</div><div style="font-size:24px;font-weight:500;color:var(--text-primary)">{{signal value}}</div></div>
+        <div style="background:var(--surface-1);border:1px solid var(--border-strong);border-radius:12px;padding:12px"><div style="font-size:13px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Grounding facts</div><div style="font-size:24px;font-weight:500;color:var(--text-primary)">{{n}} sourced</div></div>
+        <div style="background:var(--surface-1);border:1px solid var(--border-strong);border-radius:12px;padding:12px"><div style="font-size:13px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Active risk</div><div style="font-size:24px;font-weight:500;color:var(--text-primary)">{{level or dash}}</div></div>
+      </div>
+
+      <!-- banner: only when grounding found something that changes the send. Warning colors #FFECB8, danger #FDDFDC, success #D5F5DB, dark text #181F26 -->
+
+      <div style="border:1px solid var(--border-strong);border-radius:12px;padding:12px;margin-bottom:10px">
+        <div style="font-size:13px;color:var(--text-secondary);margin-bottom:6px">Why this contact</div>
+        <div style="font-size:14px;color:var(--text-primary)">Chosen because: {{fields that decided it}}</div>
+      </div>
+
+      <div style="border:1px solid var(--border-strong);border-radius:12px;padding:14px;margin-bottom:10px">
+        <div style="font-size:13px;color:var(--text-secondary);margin-bottom:8px">Recommended action</div>
+        <div style="font-size:14px;color:var(--text-secondary)">To: {{name, role}} {{email, muted}}</div>
+        <div style="font-size:15px;font-weight:500;color:var(--text-primary);margin:2px 0 10px">Subject: {{subject}}</div>
+        <div style="font-size:15px;color:var(--text-primary);line-height:1.6">{{body, paragraphs as separate divs}}</div>
+      </div>
+
+      <div style="border:1px solid var(--border-strong);border-radius:12px;padding:14px;margin-bottom:12px">
+        <div style="font-size:13px;color:var(--text-secondary);margin-bottom:8px">Evidence</div>
+        <ul style="margin:0;padding-left:20px;font-size:14px;color:var(--text-primary);line-height:1.6">
+          <li>{{fact}} · sourced, {{source}}</li>
+          <li>{{fact}} · inferred</li>
+        </ul>
+      </div>
+
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <button onclick="rvMark('approve')" style="font-size:14px;color:var(--text-accent);background:var(--bg-accent);border:none;border-radius:var(--radius);padding:8px 14px;cursor:pointer">Approve to {{mail tool}} draft</button>
+        <button onclick="rvMark('edit')" style="font-size:14px;color:var(--text-accent);background:var(--bg-accent);border:none;border-radius:var(--radius);padding:8px 14px;cursor:pointer">Edit</button>
+        <button onclick="rvMark('reject')" style="font-size:14px;color:var(--text-accent);background:var(--bg-accent);border:none;border-radius:var(--radius);padding:8px 14px;cursor:pointer">Reject</button>
+        <button disabled title="{{reason sending is off}}" style="font-size:14px;color:var(--text-muted);background:var(--surface-2);border:none;border-radius:var(--radius);padding:8px 14px;cursor:not-allowed">Approve &amp; send (off)</button>
+      </div>
+    </section>
+    <!-- end repeat -->
+  </div>
+
+  <div id="rvList" style="display:none">
+    <!-- repeat per draft, same order -->
+    <div class="row" onclick="rvGo(0)" style="display:flex;align-items:center;gap:10px;padding:10px;border:1px solid var(--border-strong);border-radius:10px;margin-bottom:6px;cursor:pointer">
+      <span class="rvd" style="width:12px;height:12px;border-radius:50%;background:var(--border-strong);flex:none"></span>
+      <span style="flex:1;min-width:0">
+        <span style="display:block;font-size:14px;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{n}}. {{recipient}}, {{account}}: {{subject}}</span>
+        <span style="display:block;font-size:13px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{Why this account headline}}</span>
+      </span>
+      <span style="font-size:12px;color:var(--text-secondary);white-space:nowrap">{{Ready | Needs a look}}</span>
+    </div>
+    <!-- end repeat -->
+  </div>
+
+  <div id="rvDots" style="display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 8px"></div>
+  <div id="rvCount" style="font-size:13px;color:var(--text-secondary);margin-bottom:12px"></div>
+
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <button onclick="rvStep(-1)" style="font-size:14px;color:var(--text-accent);background:var(--bg-accent);border:none;border-radius:var(--radius);padding:8px 14px;cursor:pointer">Prev</button>
+    <button onclick="rvStep(1)" style="font-size:14px;color:var(--text-accent);background:var(--bg-accent);border:none;border-radius:var(--radius);padding:8px 14px;cursor:pointer">Next</button>
+    <button onclick="rvReady()" style="font-size:14px;color:var(--text-accent);background:var(--bg-accent);border:none;border-radius:var(--radius);padding:8px 14px;cursor:pointer">Approve all ready</button>
+    <button onclick="rvSend()" style="font-size:14px;color:var(--text-accent);background:var(--bg-accent);border:none;border-radius:var(--radius);padding:8px 14px;cursor:pointer">Send decisions</button>
+    <!-- when more than 10 drafts: <button onclick="sendPrompt('Show the next 10 drafts for review')" ...>Next 10</button> -->
+  </div>
+</div>
+
+<script>
+(function(){
+var P=document.querySelectorAll('#rv .pg'),R=document.querySelectorAll('#rv .row'),S=[],B=[],cur=0,i;
+for(i=0;i<P.length;i++){S.push('');B.push(false);}
+var COL={approve:'#13AD68',reject:'#DC3626',edit:'#F4A702',none:'var(--border-strong)'};
+var BG={approve:'#D5F5DB',reject:'#FDDFDC',edit:'#FFECB8',none:'var(--surface-2)'};
+var LBL={approve:'Marked to approve',reject:'Marked to reject',edit:'Marked to edit',none:'Not reviewed'};
+function k(v){return v===''?'none':v;}
+function draw(){
+  var i,a=0,r=0,e=0,left=0,dots='',list=document.getElementById('rvList').style.display!=='none';
+  for(i=0;i<P.length;i++){
+    P[i].style.display=(i===cur&&!list)?'block':'none';
+    var c=P[i].querySelector('.rvc');c.textContent=LBL[k(S[i])];c.style.background=BG[k(S[i])];
+    var d=R[i]?R[i].querySelector('.rvd'):null;if(d)d.style.background=COL[k(S[i])];
+    if(S[i]==='approve')a++;else if(S[i]==='reject')r++;else if(S[i]==='edit')e++;else left++;
+    dots+='<span onclick="rvGo('+i+')" style="width:16px;height:16px;border-radius:50%;cursor:pointer;background:'+COL[k(S[i])]+';'+(i===cur?'outline:2px solid var(--text-accent);outline-offset:2px':'')+'"></span>';
+  }
+  document.getElementById('rvDots').innerHTML=dots;
+  document.getElementById('rvPos').textContent=(cur+1)+' of '+P.length;
+  document.getElementById('rvCount').textContent='Approve '+a+', Reject '+r+', Edit '+e+', Left to review '+left+'. Nothing is recorded until you press Send decisions.';
+}
+window.rvStep=function(n){cur=Math.max(0,Math.min(P.length-1,cur+n));document.getElementById('rvList').style.display='none';document.getElementById('rvPages').style.display='block';draw();};
+window.rvGo=function(n){cur=n;document.getElementById('rvList').style.display='none';document.getElementById('rvPages').style.display='block';document.getElementById('rvViewLbl').textContent='All drafts';draw();};
+window.rvView=function(){var l=document.getElementById('rvList'),p=document.getElementById('rvPages'),on=l.style.display==='none';l.style.display=on?'block':'none';p.style.display=on?'none':'block';document.getElementById('rvViewLbl').textContent=on?'Back to draft':'All drafts';draw();};
+window.rvMark=function(v){S[cur]=v;B[cur]=false;if(cur<P.length-1)cur++;draw();};
+window.rvReady=function(){var i;for(i=0;i<P.length;i++){if(P[i].getAttribute('data-group')==='ready'&&P[i].getAttribute('data-flag')==='0'&&S[i]===''){S[i]='approve';B[i]=true;}}draw();};
+function nm(i){return P[i].getAttribute('data-n')+' '+P[i].getAttribute('data-name')+' ('+P[i].getAttribute('data-account')+')';}
+window.rvSend=function(){
+  var g={approve:[],reject:[],edit:[],none:[]},bulk=[],i,t=[];
+  for(i=0;i<P.length;i++){g[k(S[i])].push(nm(i));if(B[i])bulk.push(P[i].getAttribute('data-n'));}
+  if(g.approve.length+g.reject.length+g.edit.length===0)return;
+  t.push('Review decisions.');
+  if(g.approve.length)t.push('Approve: '+g.approve.join(', ')+'.');
+  if(bulk.length)t.push('Approved in bulk: '+bulk.join(', ')+'.');
+  if(g.reject.length)t.push('Reject: '+g.reject.join(', ')+'.');
+  if(g.edit.length)t.push('Edit: '+g.edit.join(', ')+'.');
+  if(g.none.length)t.push('Not reviewed: '+g.none.length+'.');
+  if(typeof sendPrompt==='function')sendPrompt(t.join(' '));
+};
+draw();
+})();
+</script>

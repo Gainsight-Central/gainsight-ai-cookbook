@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "gainsight-cs": {
+      "type": "http",
+      "url": "${user_config.cs_server_url}"
+    },
+    "staircase": {
+      "type": "http",
+      "url": "${user_config.staircase_server_url}"
+    }
+  }
+}
