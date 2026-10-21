@@ -6,47 +6,54 @@ Copilot reads Gainsight. When Staircase is connected, these prompts also use con
 
 You never paste an id. Where a prompt names an account, replace `[customer name]` with the customer.
 
-These are the jobs CSMs actually ask for, matched to the [Customer Success prompts](https://www.gainsight.com/mcp/library/?_mcp-type=prompt&_products=customer-success) on the Gainsight CS MCP library. The wording here is the cookbook's: short, read-only, and unwilling to invent a number.
+The pack follows the Agentic / Headless use cases in the enablement hub. Where the hub and an older prompt covered the same job, the hub version replaced it. The rest line up with the [Customer Success prompts](https://www.gainsight.com/mcp/library/?_mcp-type=prompt&_products=customer-success) on the Gainsight CS MCP library. The wording here is the cookbook's: short, approval before any write, and unwilling to invent a number.
 
 ## On one account
 
-| Prompt | Use it for | Library job it lines up with |
+| Prompt | Use it for | Lines up with |
 |---|---|---|
 | [Prep for a call](prep-for-a-call.md) | Before a customer call | Meeting prep in 60 seconds |
 | [How is this account doing?](how-is-this-account.md) | A quick health check | Current health status |
 | [Catch me up](catch-me-up.md) | The last 30 days | Last 30 days of activity |
-| [QBR outline](qbr-outline.md) | The last 90 days, as a QBR | QBR outline builder |
+| [Customer story and business review](customer-story.md) | One narrative across the connected products, an exec briefing, and the QBR or EBR deck outline | Hub: Customer Story and Business Review |
 | [Renewal conversation](renewal-conversation.md) | One renewal meeting, including value and competitor mentions | Renewal risk assessment and value documentation |
 | [Who matters here](who-matters-here.md) | Stakeholders, including who has gone quiet | Stakeholder mapping |
 | [Success plan check](success-plan-check.md) | The plan, or a proposal if there is none | Success plan builder |
-| [Taking over this account](taking-over-this-account.md) | The first 30 days on an inherited account | Seamless account handoffs |
+| [Taking over this account](taking-over-this-account.md) | The first 30 days on an account inherited from another CSM | Seamless account handoffs |
 | [Draft a follow-up](draft-a-follow-up.md) | An email after the call. It is not sent | Contextual email drafting |
-| [Draft a VP call note](draft-a-vp-call-note.md) | A chat-only note when an exec is joining | Executive briefing |
-| [Customer story](customer-story.md) | One narrative for a business review, across the sources that are connected | Customer story and business review |
-| [Save plan](save-plan.md) | Why a red account is at risk, and the drafts to hold until you approve | Escalation and save plan |
-| [Expansion signals](expansion-signals.md) | What the customer asked for, and whether to move now | Expansion signals |
-| [90-day handoff readout](handoff-readout.md) | A one-page briefing and a proposed plan from handoff notes | Post-sales handoff |
+| [Exec meeting prep](exec-meeting-prep.md) | A one-screen brief for an exec walking into the meeting | Hub: Exec Meeting Prep |
+| [Escalation and save plan](save-plan.md) | Why a red account is at risk, and the drafts to hold until you approve | Hub: CSM Command Center and Save Plan |
+| [90-day handoff readout](handoff-readout.md) | A one-page briefing and a proposed success plan from post-sales notes | Hub: 90-Day Handoff Success Plan |
 
 ## Across the book
 
-| Prompt | Use it for | Library job it lines up with |
+| Prompt | Use it for | Lines up with |
 |---|---|---|
-| [What needs me this week](what-needs-me-this-week.md) | A ranked Monday list | Weekly portfolio triage |
-| [Renewals coming up](renewals-coming-up.md) | Renewals in the next 90 days | Portfolio renewal calendar |
-| [Risks across my book](risks-across-my-book.md) | Open risk CTAs, most urgent first | Portfolio health report |
+| [My command center](command-center.md) | Today's actions, the churn radar, and the top account | Hub: CSM Command Center |
+| [Expansion signals](expansion-signals.md) | Signals side by side, and the next step for each account | Hub: Growth, Expansion and Handoff |
 | [Open CTAs to clean up](open-ctas-to-clean-up.md) | Stale or already-done CTAs. Nothing is closed | CTA triage and cleanup |
-| [Where the work sits](where-the-work-sits.md) | The team's books: health, sentiment, and renewals stacked in one quarter | CS capacity check |
+
+## For a CS leader
+
+| Prompt | Use it for | Lines up with |
+|---|---|---|
+| [Risk and expansion radar](risk-and-expansion-radar.md) | ARR that is safe, at risk, and still on the table | Hub: Risk & Expansion Radar |
+| [CS capacity plan](cs-capacity-plan.md) | Where the work is, CSMs needed, and balanced books | Hub: CS Capacity Planning |
+
+## Replaced by the hub
+
+- **QBR outline** is now part of [Customer story and business review](customer-story.md).
+- **Draft a VP call note** is now [Exec meeting prep](exec-meeting-prep.md).
+- **What needs me this week** and **Renewals coming up** are now [My command center](command-center.md). Its churn radar lists renewals in the next 90 days.
+- **Risks across my book** is now the [Risk and expansion radar](risk-and-expansion-radar.md).
 
 ## Left out on purpose
 
-- **Writes.** Closing a CTA, posting Timeline, and assigning an owner are not in this folder. The prompts recommend or draft. The [skills](../skills/) write, and each card says where.
-- **Hardcoded health bands and ARR cutoffs.** A score of 40, or ARR above $500K, means different things in different tenants. These prompts use the scores Copilot finds.
-- **A 120-day renewal window.** The library uses 120 days. This pack uses 90, which matches a Monday pass. Use [Renewal conversation](renewal-conversation.md) for one account.
-- **Competitor-only and cross-customer feature research.** Competitor mentions sit inside the renewal conversation. A topic search across every customer is a different job.
-- **A capacity model with hours and weights.** [Where the work sits](where-the-work-sits.md) uses health, sentiment, and renewal quarter. It does not invent hours or headcount.
-- **The Agentforce expansion brief.** [Expansion signals](expansion-signals.md) is the Copilot prompt. The structured brief for Agentforce still lives in the [expansion analysis](../../agentforce-cs-agent/templates/expansion-analysis.md) template.
+- **Writes without approval.** Prompts that draft a CTA, a timeline entry, a CSQL, or an email stop and wait for you. The [skills](../skills/) write, and each card says where.
+- **Hardcoded health bands and ARR cutoffs.** A score of 40, or ARR above $500K, means different things in different tenants. These prompts use the labels and scores Copilot finds.
+- **Assumed capacity numbers.** The [CS capacity plan](cs-capacity-plan.md) asks for hours, buffer, and segment hours. It does not guess them.
+- **Slack canvases and Cowork dashboards.** The hub demos them, but they need a scheduled job or Claude Cowork. These prompts return the same content in the chat.
+- **The Agentforce expansion brief.** The structured brief for Agentforce still lives in the [expansion analysis](../../agentforce-cs-agent/templates/expansion-analysis.md) template.
 - **Admin reports, GSIDs, and rules.** Those belong in the CS Ops kits.
-
-These prompts do not post to Timeline or send email. The [skills](../skills/) do more of the job when calendar, email, or other tools are connected, and the cards on the cookbook site say what each one writes.
 
 > Part of the [Gainsight AI Cookbook](../../). Sample prompts, not a supported Gainsight product.
