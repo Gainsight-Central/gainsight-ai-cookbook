@@ -112,7 +112,7 @@ If a value is missing, say so. Do not invent numbers.</div>
     <div class="block-head">
       <div class="over">Copy directly, no install</div>
       <h2 class="title">Prompts for the questions you ask every week.</h2>
-      <p class="lede">Fourteen prompts, matched to the jobs CSMs already ask and to the published Customer Success library. Each one needs only a customer name, or nothing at all. The same text lives in the <a href="https://github.com/Gainsight-Central/gainsight-ai-cookbook/tree/main/gainsight-cs-mcp-skills/prompts">prompts folder</a>.</p>
+      <p class="lede">Nineteen prompts, matched to the jobs CSMs already ask and to the published Customer Success library. Most need only a customer name. The handoff prompt also takes your notes. The same text lives in the <a href="https://github.com/Gainsight-Central/gainsight-ai-cookbook/tree/main/gainsight-cs-mcp-skills/prompts">prompts folder</a>.</p>
     </div>
     <h3 class="shelf-label">On one account</h3>
     <div class="shelf">
@@ -166,6 +166,26 @@ If a value is missing, say so. Do not invent numbers.</div>
         <div class="q">Draft a short note for my VP joining the [customer name] call. Don't post or change anything.</div>
         <div class="when">Exec joining a call</div>
       </div>
+      <div class="pcard">
+        <div class="pt"><h4>Customer story</h4><button class="copy-btn ghost" type="button" data-copy="customer-story">Copy</button></div>
+        <div class="q">The full story for [customer name]: relationship, what landed, what is stuck, and an exec briefing.</div>
+        <div class="when">Before a business review</div>
+      </div>
+      <div class="pcard">
+        <div class="pt"><h4>Save plan</h4><button class="copy-btn ghost" type="button" data-copy="save-plan">Copy</button></div>
+        <div class="q">Why [customer name] is at risk, who to bring in, and the drafts to hold until I approve.</div>
+        <div class="when">When an account is red</div>
+      </div>
+      <div class="pcard">
+        <div class="pt"><h4>Expansion signals</h4><button class="copy-btn ghost" type="button" data-copy="expansion-signals">Copy</button></div>
+        <div class="q">What [customer name] asked for, the readiness signals, and whether to move now. Don't create anything.</div>
+        <div class="when">Growth conversation</div>
+      </div>
+      <div class="pcard">
+        <div class="pt"><h4>90-day handoff readout</h4><button class="copy-btn ghost" type="button" data-copy="handoff-readout">Copy</button></div>
+        <div class="q">A one-page briefing and a proposed 90-day plan from the handoff notes. Don't create it yet.</div>
+        <div class="when">After the deal closes</div>
+      </div>
     </div>
     <h3 class="shelf-label">Across the book</h3>
     <div class="shelf">
@@ -188,6 +208,14 @@ If a value is missing, say so. Do not invent numbers.</div>
         <div class="pt"><h4>Open CTAs to clean up</h4><button class="copy-btn ghost" type="button" data-copy="open-ctas-to-clean-up">Copy</button></div>
         <div class="q">List my open CTAs. Flag ones that look already done or stale. Don't close anything.</div>
         <div class="when">CTA cleanup</div>
+      </div>
+    </div>
+    <h3 class="shelf-label">For a CS leader</h3>
+    <div class="shelf">
+      <div class="pcard">
+        <div class="pt"><h4>Where the work sits</h4><button class="copy-btn ghost" type="button" data-copy="where-the-work-sits">Copy</button></div>
+        <div class="q">Group the book by CSM. Show health, sentiment, and renewals that pile up in one quarter. Don't invent hours.</div>
+        <div class="when">Capacity check</div>
       </div>
     </div>
     <div class="shelf-note">Every prompt uses Staircase when it is connected, and ends with the same rule: if a value is missing, say so, and don't invent numbers. Drafts stay in the chat. Nothing is sent, closed, or posted.</div>
@@ -310,6 +338,32 @@ Include health and the trend, why this call matters, wins from the last quarter,
 If Staircase is connected, include sentiment and what the customer said on recent calls. If it is not connected, say so.
 Do not post or change anything in Gainsight.
 If a value is missing, say so. Do not invent numbers.</pre>
+  <pre id="customer-story" class="copy-source">Tell me the full customer story for [customer name], the one I would take into a business review.
+Write one narrative: where the relationship stands, what they are trying to achieve, what has landed, and what is stuck.
+Use Gainsight for health, renewal, CTAs, the success plan, and the timeline.
+If Gainsight PX, Skilljar, Community, or Support is connected, fold that in and name the source. If one of them is not connected, say so and leave it out.
+If Staircase is connected, add sentiment and what the customer has said. If it is not connected, say so.
+Close with a short exec briefing: what leadership will ask, and the talking points.
+Do not create a deck or change anything in Gainsight.
+If a value is missing, say so. Do not invent numbers.</pre>
+  <pre id="save-plan" class="copy-source">[customer name] needs a save plan.
+Tell me why it is at risk, who we need in the room and where each person stands, and the next three moves.
+Draft the timeline note and the CTAs I would open. Do not post or create anything until I approve.
+If Staircase is connected, use what the customer said and how sentiment has moved. If it is not connected, say so.
+If a value is missing, say so. Do not invent numbers.</pre>
+  <pre id="expansion-signals" class="copy-source">Where is the expansion opportunity on [customer name]?
+Separate what the customer has asked for from readiness signals in usage, learning, community, and the success plan. Name the source of each signal.
+Note any competitor mention and whether it changes the timing.
+Give up to three plays, who they involve, and whether to move now or validate first. If nothing is supported, say so.
+If Staircase is connected, include sentiment and quotes. If it is not connected, say so.
+Do not create a CTA, an opportunity, or an email.
+If a value is missing, say so. Do not invent numbers.</pre>
+  <pre id="handoff-readout" class="copy-source">Here are the handoff notes for [customer name]: [paste notes].
+Write a one-page exec briefing: what we sold, who owns the relationship, the outcomes they expect, the risks, and the open questions.
+Then propose a 90-day success plan: objectives, owners, and the first milestones. If a success plan already exists, add to it instead of starting a second one.
+Do not create or update anything in Gainsight until I approve.
+If Staircase is connected, use the post-sales conversation. If it is not connected, use only the notes I pasted and say so.
+If a value is missing, say so. Do not invent numbers.</pre>
   <pre id="what-needs-me-this-week" class="copy-source">What needs me this week across my book?
 Rank accounts by urgency. For each one that needs attention, give the signal, why it is urgent, the renewal date if there is one, and the one action I should take.
 Look at open risks, renewals in the next 90 days, and CTAs with no recent update.
@@ -329,6 +383,13 @@ For each, give the customer, ARR if it is on the account, CTA type, priority, ho
 Compare them with recent timeline activity. Flag any that look already done, and any with no update for about 60 days.
 Recommend which to close and which still need action. Do not close, edit, or reassign anything.
 If Staircase is connected, use what the customer said when deciding whether the work is already done. If it is not connected, say so.
+If a value is missing, say so. Do not invent numbers.</pre>
+  <pre id="where-the-work-sits" class="copy-source">Show me where the work sits across the CS team.
+Group accounts by CSM. For each CSM, show the accounts, segment, renewal quarter, health, and open risk CTAs.
+When two accounts look the same on ARR and segment, say which one needs more attention and why, using health and sentiment.
+Flag any CSM whose renewals pile up in the same quarter.
+If Staircase is connected, use sentiment as part of the load. If it is not connected, say so.
+Do not invent hours, headcount, or capacity weights. If those are not in Gainsight, say so.
 If a value is missing, say so. Do not invent numbers.</pre>
   <script src="js/site.js"></script>
 </body>
