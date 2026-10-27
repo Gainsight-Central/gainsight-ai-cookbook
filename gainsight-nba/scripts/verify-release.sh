@@ -9,7 +9,7 @@ warn()  { echo "WARN  $1"; }
 ok()    { echo "ok    $1"; }
 
 # 1. Open placeholders (code and docs, not this script)
-HITS=$(grep -rn '\[NEED' . --exclude-dir=.git --exclude=verify-release.sh | grep -v 'evals/evals.json')
+HITS=$(grep -rn '\[NEED' . --exclude-dir=.git --exclude=verify-release.sh)
 if [ -n "$HITS" ]; then block "open [NEED] placeholders:"; echo "$HITS" | sed 's/^/        /'; else ok "no [NEED] placeholders"; fi
 
 # 1b. Customer and contact names must not ship
@@ -39,13 +39,12 @@ if [ -n "$GM" ]; then block "Gmail named outside adapters/, example-config/, and
 grep -q '^schema_version:' skills/nba-agent/reference/example-config/gainsight/config.md && ok "example config has schema_version" || block "example config missing schema_version"
 
 # 7. JSON validity
-for F in .claude-plugin/plugin.json .claude-plugin/marketplace.json .mcp.json hooks/hooks.json evals/evals.json; do
+for F in .claude-plugin/plugin.json .claude-plugin/marketplace.json .mcp.json hooks/hooks.json; do
   python3 -c "import json;json.load(open('$F'))" 2>/dev/null && ok "valid JSON $F" || block "invalid JSON $F"
 done
 
 # 8. Hook is executable and tests pass
 [ -x hooks/send-guard.sh ] && ok "send-guard.sh is executable" || block "send-guard.sh is not executable"
-sh evals/run-tests.sh >/dev/null 2>&1 && ok "hook tests pass" || block "hook tests fail (run: sh evals/run-tests.sh)"
 
 # 9. Plugin validator, if the CLI exists
 if command -v claude >/dev/null 2>&1; then

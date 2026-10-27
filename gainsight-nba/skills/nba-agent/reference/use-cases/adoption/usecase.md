@@ -148,7 +148,3 @@ Skipped is shown as its own tile.
 | `Grounding incomplete` | Context or knowledge could not confirm enough. Say what is missing. |
 
 Never show `Sent` without a completed send in this session.
-
-## Evals
-
-`evals/` in the plugin root holds the adoption fixtures.

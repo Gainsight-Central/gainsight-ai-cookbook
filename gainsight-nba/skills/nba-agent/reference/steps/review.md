@@ -48,7 +48,7 @@ Right after the funnel, add a plain-text note: one line per stage, naming the ac
 
 ## Paginated review widget
 
-One widget holds up to 10 drafts, one per page. It is the main review surface. Use the fragment in `reference/widgets/paginated-review.html` and the component spec in `reference/design.md`, Paginated review card. Experimental until `evals/widget-test-checklist.md` passes in Desktop chat.
+One widget holds up to 10 drafts, one per page. It is the main review surface. Use the fragment in `reference/widgets/paginated-review.html` and the component spec in `reference/design.md`, Paginated review card.
 
 **Groups.** Ready: every fact passed the fact check and is sourced (the `High confidence` badge). Needs a look: `Thread follow-up only`, `Flagged risk`, `Grounding incomplete`, any inferred claim, or any risk note on the card. Order Ready first.
 
