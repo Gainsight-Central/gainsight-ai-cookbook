@@ -1,9 +1,0 @@
-user_email,name,account,role,opted_out,timezone
-ana@northwind.example,Ana Lopez,Northwind,Admin,false,America/New_York
-ben@northwind.example,Ben Ito,Northwind,User,false,America/Chicago
-cara@northwind.example,Cara Diaz,Northwind,User,false,America/New_York
-dev@contoso.example,Dev Rao,Contoso,User,true,Europe/London
-eli@contoso.example,Eli Park,Contoso,User,false,Europe/London
-fay@fabrikam.example,Fay Stone,Fabrikam,Admin,false,America/Los_Angeles
-gus@fabrikam.example,Gus Hale,Fabrikam,User,false,America/Los_Angeles
-hal@tailspin.example,Hal Moss,Tailspin,User,false,Asia/Kolkata
