@@ -32,7 +32,7 @@ Say the render failed in one line, once.
 ## Sequence (strict)
 
 1. Finish drafting the cohort.
-2. In one message, in this order: the counts strip (see Funnel) and the paginated review widget with the first draft open. Use `reference/widgets/paginated-review.html`. The CSM does not click to reach the first email.
+2. In one message, in this order: the counts strip (see Funnel) and the paginated review widget with the first draft open. Use `reference/widgets/paginated-review.html`. The CSM does not click to reach the first email. Add one summary line under the widget: `<n> drafts ready. <k> skipped: <account> (<reason in plain words>). Nothing was sent.` Name each skipped account when there are 3 or fewer. Above that, give the count and point to the Skipped group. Never drop a skipped account silently, a churned account included.
 3. Order: the queue's own order. Ready drafts first, then Needs a look.
 4. The CSM decides in the widget and presses Send decisions. Then show the result and the next widget (see After Send decisions). Show the full funnel only when no drafts are left.
 
@@ -64,7 +64,7 @@ One widget holds up to 10 drafts, one per page. It is the main review surface. U
 
 **State.** Decisions live in the widget until Send decisions. If the widget re-renders or the chat reloads, they are lost. The count line says "Nothing is recorded until you press Send decisions."
 
-**Skipped.** Under the widget, a short "Skipped, no draft" group. Each skipped account is a card with the name and status chip on the first row, the sub-line on one line with an ellipsis, and the reason on its own row beneath. Rows never overlap.
+**Skipped.** Under the widget, a short "Skipped, no draft" group. Each skipped account is a card with the name and status chip on the first row, the sub-line on one line with an ellipsis, and the reason on its own row beneath. Rows never overlap. In chat text, call these accounts "skipped", never "flagged". For a skipped account with `Flagged risk`, add a short read-only brief under its row, never a bare "skip": what flagged it, the sourced usage fact, who is already writing to the customer (from the thread and timeline items), and one suggested next step in plain words for the CSM. If the data names the account's renewal owner or account owner, offer one draft note to that person as a mail draft, written for the CSM to review. Never create a CTA or write to Gainsight. Never send. "Flagged" is the funnel stage name, and a CSM reads it as a warning.
 
 **Footer.** If `ground_top_n` or another cap left flagged accounts out, one line: "N more flagged accounts not yet grounded: A, B, C." with a **Ground remaining accounts** button.
 

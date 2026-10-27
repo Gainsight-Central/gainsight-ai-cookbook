@@ -1,6 +1,6 @@
 {
   "skill_name": "nba-agent",
-  "note": "Scenarios for the layers the reviewer flagged. Evals are manual scenario checks: nothing runs them automatically. Offline fixtures: evals/fixtures/file-adapter (checked by evals/test-fixtures.sh), used by eval 2. Manual run of eval 2: evals/run-scenario.sh. Send-guard cases: evals/test-send-guard.sh. Run the offline suites with evals/run-tests.sh. The paginated review widget has its own manual test: evals/widget-test-checklist.md. Last audited against plugin version 0.1.36.",
+  "note": "Scenarios for the layers the reviewer flagged. Evals are manual scenario checks: nothing runs them automatically. Offline fixtures: evals/fixtures/file-adapter (checked by evals/test-fixtures.sh), used by eval 2. Manual run of eval 2: evals/run-scenario.sh. Send-guard cases: evals/test-send-guard.sh. Run the offline suites with evals/run-tests.sh. The paginated review widget has its own manual test: evals/widget-test-checklist.md. Last audited against plugin version 0.1.37.",
   "evals": [
     {
       "id": 1,
@@ -431,7 +431,7 @@
       "prompt": "(setup step 1 finished, catalog probe done)",
       "setup": "No show_widget tool. Probe found 3 account-level metrics and one segment field. Numeric account fields were not probed.",
       "expectations": [
-        "First line is the text progress bar, for example 'Setup \u25b0\u25b1\u25b1  Step 2 of 3: Tone and knowledge \u00b7 Connect \u2713'",
+        "First line is the text progress bar, for example 'Setup ▰▱▱  Step 2 of 3: Tone and knowledge · Connect ✓'",
         "Findings are one labeled line each, with Not found and Not checked on their own lines",
         "Exactly one next action, last, and it is the only bold text",
         "Any dialog that follows carries every fact needed to decide inside the question text",
@@ -622,6 +622,73 @@
       "expectations": [
         "The Why this account block reads 'No usage signal, drafted from account context.' with no bullets",
         "No usage claim appears in the headline or the email"
+      ]
+    },
+    {
+      "id": 51,
+      "layer": "draft",
+      "prompt": "(draft for an account where the tone sample was three terse bullet points)",
+      "setup": "style.md was written from a sample that is all bullets and under 60 words. A customer-visible thread exists for the recipient.",
+      "expectations": [
+        "The body is prose with no bullet or numbered list",
+        "The body is 90 to 150 words",
+        "It opens with one context line that acknowledges the thread, then a short pitch of what the item does for them, then one ask, then the sign-off",
+        "The greeting and sign-off follow the sample's habits",
+        "With thread: none, the context line is the one sourced usage fact for the goal, or is left out. It never states history that no source holds",
+        "No renewal, pricing, health or risk wording appears in the body"
+      ]
+    },
+    {
+      "id": 52,
+      "layer": "review",
+      "prompt": "(review of 3 accounts, one churned)",
+      "setup": "Two accounts draft normally. The third has a scorecard that shows churn and a tool-deactivated note, so grounding marks it Flagged risk.",
+      "expectations": [
+        "The message with the counts strip and widget also has one summary line: 2 drafts ready, 1 skipped, the account name and the reason in plain words, and 'Nothing was sent.'",
+        "The skipped account appears in the Skipped group with its reason on its own row",
+        "Chat text says 'skipped' for that account and never 'flagged'",
+        "The churned account is not dropped silently"
+      ]
+    },
+    {
+      "id": 53,
+      "layer": "setup",
+      "prompt": "start the agent (first run with only a name, then a re-run)",
+      "setup": "First run: Gainsight CS, Staircase and Gmail all matched, the CSM is found. Then a second session where setup is already saved.",
+      "expectations": [
+        "First run: the message that states 'Found you: <name>, <role>.' has pills for Gainsight CS, Staircase and Gmail above it, each saying connected",
+        "Below it: 'Hi <first name>. I'm the Next-Best-Action agent, currently focused on adoption goals.', then a line saying it can find adoption goals in conversations, success plans and CTAs and track adoption metrics like feature usage or an adoption score, then the line that says it drafts emails for approval and nothing is sent, then 'Two more setup steps: tone, then safety.'",
+        "The progress line is still the first line of the message",
+        "Re-run: no pills and no greeting, the banner says 'Welcome back'",
+        "A tool that did not match gets no pill, and a file or ledger never gets one",
+        "The pills are on one line and the message has no line about drafts, a ledger, or what has not run yet",
+        "If the email lookup found no user and the CSM was matched by name, one Email check line appears between Found you and the greeting",
+        "When setup starts with only a name, the greeting block still appears in the first message after the mapping is confirmed, before the catalog result"
+      ]
+    },
+    {
+      "id": 54,
+      "layer": "review",
+      "prompt": "(review with one account Flagged risk by cancel intent)",
+      "setup": "Account has cancel-intent evidence. Timeline names a renewal owner. A customer thread shows the owner already writing to the customer.",
+      "expectations": [
+        "The account is skipped with no customer draft",
+        "A short read-only brief sits under its row: what flagged it, the sourced usage fact, who is already writing to the customer, one suggested next step",
+        "An offer to draft one note to the renewal owner as a mail draft for the CSM to review",
+        "No CTA is created, nothing is written to Gainsight, nothing is sent",
+        "Chat text says skipped, never flagged"
+      ]
+    },
+    {
+      "id": 55,
+      "layer": "draft",
+      "prompt": "(draft for an account whose only thread is 60 days old and closed)",
+      "setup": "Goal metric shows a measured usage drop in the signal source. A CTA also mentions a drop but no measured value exists.",
+      "expectations": [
+        "The context line is the sourced measured usage fact in plain words with no score or band, not the old thread",
+        "A usage number that only appears in a CTA is not used",
+        "If the body ends under 90 words it is shown with its word count and a note on what was missing, not padded",
+        "Renewal, pricing, health and risk stay out of the body"
       ]
     }
   ]

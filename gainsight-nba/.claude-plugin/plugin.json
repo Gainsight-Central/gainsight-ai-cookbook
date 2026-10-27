@@ -1,7 +1,7 @@
 {
   "name": "gainsight-nba",
   "displayName": "Gainsight NBA",
-  "version": "0.1.36",
+  "version": "0.1.37",
   "description": "Customer-agnostic next-best-action agent for CSMs. Defines a goal, finds the accounts that raised it, drafts grounded emails, and stops for CSM approval. Adoption is the first use case.",
   "keywords": [
     "customer-success",

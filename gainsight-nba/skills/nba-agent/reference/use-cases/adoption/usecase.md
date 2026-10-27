@@ -107,14 +107,15 @@ Ask `context` for each kept account:
 - What is the account's current health and sentiment?
 - Are there active risk signals (churn, escalation, offboarding)?
 
-Exclusions: an account in churn or offboarding, or with an open escalation, gets `Flagged risk`. No draft. One-line reason. An account whose context is critical risk, or whose sources conflict (for example an active status next to a note that the customer wants to cancel), also gets `Flagged risk` with the conflict stated, and the CSM decides. An account with a near renewal or a questioned-value note may still get a draft, but the draft is shown with that risk named above it and no pricing or contract terms.
+Exclusions: an account in churn or offboarding, or with an open escalation, gets `Flagged risk`. No draft. One-line reason. An account whose context is critical risk, or whose sources conflict (for example an active status next to a note that the customer wants to cancel), also gets `Flagged risk` with the conflict stated, and the CSM decides. A `Flagged risk` account still gets the read-only brief and the owner-note offer described in `steps/review.md` (Skipped). An account with a near renewal or a questioned-value note may still get a draft, but the draft is shown with that risk named above it and no pricing or contract terms.
 
 ## Draft intent
 
 - Purpose: acknowledge one recent thread from the recipient's own account, then show how the one recommended item from `knowledge` helps with the gap and the goal, and ask for one next step.
-- Structure: a one-line acknowledgement of the thread (see `ground.md`, Recent thread), two to three sentences on what the item lets them do, in the words of its source, then the ask. With `thread: none`, skip the acknowledgement and do not mention history.
+- Structure: greeting by first name, one context line, two to three sentences on what the item lets them do in the words of its source, one ask, sign-off. The context line is, in order: a one-line acknowledgement of a customer-visible thread or call that is open or from the last 30 days and bears on adoption or the item (see `ground.md`, Recent thread); else the one sourced usage fact tied to the goal, a measured value from the signal source stated in plain words with no score or band; else none, and the email opens on the item. Never invent history. Renewal, pricing, health and risk stay out of the context line (see the last bullet).
 - Excitement comes from the specific benefit to this recipient's gap, stated plainly. No superlatives, no claims the source does not make, no invented numbers. Paid items keep `[verify entitlement]`.
-- Length: about 150 words. One screen.
+- Length: 90 to 150 words in the body. Prose paragraphs. No bullet lists and no numbered lists.
+- Structure, length and format are the plugin default. `style.md` sets voice only (`draft.md`, Default email and style).
 - One ask: one link or one next step.
 - Anchor: the recommended item, described only as its source describes it, plus one grounded fact about the user's own usage if retrieved.
 - The email body carries `sourced` facts only. See `draft.md`, Fact check.

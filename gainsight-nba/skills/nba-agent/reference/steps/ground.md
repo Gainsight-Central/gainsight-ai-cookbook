@@ -16,13 +16,13 @@ For each kept account, ask `context` the use case's `grounding_questions`. Colle
 
 For each recipient's account, find what was said recently, so the email can open by acknowledging it.
 
-- Ask `context` for the last 90 days of communications and timeline notes. If fewer than 2 usable items come back, widen once to 180 days and say the window. Fetch the full text of any item you plan to rely on. A summary is not quotable.
+- Ask `context` for the last 90 days of communications (emails, calls, meetings, tickets) and timeline notes. If fewer than 2 usable items come back, widen once to 180 days and say the window. Fetch the full text of any item you plan to rely on. A summary is not quotable.
 - Keep each item with its source, date, who said it, and a short verbatim quote.
 - Sort every item into one of two groups:
   - **Customer-visible, may acknowledge:** something the customer said or asked, a request they raised, or a follow-up the customer was told we would do (an offered walkthrough, a promised answer, an open support request they raised). The customer already knows about it.
   - **Internal, may inform only:** CTAs, internal tasks, risk flags, health or sentiment notes, renewal or pricing notes, anything written for the team. It can shape the choice of item. It never appears in the wording.
 - A customer-visible item belongs to the recipient's own account. If it was said by a different contact, it may inform the draft. It may be acknowledged only if the recipient was on that thread.
-- Pick at most one item to acknowledge: the most recent customer-visible item that bears on adoption or on the recommended feature. If an open follow-up exists, prefer it and say what is still open, in the customer's terms. Do not claim it is done or promise a date you did not find.
+- Pick at most one item to acknowledge: the most recent customer-visible item that bears on adoption or on the recommended feature and is either an open follow-up or from the last 30 days. An older, closed or unrelated thread is not acknowledged. The draft then uses the sourced goal usage fact as its context line (usecase.md, Draft intent). A usage number that appears only in a CTA or internal note is internal and is not used. If an open follow-up exists, prefer it and say what is still open, in the customer's terms. Do not claim it is done or promise a date you did not find.
 - If no customer-visible item exists, record `thread: none`. The draft skips the acknowledgement and the card says "Personalization: thin". Do not invent one.
 
 ## 2. Knowledge match

@@ -5,7 +5,7 @@ Inputs: `style.md`, `rules.md`, the use case's `draft_intent`, the grounded fact
 ## Rules
 
 - Write one email per unit the use case names, to the recipient the `recipient_rule` selects.
-- Follow `style.md`. Apply every item in `rules.md` as a hard constraint.
+- Follow `style.md` for voice. Apply every item in `rules.md` as a hard constraint.
 - Follow `draft_intent` for purpose, length, the one ask, and what the email anchors on.
 - Reference only facts from the data and ground steps. The email body states only `sourced` facts. An `inferred` point may shape which item you pick and never appears in the body as a statement about the recipient or their account. Drop it, or turn it into a plain question to the recipient only if the CSM asks for that.
 - The one ask is the item's link or a next step the CSM's rules allow. Do not offer a meeting, call, demo, deadline, discount, or any commitment of the CSM's time unless `rules.md` allows it.
@@ -17,6 +17,15 @@ Inputs: `style.md`, `rules.md`, the use case's `draft_intent`, the grounded fact
 - Subject line: specific, names the value or the item. No "Quick question."
 - Sign as the CSM from `identity`. If the CSM name is missing, leave a placeholder for the CSM to fill.
 - Keep the writing rules in `style.md`. If the customer has none, use plain sentences, active voice, no em dashes.
+
+## Default email and style
+
+The plugin sets the structure. The CSM's style sets the voice. They are two layers.
+
+- **Fixed by the plugin:** the structure in the use case's `draft_intent` (greeting, one context line, a short pitch, one ask, sign-off), a body of 90 to 150 words, prose paragraphs, no bullet or numbered lists.
+- **Set by `style.md`:** greeting and sign-off habits, formality, sentence length, and the words the CSM uses or avoids.
+- If `style.md` or a sample email conflicts with the fixed layer (bullets, a body under 90 words, no context line, no pitch), the fixed layer wins. Take the voice from the sample and leave its structure out.
+- After drafting, count the words in the body. If it is outside 90 to 150, rewrite once. If it still misses, show it and say the word count on the card.
 
 ## Test first (large cohorts only)
 
@@ -39,6 +48,8 @@ Read the finished body one sentence at a time. For every sentence that says some
    If what is left is only a follow-up on the thread, first try one rewrite around a single sourced item from `knowledge` that fits the gap and the account's products. If none fits, show it with the label "Thread follow-up only, no feature". That label is never shown with `High confidence`.
 4. Check the recommended item's product against the account's products (`ground.md`, Product fit). Config's `products` is the vendor's list, not the account's.
 5. Check the ask. A meeting, call, demo, or deadline in the body is unsupported unless `rules.md` allows it.
+
+If the body is under 90 words after this check, keep it, show the word count on the card and name what was missing ("the source describes only these points"). Never pad it with a claim that has no source.
 
 Record what you removed, as a count. The card shows "Left out: N unsupported points". Do not paraphrase an inferred point into the body to get around this.
 
