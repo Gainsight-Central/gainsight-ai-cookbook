@@ -1,7 +1,7 @@
 ---
 name: nba-agent
 metadata:
-  version: 0.1.36
+  version: 0.1.37
 description: Customer-agnostic next-best-action agent for CSMs. Use when the user says "start the NBA agent" or "run the NBA agent", asks to set up or configure the NBA agent for a customer, or asks for drafted outreach emails for the accounts in their book. Checks for a saved customer configuration first and asks for anything missing, then asks the user to define a goal (adoption is the first use case), finds the accounts that raised it, grounds each recommendation in real account context, drafts one personalized email per recipient, shows a funnel with drill-downs, and stops for CSM approval. All customer specifics (tone, rules, product knowledge, data sources, mail tool) come from the saved configuration, not from this skill. Do not use for: running an existing Journey Orchestrator program, reading or generating JO program JSON, use jo-program-reader or jo-stepjson-generator).
 ---
 

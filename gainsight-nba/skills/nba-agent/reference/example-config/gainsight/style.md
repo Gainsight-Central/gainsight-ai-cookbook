@@ -5,7 +5,7 @@ These emails are customer-facing adoption nudges from a CSM. Write them the way 
 ## Voice
 - Write "you," not "we." Lead with the benefit and the so-what.
 - Say what the reader can now do that they could not before, and why it is worth two minutes.
-- Short and skimmable. A nudge, not a pitch. Target ~120 words, one screen, no scrolling.
+- Short and skimmable, one screen. Length and structure come from the plugin default (90 to 150 words), not from this file.
 - Borrow the words the customer, CS, and Support actually use. Do not invent product-speak.
 - One clear ask. One link or next step, not three.
 
@@ -19,7 +19,6 @@ These emails are customer-facing adoption nudges from a CSM. Write them the way 
 
 ## Format
 - Greeting by first name if you have it, else a neutral opener.
-- Two or three short sentences of body.
 - One ask.
 - Sign as the CSM (use the owner from Staircase/CS if available, else a placeholder the CSM fills).
 
