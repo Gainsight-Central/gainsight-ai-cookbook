@@ -79,6 +79,7 @@
 
     gateLink.addEventListener("click", function (event) {
       event.preventDefault();
+      if (window.cookbookTrack && !dialog.open) window.cookbookTrack("dialog_opened");
       sending = false;
       submitBtn.disabled = false;
       cancelBtn.disabled = false;
