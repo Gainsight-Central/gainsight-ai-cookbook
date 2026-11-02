@@ -26,7 +26,7 @@ It doesn't run in the background. It acts only when you start it, and it uses th
 
 ## Get started
 
-1. Download the plugin zip: [gainsight-nba-0.1.37.zip](https://github.com/Gainsight-Central/gainsight-ai-cookbook/raw/main/docs/downloads/gainsight-nba-0.1.37.zip). Marketplace install is planned. Until then the zip is the only way to install.
+1. Download the plugin zip from the [cookbook page](https://gainsight-central.github.io/gainsight-ai-cookbook/index.html#nba). Click **Download 0.1.37** and enter your name, work email, and company. Marketplace install is planned. Until then the zip is the only way to install.
 
 2. Install it. Open Settings, then Plugins, in the Claude desktop app. In Claude Code, `/plugin` opens the same page. Click **Add**, then **Upload plugin**, and choose the zip.
 
