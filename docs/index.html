@@ -148,17 +148,17 @@ who I should talk to, the open risks and CTAs, what happened recently on the tim
 the landmines to avoid, and 3 questions I should ask.
 If Staircase is connected, include sentiment and what the customer said on recent calls. If it is not connected, say so.
 If a value is missing, say so. Do not invent numbers.</pre>
-  <dialog id="nba-gate" class="gate">
+  <dialog id="nba-gate" class="nba-dialog">
     <form id="nba-gate-form" method="dialog">
       <h2>Download the CSM Adoption Agent plugin</h2>
       <p>Fill in the form and your download starts right after. We'll use your details to see who is trying the plugin and to ask how it went. We won't add you to a mailing list.</p>
-      <p class="gate-note"><span class="req" aria-hidden="true">*</span> Required</p>
-      <label>Name <span class="req" aria-hidden="true">*</span><input name="name" type="text" placeholder="Jane Smith" autocomplete="name" required aria-required="true"><span class="gate-error">Enter your name.</span></label>
-      <label>Work email <span class="req" aria-hidden="true">*</span><input name="email" type="email" placeholder="jane@company.com" autocomplete="email" required aria-required="true"><span class="gate-error">Enter a valid work email, like jane@company.com.</span></label>
-      <label>Company <span class="req" aria-hidden="true">*</span><input name="company" type="text" placeholder="Company name" autocomplete="organization" required aria-required="true"><span class="gate-error">Enter your company.</span></label>
+      <p class="nba-dialog-note"><span class="req" aria-hidden="true">*</span> Required</p>
+      <label>Name <span class="req" aria-hidden="true">*</span><input name="name" type="text" placeholder="Jane Smith" autocomplete="name" required aria-required="true"><span class="nba-dialog-error">Enter your name.</span></label>
+      <label>Work email <span class="req" aria-hidden="true">*</span><input name="email" type="email" placeholder="jane@company.com" autocomplete="email" required aria-required="true"><span class="nba-dialog-error">Enter a valid work email, like jane@company.com.</span></label>
+      <label>Company <span class="req" aria-hidden="true">*</span><input name="company" type="text" placeholder="Company name" autocomplete="organization" required aria-required="true"><span class="nba-dialog-error">Enter your company.</span></label>
       <label>Role <span class="opt">(optional)</span><input name="role" type="text" placeholder="CSM, CS Ops, CS leader" autocomplete="organization-title"></label>
       <label>How do you plan to use it? <span class="opt">(optional)</span><input name="use" type="text" placeholder="For example, find accounts that stopped using a feature"></label>
-      <div class="gate-actions">
+      <div class="nba-dialog-actions">
         <button class="btn btn-blue" type="submit">Download</button>
         <button class="btn btn-quiet" type="button" data-gate-close>Cancel</button>
       </div>
