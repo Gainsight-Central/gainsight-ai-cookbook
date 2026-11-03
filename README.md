@@ -2,12 +2,14 @@
 
 Example prompts, agent skills, and Admin CLI kits for putting Gainsight to work in the AI agent of your choice.
 
-The site at <https://gainsight-central.github.io/gainsight-ai-cookbook/> 
+The site at <https://gainsight-central.github.io/gainsight-ai-cookbook/> has the same kits, with a page for each role and a download for each kit.
 
 | If you are | Start here |
 |---|---|
 | I manage customers | [Copilot prompts](gainsight-cs-mcp-skills/prompts/). Paste one into Gainsight Copilot. Customer name only. Staircase is used when it is connected. |
 | I'm in CS Ops | [Admin CLI starter kit](cs-admin-cli-starter-kit/). Read-only. |
+| I'm a CSM who wants adoption gaps found for me | [CSM Adoption Agent](gainsight-nba/). Drafts outreach you approve before anything is sent. |
+| I'm on Salesforce Agentforce | [Agentforce CS Agent](agentforce-cs-agent/). Paste it in as a subagent. |
 
 ## Contents
 
