@@ -13,7 +13,10 @@ HITS=$(grep -rn '\[NEED' . --exclude-dir=.git --exclude=verify-release.sh)
 if [ -n "$HITS" ]; then block "open [NEED] placeholders:"; echo "$HITS" | sed 's/^/        /'; else ok "no [NEED] placeholders"; fi
 
 # 1b. Customer and contact names must not ship
-NM=$(grep -rniE 'accruent|cristiana|fabiani|orbus|\bABB\b|workiva|teamworks|@gainsight\.com' . --exclude-dir=.git --exclude=verify-release.sh)
+# The public support address is allowed. It is removed from each hit and the line is checked again,
+# so a line with support@gainsight.com plus another @gainsight.com address still blocks.
+NMPAT='accruent|cristiana|fabiani|orbus|\bABB\b|workiva|teamworks|@gainsight\.com'
+NM=$(grep -rniE "$NMPAT" . --exclude-dir=.git --exclude=verify-release.sh | sed 's/support@gainsight\.com//g' | grep -iE "$NMPAT")
 if [ -n "$NM" ]; then block "customer or contact names found:"; echo "$NM" | sed 's/^/        /'; else ok "no customer names"; fi
 
 # 2. Placeholder hosts in the MCP config
